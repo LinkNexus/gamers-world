@@ -1,0 +1,65 @@
+{% extends 'components/Forms/AutoValidatingForm.html.twig' %}
+
+{% block form_body %}
+    {{ form_errors(form) }}
+
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <div>
+        {{ form_widget(form.name) }}
+        {{ form_errors(form.name) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.email) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div>
+        <twig:Forms:RandomInput type="username">
+            {{ form_widget(form.username, { attr: {
+                'data-forms--random-input-target': 'username'
+            }}) }}
+        </twig:Forms:RandomInput>
+        {{ form_errors(form.username) }}
+    </div>
+
+    <div>
+        <twig:Forms:RandomInput type="password">
+            {{ form_widget(form.plainPassword.first, {
+                attr: {
+                    'data-forms--random-input-target': 'password'
+                }
+            }) }}
+        </twig:Forms:RandomInput>
+        {{ form_errors(form.plainPassword.first) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.plainPassword.second, { attr:{
+            'data-forms--random-input-target': 'password'
+        }}) }}
+        {{ form_errors(form.plainPassword.second) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.agreeTerms) }}
+        {{ form_label(form.agreeTerms) }}
+        {{ form_errors(form.agreeTerms) }}
+    </div>
+
+    <button type="submit">Register</button>
+{% endblock %}
+
+{% block form %}
+    {{ parent() }}
+    <hr>
+    <a href="/">Sign In</a>
+{% endblock %}
+
+{% block attributes %}
+    {{ parent() }}
+    data-controller="forms--random-input"
+{% endblock %}

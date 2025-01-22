@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    // ...
+    "lib": ["dom", "es2015", "es2016", "dom.iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./assets/*"
+      ]
+    }
+    // ...
+  }
+}

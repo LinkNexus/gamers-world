@@ -1,0 +1,57 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+$themePrimary: #8750f7
+$themePrimary1: #2400ff
+$themePrimary2: #9b8dff
+$themePrimary3: #4654f9
+$themeH3Primary1: #814cec
+$themeH4Primary1: #240F31
+$themeSecondary: #2a1454
+$themeAccent1: #0f0715
+$themeAccent2: #140c1c
+$themeWhite: #fff
+$body: #dddddd
+
+@layer components
+  .clickable
+    box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24)
+    &:active
+      @apply transform scale-95
+      box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24)
+
+  .button
+    @apply cursor-pointer outline-none transition-all flex content-center justify-center text-lg font-semibold rounded-full py-3 px-8 clickable
+
+    &:disabled
+      @apply cursor-not-allowed bg-none bg-gray-400
+
+  .button-primary
+    @apply button bg-gradient-to-r from-theme-primary to-theme-secondary text-theme-white
+
+    &:not(:disabled):hover
+      @apply bg-gradient-to-r from-theme-secondary to-theme-primary
+
+  .button-secondary
+    @apply button text-theme-primary border-2 border-theme-secondary
+
+    &:hover
+      @apply bg-gradient-to-r from-theme-primary to-theme-secondary text-theme-white
+
+  .color-gradient
+    @apply bg-gradient-to-r from-theme-primary to-theme-secondary to-theme-white bg-clip-text
+    -webkit-text-fill-color: transparent
+    -webkit-background-clip: text
+
+  .bg-gradient
+    @apply bg-gradient-to-r from-theme-accent-1 from-55% to-theme-secondary
+
+  .title
+    @apply text-5xl font-bold bg-gradient-to-r from-theme-primary to-theme-white bg-clip-text color-gradient
+
+    @media (min-width: 768px)
+      @apply text-5xl
+
+  .dashed-borders
+    @apply border-dashed border-theme-primary

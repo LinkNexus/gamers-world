@@ -1,0 +1,13 @@
+{% extends 'auth/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block main_title %}Sign Up{% endblock %}
+
+{% block description %}
+    Enter your information to create a new Account
+{% endblock %}
+
+{% block form %}
+    <twig:Auth:RegistrationForm :form="registrationForm" />
+{% endblock %}

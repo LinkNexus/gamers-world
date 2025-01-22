@@ -1,0 +1,65 @@
+@use './base'
+
+.external-form
+  @apply min-h-screen flex flex-wrap justify-center content-center p-5 bg-gradient-to-r from-theme-accent-1 from-55% to-theme-secondary
+
+  @media (min-width: 768px)
+    @apply px-10
+
+  &>div
+    @apply w-full
+
+    @media (min-width: 768px)
+      max-width: 75%
+
+    @media (min-width: 1024px)
+      max-width: 50%
+
+    &>div
+      @apply w-full flex flex-col gap-y-2 mb-5
+
+      @media (min-width: 768px)
+        @apply gap-y-4
+
+      & h1
+        @apply title w-full text-center
+
+      & span
+        @apply w-full font-medium block text-sm text-center
+
+        @media (min-width: 768px)
+          @apply text-base
+
+    form
+      @apply py-5 w-full flex flex-col gap-y-5 px-3
+
+      @media (min-width: 768px)
+        @apply gap-y-8
+
+      & input:not([type="submit"], [type="checkbox"]), & textarea
+        @apply bg-theme-accent-2 rounded-lg p-2 w-full border border-theme-primary
+
+        &:focus
+          @apply border-2 border-theme-primary
+
+      & .toggle-password-container
+        @apply w-full mt-2
+
+      & .input-with-icon
+        @apply flex gap-x-3
+
+        & svg
+          @apply aspect-square h-full max-h-10 cursor-pointer
+
+      & input:has(+ul), & textarea:has(+ul), & .toggle-password-container:has(+ul) > input, & .input-with-icon:has(+ul) input
+        @apply border border-red-500
+
+      & input + ul, & textarea + ul , & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul
+        @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2
+
+      & button[type="submit"]
+        @apply button-primary w-full mt-3
+        transition: all 0.8s
+
+    & a:not(form a)
+      @apply button-secondary mt-5

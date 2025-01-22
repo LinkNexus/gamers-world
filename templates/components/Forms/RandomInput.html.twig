@@ -1,0 +1,11 @@
+{% props type %}
+
+<div {{ attributes.defaults({ class: 'input-with-icon' }) }}>
+    {% block content %}{% endblock %}
+    <twig:ux:icon
+            name="noto-v1:game-die"
+            data-action="click->forms--random-input#generate{{ type|capitalize }}"
+            title="Generate a random password"
+            class="clickable"
+    />
+</div>
