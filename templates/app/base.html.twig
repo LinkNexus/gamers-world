@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'fragments/_header.html.twig' %}
+    {% include 'fragments/_sidebar.html.twig' %}
+
+    <div class="p-4 sm:ml-64">
+        <div class="p-4 mt-14 rounded-lg bg-gradient">
+            {% set i = 0 %}
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <twig:Utilities:Alert id="alert-{{ type }}-{{ i }}" type="{{ type }}" message="{{ message }}" />
+                    {% set i = i + 1 %}
+                {% endfor %}
+            {% endfor %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {# Auth Modals #}
+    {% if app.user is null %}
+        <div>
+            <twig:Modals:Auth id="login-form" title="Sign in to our platform" />
+            <twig:Modals:Auth id="registration-form" title="Join our Community" />
+        </div>
+    {% endif %}
+{% endblock %}

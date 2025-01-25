@@ -9,5 +9,7 @@
 {% endblock %}
 
 {% block form %}
-    <twig:Auth:RegistrationForm :form="registrationForm" />
+    <twig:Turbo:Frame id="registration-form">
+        <twig:Auth:RegistrationForm :form="registrationForm" />
+    </twig:Turbo:Frame>
 {% endblock %}

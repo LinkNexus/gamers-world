@@ -1,0 +1,15 @@
+{% extends 'auth/base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block main_title %}
+    Change your Password
+{% endblock %}
+
+{% block description %}
+    Enter a new valid and strong Password below
+{% endblock %}
+
+{% block form %}
+    <twig:Auth:ChangePasswordForm form="{{ resetForm }}" />
+{% endblock %}

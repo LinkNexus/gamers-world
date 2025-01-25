@@ -4,6 +4,7 @@ module.exports = {
     "./assets/**/*.{js,jsx,ts,tsx}",
     "./templates/**/*.html.twig",
     './vendor/symfony/twig-bridge/Resources/views/Form/*.html.twig',
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {
@@ -21,6 +22,8 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }
 

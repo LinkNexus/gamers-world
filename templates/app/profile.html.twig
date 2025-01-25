@@ -1,0 +1,62 @@
+{% extends 'app/base.html.twig' %}
+
+{% block content %}
+    <div class="flex justify-center items-center">
+        <div class="relative bg-white rounded-full w-fit h-fit cursor-pointer">
+            <img class="w-96 aspect-square object-cover rounded-full" src="{{ asset('images/users/' ~ (user.image ?? "default-image.jpg")) }}" alt="profile image" data-modal-target="crop-image-modal" data-modal-toggle="crop-image-modal" />
+            <div title="Change profile picture" class="flex justify-center items-center absolute right-0 bottom-6 bg-theme-secondary rounded-full cursor-pointer hover:bg-theme-primary" data-modal-target="profile-image-modal" data-modal-toggle="profile-image-modal">
+                <twig:ux:icon class="w-20" name="material-symbols:camera-rounded" />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <twig:UserForm :form="form" />
+    </div>
+
+    <twig:Modals:Form id="profile-image" title="Upload Profile Picture">
+        <style>
+            .dropzone-container {
+                height: 100%;
+            }
+        </style>
+        <div class="h-72">
+            {{ form_start(profileImageForm, {
+                attr: {
+                    class: "h-full"
+                }
+            }) }}
+
+            <div class="h-full">
+                {{ form_widget(profileImageForm.image) }}
+                {{ form_errors(profileImageForm.image) }}
+            </div>
+
+            <button type="submit" class="button-primary">Upload</button>
+
+            {{ form_end(profileImageForm) }}
+        </div>
+    </twig:Modals:Form>
+    <twig:Modals:Form id="crop-image" title="Crop Profile Picture">
+        <div class="min-h-72">
+            {{ form_start(cropForm, {
+                attr: {
+                    class: "w-full h-full"
+                }
+            }) }}
+                <div class="w-full h-full">{{ form_widget(cropForm, {
+                        attr: {
+                            class: "w-full h-full"
+                        }
+                    }) }}</div>
+                <div class="w-1/4">
+                    <div id="cropper-preview" style="overflow: hidden; width: 200px !important; height: 200px !important;">
+                        Test
+                    </div>
+                </div>
+                <button type="submit" class="button mt-5" style="width: 100%;">Crop it!</button>
+            {{ form_end(cropForm) }}
+        </div>
+    </twig:Modals:Form>
+{% endblock %}
+

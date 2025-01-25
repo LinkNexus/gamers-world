@@ -1,20 +1,151 @@
-{% extends 'base.html.twig' %}
+{% extends 'app/base.html.twig' %}
 
-{% block title %}Hello AppController!{% endblock %}
+{% set games = [
+    {
+        name: 'Chifoumi',
+        image: 'chifoumi.webp',
+        description: 'Play Rock-Paper-Scissors against the computer or other players online',
+        url: '#'
+    },
+    {
+        name: 'Tic-Tac-Toe',
+        image: 'tictactoe.png',
+        description: 'Play Tic-Tac-Toe against the computer or other players online',
+        url: '#'
+    }
+] %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% set top_scores = [
+    {
+        player: 'User 1',
+        wins: 10,
+        loses: 5,
+        draws: 2,
+        points: 32
+    },
+    {
+        player: 'User 2',
+        wins: 8,
+        loses: 7,
+        draws: 3,
+        points: 27
+    },
+    {
+        player: 'User 3',
+        wins: 6,
+        loses: 8,
+        draws: 4,
+        points: 22
+    },
+    {
+        player: 'User 4',
+        wins: 4,
+        loses: 10,
+        draws: 6,
+        points: 18
+    },
+    {
+        player: 'User 5',
+        wins: 2,
+        loses: 12,
+        draws: 8,
+        points: 14
+    }
+] %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block content %}
+    <div class="p-5">
+        <h1 class="w-full title text-center text-3xl md:text-5xl lg:text-6xl">
+            Welcome to The Gamers World!
+        </h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/app/src/Controller/AppController.php</code></li>
-        <li>Your template at <code>/app/templates/index.html.twig</code></li>
-    </ul>
-</div>
+        <p class="w-full text-xl text-center mt-5">Play Free, Simple, and Fun Games online.</p>
+    </div>
+
+    <div class="mt-8 p-4">
+        <h2 class="text-3xl w-full text-center font-bold md:text-4xl lg:text-5xl">Popular Games</h2>
+        <div class="flex flex-wrap justify-center gap-5 mt-8">
+            {% for game in games %}
+                <a href="{{ game.url }}" class="md:w-[400px] flex flex-col gap-y-3 border-2 border-dashed border-theme-primary rounded-md p-5 clickable hover:bg-theme-primary hover:border-theme-secondary transition">
+                    <img class="w-50 flex-shrink-0 flex-grow-0" src="{{ asset('images/' ~ game.image) }}" alt="{{ game.name ~ ' image' }}">
+                    <h3 class="text-center font-bold text-2xl">{{ game.name }}</h3>
+                    <span class="text-center">{{ game.description }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-8 p-4">
+        <h2 class="text-3xl w-full text-center font-bold md:text-4xl lg:text-5xl">Top Players</h2>
+        <div class="flex flex-wrap justify-center gap-5 mt-8">
+
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+                <table class="w-full text-sm text-left rtl:text-right">
+                    <thead class="text-xs text-theme-primary uppercase border-b border-dashed border-theme-primary">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 border-r border-dashed border-theme-primary">
+                            Rank
+                        </th>
+                        <th scope="col" class="px-6 py-3 border-r border-dashed border-theme-primary">
+                            Player
+                        </th>
+                        <th scope="col" class="px-6 py-3 border-r border-dashed border-theme-primary">
+                            Wins
+                        </th>
+                        <th scope="col" class="px-6 py-3 border-r border-dashed border-theme-primary">
+                            Loses
+                        </th>
+                        <th scope="col" class="px-6 py-3 border-r border-dashed border-theme-primary">
+                            Draws
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Points
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in range(0, top_scores|length - 1) %}
+                        <tr class="{{ i < top_scores|length - 1 ? 'border-b border-dashed border-theme-primary' }} hover:bg-theme-secondary">
+                            <td class="px-6 py-4 border-r dashed-borders">
+                                {{ i + 1 }}
+                            </td>
+                            <th scope="row" class="flex items-center px-6 py-4 font-semibold border-r dashed-borders whitespace-nowrap overflow-x-auto">
+                                <img class="w-10 aspect-square rounded-full" src="{{ asset('images/users/default-image.jpg') }}" alt="Player image">
+                                <div class="ps-3">
+                                    <div class="text-base font-semibold">{{ top_scores[i].player }}</div>
+                                    <div class="font-normal text-gray-500">neil.sims@flowbite.com</div>
+                                </div>
+                            </th>
+                            <td class="px-6 py-4 border-r dashed-borders">
+                                {{ top_scores[i].wins }}
+                            </td>
+                            <td class="px-6 py-4 border-r dashed-borders">
+                                {{ top_scores[i].loses }}
+                            </td>
+                            <td class="px-6 py-4 border-r dashed-borders">
+                                {{ top_scores[i].draws }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ top_scores[i].points }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
 {% endblock %}
+
+{#{% block react_component %}#}
+{#    {{ react_component('App', {#}
+{#        user: user,#}
+{#        joinUrl: mercure('http://localhost:5001/join')|json_serialize,#}
+{#        synchronizePlayersUrl: mercure('http://localhost:5001/players/synchronize')|json_serialize,#}
+{#        isPlayerReadyUrl: mercure('http://localhost:5001/players/is-ready')|json_serialize,#}
+{#        shifoumiPlayUrl: mercure('http://localhost:5001/chifoumi/play')|json_serialize,#}
+{#        ticTacToePlayUrl: mercure('http://localhost:5001/tictactoe/play')|json_serialize,#}
+{#        ticTacToeOutcomeUrl: mercure('http://localhost:5001/tictactoe/outcome')|json_serialize,#}
+{#    }) }}#}
+{#{% endblock %}#}

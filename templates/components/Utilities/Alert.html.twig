@@ -1,0 +1,32 @@
+{% props type, message, id %}
+
+{% set colors = {
+    'success': {
+        'block': 'text-green-800 bg-green-200',
+        'close_button': 'hover:bg-green-400 focus:ring-green-400',
+    },
+    'error': {
+        'block': 'text-red-800 bg-red-200',
+        'close_button': 'hover:bg-red-400 focus:ring-red-400',
+    },
+    'warning': {
+        'block': 'text-yellow-800 bg-yellow-200',
+        'close_button': 'hover:bg-yellow-400 focus:ring-yellow-400',
+    },
+    'info': {
+        'block': 'text-blue-800 bg-blue-200',
+        'close_button': 'hover:bg-blue-400 focus:ring-blue-400',
+    },
+} %}
+
+<div id="{{ id }}" class="flex items-center p-4 mb-4 {{ colors[type].block }} rounded-lg" role="alert">
+    <twig:ux:icon name="ep:info-filled" class="flex-shrink-0 w-4 h-4" aria-hidden="true" fill="currentColor" />
+    <span class="sr-only">Info</span>
+    <div class="ms-3 text-sm font-medium">
+        {{ message }}
+    </div>
+    <button type="button" class="ms-auto -mx-1.5 -my-1.5 {{ colors[type].close_button }} rounded-lg focus:ring-2 p-1.5 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#{{ id }}" aria-label="Close">
+        <span class="sr-only">Close</span>
+        <twig:ux:icon class="w-6 h-6" aria-hidden="true" name="bitcoin-icons:cross-filled" fill="none" />
+    </button>
+</div>

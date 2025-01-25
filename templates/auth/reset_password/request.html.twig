@@ -1,0 +1,15 @@
+{% extends 'auth/base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block main_title %}
+    Reset your Password
+{% endblock %}
+
+{% block description %}
+    Enter your Email Address in order to reset your password.
+{% endblock %}
+
+{% block form %}
+    <twig:Auth:ResetPasswordRequestForm form="{{ requestForm }}" />
+{% endblock %}

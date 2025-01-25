@@ -23,6 +23,10 @@ Encore
      */
     .addEntry('app', './assets/app.ts')
 
+    .addEntry('auth', './assets/auth.ts')
+
+    .addEntry('base', './assets/base.ts')
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
@@ -79,6 +83,20 @@ Encore
     .enablePostCssLoader()
     .addAliases({
         '@': resolve(__dirname, 'assets')
+    })
+
+    // To permit hot-refresh on twig files
+    .disableCssExtraction(Encore.isDevServer())
+    .configureDevServerOptions(options => {
+        // Watch Twig & yaml files to force reload the browser on changes:
+        options.liveReload = true;
+        options.watchFiles = [
+            'templates/**/*.twig'
+        ];
+
+        // Disable watching the static `public` folder since it would force a live reload on any change,
+        // as the manifest.json file is always re-computed (but not required by the dev server):
+        options.static.watch = false;
     })
 ;
 

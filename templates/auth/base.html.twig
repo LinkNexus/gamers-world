@@ -1,7 +1,17 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('auth') }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('auth') }}
+{% endblock %}
+
 {% block body %}
-    <main class="external-form">
+    <main class="auth-form">
         <div>
             <div>
                 <h1>{% block main_title %}{% endblock %}</h1>

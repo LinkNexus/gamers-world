@@ -1,6 +1,11 @@
 {% extends 'components/Forms/AutoValidatingForm.html.twig' %}
 
-{% block form_body %}
+{% block form %}
+    {{ form_start(form, { attr: {
+        novalidate: true,
+        action: path('app_register'),
+    } }) }}
+
     {{ form_errors(form) }}
 
     {% for flash_error in app.flashes('verify_email_error') %}
@@ -50,13 +55,11 @@
         {{ form_errors(form.agreeTerms) }}
     </div>
 
-    <button type="submit">Register</button>
-{% endblock %}
+    <button data-turbo="false" type="submit">Register</button>
 
-{% block form %}
-    {{ parent() }}
+    {{ form_end(form) }}
     <hr>
-    <a href="/">Sign In</a>
+    <a href="{{ path('app_login') }}">Sign In</a>
 {% endblock %}
 
 {% block attributes %}

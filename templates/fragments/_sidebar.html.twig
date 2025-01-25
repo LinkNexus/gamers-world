@@ -1,0 +1,111 @@
+{% set menu_content = [
+    {
+        'label': 'Dashboard',
+        'icon': 'material-symbols:dashboard',
+        'url': '#',
+        'authentication_required': true,
+    },
+    {
+        'label': 'Leaderboard',
+        'icon': 'material-symbols:social-leaderboard',
+        'url': '#',
+        'authentication_required': null,
+    },
+    {
+        'label': 'Games',
+        'icon': 'emojione-v1:video-game',
+        'url': '#',
+        'authentication_required': null,
+        'dropdown': [
+            {
+                'label': 'Tic Tac Toe',
+                'icon': 'game-icons:tic-tac-toe',
+                'url': '#'
+            },
+            {
+                'label': 'Rock-Paper-Scissors',
+                'icon': 'fa:hand-scissors-o',
+                'url': '#'
+            }
+        ]
+    },
+    {
+        'label': 'Sign In',
+        'icon': 'simple-icons:simplelogin',
+        'url': path('app_login'),
+        'authentication_required': false,
+    },
+    {
+        'label': 'Sign Up',
+        'icon': 'mdi:register',
+        'url': path('app_register'),
+        'authentication_required': false,
+    },
+    {
+        'label': 'Sign Out',
+        'icon': 'solar:logout-2-bold',
+        'url': path('app_logout'),
+        'authentication_required': true,
+    },
+    {
+        'label': 'Contact',
+        'icon': 'iconoir:send-mail-solid',
+        'url': '#',
+        'authentication_required': null,
+    }
+] %}
+
+{% if app.user is not null %}
+    {% set menu_content = menu_content|filter(value => value.authentication_required != false or value.authentication_required is null) %}
+{% else %}
+    {% set menu_content = menu_content|filter(value => value.authentication_required != true or value.authentication_required is null) %}
+{% endif %}
+
+<aside id="logo-sidebar" class="fixed top-0 text-white left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-black border-r-2 border-theme-secondary sm:translate-x-0" aria-label="Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-black">
+        <ul class="space-y-2 font-medium">
+            {% for item in menu_content %}
+                <li>
+                    {% if item.dropdown is defined %}
+                        <button type="button" class="flex items-center w-full p-2 text-base duration-75 rounded-lg group hover:bg-theme-primary" aria-controls="dropdown" data-collapse-toggle="dropdown-{{ item.label }}">
+                            <twig:ux:icon
+                                    name="{{ item.icon }}"
+                                    class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
+                                    aria-hidden="true"
+                            />
+                            <span class="ms-3">{{ item.label }}</span>
+                            <twig:ux:icon
+                                    name="codex:chevron-down"
+                                    class="w-5 h-5 ml-auto"
+                                    aria-hidden="true"
+                            />
+                        </button>
+                        <ul id="dropdown-{{ item.label }}">
+                            {% for dropdown_item in item.dropdown %}
+                                <li>
+                                   <a href="{{ dropdown_item.url }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-theme-primary">
+                                        <twig:ux:icon
+                                                  name="{{ dropdown_item.icon }}"
+                                                  class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
+                                                  aria-hidden="true"
+                                        />
+                                        <span class="ms-3">{{ dropdown_item.label }}</span>
+                                   </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a href="{{ item.url }}" class="flex items-center p-2 rounded-lg hover:bg-theme-primary group">
+                            <twig:ux:icon
+                                    name="{{ item.icon }}"
+                                    class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
+                                    aria-hidden="true"
+                            />
+                            <span class="ms-3">{{ item.label }}</span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</aside>

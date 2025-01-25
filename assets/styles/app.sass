@@ -1,23 +1,5 @@
 @use './base'
-
-body
-  @apply text-body bg-theme-accent-1
-  font-family: "Sora", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-
-.alert
-  @apply flex flex-wrap p-5 rounded-lg flex flex-wrap items-center justify-center font-semibold
-
-.alert-danger
-  @apply text-red-700
-  background: rgba(254, 202, 202, .8)
-
-.alert-success
-    @apply text-green-700
-    background: rgba(209, 250, 229, .8)
-
-.alert-info
-    @apply text-blue-700
-    background: rgba(147, 197, 253, .8)
+@use './components'
 
 .grids
   @apply bg-slate-900
