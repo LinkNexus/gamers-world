@@ -200,7 +200,7 @@
         "files": [
             "assets/bootstrap.ts",
             "assets/controllers.json",
-            "assets/controllers/csrf_protection_controller.js",
+            "assets/controllers/csrf_protection_controller.ts",
             "assets/controllers/hello_controller.js"
         ]
     },
