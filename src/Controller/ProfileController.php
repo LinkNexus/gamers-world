@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Config\Gender;
 use App\DTO\TemplatedMailDTO;
 use App\Entity\User;
 use App\Form\User\ChangeEmailType;
@@ -159,7 +160,7 @@ final class ProfileController extends AbstractController
         #[CurrentUser] ?User $user
     ): RedirectResponse
     {
-        $imageName = $imageGenerator->generateImageByGender($user->getGender(), $user->getUsername());
+        $imageName = $imageGenerator->generateImageByGender(($user->getGender() ?? Gender::Other), $user->getUsername());
 
         if ($imageName) {
             $user->deleteImage($this->getParameter('kernel.project_dir'));

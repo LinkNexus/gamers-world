@@ -8,7 +8,10 @@ framework:
     #esi: true
     #fragments: true
 
-#    csrf_protection: false
+    http_client:
+        scoped_clients:
+            imageGenerator.client:
+                base_uri: "https://avatar.iran.liara.run/"
 
 when@test:
     framework:
