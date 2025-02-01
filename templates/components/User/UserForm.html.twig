@@ -1,0 +1,65 @@
+<div {{ attributes }}>
+    <div data-controller="forms--random-input" data-forms--random-input-initially-loaded-fields-value="[]">
+        {{ form_start(form, { attr: {
+            'class': 'w-full flex flex-row lg:justify-between flex-wrap lg:gap-x-6',
+            'novalidate': 'novalidate',
+        }}) }}
+
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div>
+            {{ form_label(form.username) }}
+            <twig:Forms:RandomInput type="username">
+                {{ form_widget(form.username, {
+                    attr: {
+                        'data-forms--random-input-target': 'username',
+                        'class': 'w-full',
+                    }
+                }) }}
+            </twig:Forms:RandomInput>
+            {{ form_errors(form.username) }}
+        </div>
+
+        <div>
+            {{ form_label(form.plainPassword.first) }}
+            <twig:Forms:RandomInput type="password">
+                {{ form_widget(form.plainPassword.first, {
+                    attr: {
+                        'data-forms--random-input-target': 'password',
+                        'class': 'w-full'
+                    }
+                }) }}
+            </twig:Forms:RandomInput>
+            {{ form_errors(form.plainPassword.first) }}
+        </div>
+
+        <div>
+            {{ form_label(form.plainPassword.second) }}
+            {{ form_widget(form.plainPassword.second, {
+                attr: {
+                    'data-forms--random-input-target': 'password',
+                    'class': 'w-full'
+                }
+            }) }}
+            {{ form_errors(form.plainPassword.second) }}
+        </div>
+
+        <div>
+            {{ form_label(form.gender) }}
+            {{ form_widget(form.gender) }}
+            {{ form_errors(form.gender) }}
+        </div>
+
+        <button type="submit">
+            Save
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+</div>

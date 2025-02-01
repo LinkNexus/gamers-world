@@ -11,14 +11,30 @@
 {% endblock %}
 
 {% block body %}
-    <main class="auth-form">
-        <div>
-            <div>
-                <h1>{% block main_title %}{% endblock %}</h1>
-                <span>{% block description %}{% endblock %}</span>
+    <main class="min-h-screen flex flex-wrap justify-center content-center p-5 bg-gradient-to-r from-theme-accent-1 from-55% to-theme-secondary md:px-10">
+        <div class="w-full md:w-3/4 lg:w-1/2">
+            <div class="w-full flex flex-col gap-y-2 mb-5 md:gap-y-4">
+                <h1 class="title w-full text-center h-fit">
+                    <span>
+                        {% block main_title %}{% endblock %}
+                    </span>
+                </h1>
+                <span class="w-full font-medium block text-sm text-center md:text-base">
+                    {% block description %}{% endblock %}
+                </span>
             </div>
 
+            {% block alerts %}
+                {% include 'fragments/_flash_messages.html.twig' %}
+            {% endblock %}
+
             {% block form %}{% endblock %}
+
+            <hr>
+
+            {% block secondary_link %}
+                <a class="button-secondary mt-5" href="{{ path('app_login') }}">Sign In</a>
+            {% endblock %}
         </div>
     </main>
 {% endblock %}

@@ -48,10 +48,16 @@ $body: #dddddd
     @apply bg-gradient-to-r from-theme-accent-1 from-55% to-theme-secondary
 
   .title
-    @apply text-5xl font-bold bg-gradient-to-r from-theme-primary to-theme-white bg-clip-text color-gradient
+    @apply w-full text-3xl font-bold text-center
+
+    &>*
+      @apply color-gradient
 
     @media (min-width: 768px)
       @apply text-5xl
+
+    @media (min-width: 1024px)
+      @apply text-6xl
 
   .dashed-borders
     @apply border-dashed border-theme-primary
@@ -78,8 +84,11 @@ body
 form
   @apply w-full flex flex-col gap-y-5
 
-  & input:not([type="submit"], [type="checkbox"]), & textarea
+  & input:not([type="submit"], [type="checkbox"]), & textarea, & select
     @apply bg-theme-accent-2 rounded-lg p-2 border border-theme-primary
+
+    &:disabled
+      @apply bg-theme-primary cursor-not-allowed
 
     &:focus
       @apply border-2 border-theme-primary
@@ -94,14 +103,45 @@ form
     @apply w-full mt-2
 
   & .input-with-icon
-    @apply flex gap-x-3
+    @apply flex gap-x-3 items-center
 
     & svg
       @apply aspect-square h-full max-h-10 cursor-pointer
 
-  & input + ul, & textarea + ul , & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul
+  & input + ul, & textarea + ul , & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul, & select + ul
     @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2
+
+  & select > option
+    &:hover
+        @apply bg-theme-primary text-theme-white
 
   & button[type="submit"]
     @apply button-primary w-full
     transition: all 0.8s
+
+.title-secondary
+  @apply text-3xl w-full text-center font-bold
+  @media (min-width: 768px)
+    @apply text-4xl
+  @media (min-width: 1024px)
+    @apply text-5xl
+
+.alert-success
+  @apply text-green-800 bg-green-200
+  & button svg
+    @apply hover:bg-green-400 focus:ring-green-400
+
+.alert-error
+  @apply text-red-800 bg-red-200
+  & button svg
+    @apply hover:bg-red-400 focus:ring-red-400
+
+.alert-info
+  @apply text-blue-800 bg-blue-200
+  & button svg
+    @apply hover:bg-blue-400 focus:ring-blue-400
+
+.alert-warning
+  @apply text-yellow-800 bg-yellow-200
+  & button svg
+    @apply hover:bg-yellow-400 focus:ring-yellow-400

@@ -1,0 +1,11 @@
+{% extends 'app/base.html.twig' %}
+
+{% block content %}
+    <div class="flex flex-col items-center">
+        {% include 'fragments/_profile_picture.html.twig' %}
+
+        <h2 class="mt-5 title-secondary">
+            {{ user.username }} {{ user.name ? '('~ user.name ~ ')' : '' }}
+        </h2>
+    </div>
+{% endblock %}

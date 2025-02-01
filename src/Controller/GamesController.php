@@ -11,7 +11,7 @@ final class GamesController extends AbstractController
     #[Route('/games', name: 'app_games')]
     public function index(): Response
     {
-        return $this->render('games/index.html.twig', [
+        return $this->render('app/games/index.html.twig', [
             'controller_name' => 'GamesController',
         ]);
     }

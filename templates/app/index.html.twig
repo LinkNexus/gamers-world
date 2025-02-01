@@ -53,15 +53,16 @@
     }
 ] %}
 
+{% block main_title %}
+    Welcome to The Gamers World!
+{% endblock %}
+
+{% block title_block %}
+    {{ parent() }}
+    <p class="w-full text-xl text-center mt-5">Play Free, Simple, and Fun Games online.</p>
+{% endblock %}
+
 {% block content %}
-    <div class="p-5">
-        <h1 class="w-full title text-center text-3xl md:text-5xl lg:text-6xl">
-            Welcome to The Gamers World!
-        </h1>
-
-        <p class="w-full text-xl text-center mt-5">Play Free, Simple, and Fun Games online.</p>
-    </div>
-
     <div class="mt-8 p-4">
         <h2 class="text-3xl w-full text-center font-bold md:text-4xl lg:text-5xl">Popular Games</h2>
         <div class="flex flex-wrap justify-center gap-5 mt-8">

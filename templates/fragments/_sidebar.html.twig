@@ -1,8 +1,14 @@
 {% set menu_content = [
     {
+        'label': 'Home',
+        'icon': 'solar:home-bold',
+        'url': path('app_index'),
+        'authentication_required': null,
+    },
+    {
         'label': 'Dashboard',
         'icon': 'material-symbols:dashboard',
-        'url': '#',
+        'url': path('app_profile'),
         'authentication_required': true,
     },
     {
@@ -42,6 +48,19 @@
         'authentication_required': false,
     },
     {
+        'label': 'Inbox',
+        'icon': 'solar:mailbox-bold',
+        'url': '#',
+        'authentication_required': true,
+        'badge': 3
+    },
+    {
+        'label': 'Friends',
+        'icon': 'fa-solid:user-friends',
+        'url': '#',
+        'authentication_required': true,
+    },
+    {
         'label': 'Sign Out',
         'icon': 'solar:logout-2-bold',
         'url': path('app_logout'),
@@ -52,7 +71,7 @@
         'icon': 'iconoir:send-mail-solid',
         'url': '#',
         'authentication_required': null,
-    }
+    },
 ] %}
 
 {% if app.user is not null %}
@@ -73,7 +92,7 @@
                                     class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
                                     aria-hidden="true"
                             />
-                            <span class="ms-3">{{ item.label }}</span>
+                            <a href="#" class="ms-3 hover:underline hover:underline-offset-4">{{ item.label }}</a>
                             <twig:ux:icon
                                     name="codex:chevron-down"
                                     class="w-5 h-5 ml-auto"
@@ -95,13 +114,16 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <a href="{{ item.url }}" class="flex items-center p-2 rounded-lg hover:bg-theme-primary group">
+                        <a href="{{ item.url }}" class="flex items-center p-2 rounded-lg hover:bg-theme-primary group" data-turbo="{{ item.label == 'Sign Out' ? "false" : "true" }}">
                             <twig:ux:icon
                                     name="{{ item.icon }}"
                                     class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
                                     aria-hidden="true"
                             />
                             <span class="ms-3">{{ item.label }}</span>
+                            {% if item.badge is defined %}
+                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ item.badge }}</span>
+                            {% endif %}
                         </a>
                     {% endif %}
                 </li>

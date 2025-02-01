@@ -1,0 +1,75 @@
+{% extends 'app/base.html.twig' %}
+
+{% block content %}
+    <div class="flex justify-center items-center">
+        <div class="relative bg-white rounded-full w-fit h-fit cursor-pointer">
+            <img id="user-profile-image" class="w-96 aspect-square object-cover rounded-full" src="{{ asset('images/users/' ~ (user.image ?? "default-image.jpg")) }}" alt="profile image" />
+            <div title="Change profile picture" class="flex justify-center items-center absolute right-0 bottom-6 bg-theme-secondary rounded-full cursor-pointer hover:bg-theme-primary" data-modal-target="profile-image-modal" data-modal-toggle="profile-image-modal">
+                <twig:ux:icon class="w-20" name="material-symbols:camera-rounded" />
+            </div>
+        </div>
+    </div>
+
+    <style>
+        form[name='user'], form[name='change_email'] {
+            &>div {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                row-gap: 0.5rem;
+                @media (min-width: 1024px) {
+                    width: calc(50% - 0.75rem);
+                }
+            }
+        }
+    </style>
+
+    <div class="mt-8">
+        <h2 class="title-secondary mb-8">Personal Information</h2>
+        <twig:User:UserForm :form="form" />
+    </div>
+
+    <div class="mt-8">
+        <h2 class="title-secondary mb-8">Change your Email Address</h2>
+        <twig:User:ChangeEmailForm :form="changeEmailForm" />
+    </div>
+
+    <twig:Modals:Form id="profile-image" title="Upload Profile Picture">
+        <style>
+            .dropzone-container {
+                height: 100%;
+            }
+        </style>
+        <div class="h-72 mb-3">
+            {{ form_start(profileImageForm, {
+                attr: {
+                    class: "h-full",
+                },
+                name: "profile-image",
+            }) }}
+
+            <div class="h-full">
+                {{ form_widget(profileImageForm.image) }}
+                {{ form_errors(profileImageForm.image) }}
+            </div>
+
+            <button type="submit" class="button-primary">Upload</button>
+
+            {{ form_end(profileImageForm) }}
+        </div>
+
+        <hr>
+
+        <form action="{{ path('app_profile_random_image') }}" method="POST">
+            <button type="submit" class="button-secondary flex items-center gap-x-3 mt-3 bg-none" title="Generate a random image" data-turbo="false">
+                <span class="hidden md:block">Generate Random Image</span>
+                <twig:ux:icon
+                        name="noto-v1:game-die"
+                        title="Generate a random image"
+                        class="clickable w-10 aspect-square cursor-pointer"
+                />
+            </button>
+        </form>
+    </twig:Modals:Form>
+{% endblock %}
+

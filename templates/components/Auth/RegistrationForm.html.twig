@@ -1,68 +1,59 @@
-{% extends 'components/Forms/AutoValidatingForm.html.twig' %}
+<div {{ attributes }}>
+    <div data-controller="forms--random-input">
+        <twig:Turbo:Frame id="registration-form">
+            {{ form_start(form, { attr: {
+                novalidate: true,
+                action: path('app_register'),
+            } }) }}
 
-{% block form %}
-    {{ form_start(form, { attr: {
-        novalidate: true,
-        action: path('app_register'),
-    } }) }}
+            {{ form_errors(form) }}
 
-    {{ form_errors(form) }}
+            <div>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
 
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+            <div>
+                {{ form_widget(form.email) }}
+                {{ form_errors(form.email) }}
+            </div>
 
-    <div>
-        {{ form_widget(form.name) }}
-        {{ form_errors(form.name) }}
-    </div>
+            <div>
+                <twig:Forms:RandomInput type="username">
+                    {{ form_widget(form.username, { attr: {
+                        'data-forms--random-input-target': 'username'
+                    }}) }}
+                </twig:Forms:RandomInput>
+                {{ form_errors(form.username) }}
+            </div>
 
-    <div>
-        {{ form_widget(form.email) }}
-        {{ form_errors(form.email) }}
-    </div>
+            <div>
+                <twig:Forms:RandomInput type="password">
+                    {{ form_widget(form.plainPassword.first, {
+                        attr: {
+                            'data-forms--random-input-target': 'password'
+                        }
+                    }) }}
+                </twig:Forms:RandomInput>
+                {{ form_errors(form.plainPassword.first) }}
+            </div>
 
-    <div>
-        <twig:Forms:RandomInput type="username">
-            {{ form_widget(form.username, { attr: {
-                'data-forms--random-input-target': 'username'
-            }}) }}
-        </twig:Forms:RandomInput>
-        {{ form_errors(form.username) }}
-    </div>
-
-    <div>
-        <twig:Forms:RandomInput type="password">
-            {{ form_widget(form.plainPassword.first, {
-                attr: {
+            <div>
+                {{ form_widget(form.plainPassword.second, { attr:{
                     'data-forms--random-input-target': 'password'
-                }
-            }) }}
-        </twig:Forms:RandomInput>
-        {{ form_errors(form.plainPassword.first) }}
+                }}) }}
+                {{ form_errors(form.plainPassword.second) }}
+            </div>
+
+            <div>
+                {{ form_widget(form.agreeTerms) }}
+                {{ form_label(form.agreeTerms) }}
+                {{ form_errors(form.agreeTerms) }}
+            </div>
+
+            <button data-turbo="false" type="submit">Register</button>
+
+            {{ form_end(form) }}
+        </twig:Turbo:Frame>
     </div>
-
-    <div>
-        {{ form_widget(form.plainPassword.second, { attr:{
-            'data-forms--random-input-target': 'password'
-        }}) }}
-        {{ form_errors(form.plainPassword.second) }}
-    </div>
-
-    <div>
-        {{ form_widget(form.agreeTerms) }}
-        {{ form_label(form.agreeTerms) }}
-        {{ form_errors(form.agreeTerms) }}
-    </div>
-
-    <button data-turbo="false" type="submit">Register</button>
-
-    {{ form_end(form) }}
-    <hr>
-    <a href="{{ path('app_login') }}">Sign In</a>
-{% endblock %}
-
-{% block attributes %}
-    {{ parent() }}
-    data-controller="forms--random-input"
-{% endblock %}
+</div>

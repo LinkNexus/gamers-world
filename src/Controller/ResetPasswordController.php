@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\DTO\TemplatedMailDTO;
 use App\Entity\User;
+use App\Events\TemplatedMailRequestEvent;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,7 +30,8 @@ class ResetPasswordController extends AbstractController
 
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private readonly EventDispatcherInterface $dispatcher
     ) {
     }
 
@@ -156,17 +160,17 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('contact@gamersworld.com', 'Contact - GamersWorld'))
-            ->to((string) $user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('auth/reset_password/email.html.twig')
-            ->context([
+        $mailDetails = new TemplatedMailDTO(
+            subject: 'Your password reset request',
+            template: 'auth/reset_password/email.html.twig',
+            context: [
                 'resetToken' => $resetToken,
-            ])
-        ;
+            ],
+            fromAddresses: [new Address('contact@gamersworld.com', 'Contact - GamersWorld')],
+            toAddresses: [(string) $user->getEmail()],
+        );
 
-        $mailer->send($email);
+        $this->dispatcher->dispatch(new TemplatedMailRequestEvent($mailDetails));
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);

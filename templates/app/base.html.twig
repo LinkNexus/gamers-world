@@ -16,15 +16,21 @@
 
     <div class="p-4 sm:ml-64">
         <div class="p-4 mt-14 rounded-lg bg-gradient">
-            {% set i = 0 %}
-            {% for type, messages in app.flashes %}
-                {% for message in messages %}
-                    <twig:Utilities:Alert id="alert-{{ type }}-{{ i }}" type="{{ type }}" message="{{ message }}" />
-                    {% set i = i + 1 %}
-                {% endfor %}
-            {% endfor %}
 
-            {% block content %}{% endblock %}
+            {% include 'fragments/_flash_messages.html.twig' %}
+
+            {% block title_block %}
+                <div class="p-5">
+                    <h1 class="title">
+                    <span>
+                        {% block main_title %}{% endblock %}
+                    </span>
+                    </h1>
+                </div>
+            {% endblock %}
+
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 

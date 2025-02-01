@@ -24,9 +24,10 @@ class AppFixtures extends Fixture
             $user = (new User())
                 ->setName("User $i")
                 ->setEmail('user' . $i . '@example.com')
-                ->setUsername("user$i")
+                ->setUsername("@User$i")
                 ->setName("User $i")
-                ->setImage('default-image.jpg');
+                ->setImage('default-image.jpg')
+                ->setIsVerified(true);
 
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
             $manager->persist($user);

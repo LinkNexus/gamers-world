@@ -16,7 +16,7 @@
             <div class="flex items-center">
                 <div class="flex items-center ms-3">
                     <div>
-                        <button type="button" class="flex text-sm rounded-full focus:ring-4" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                        <button type="button" class="flex text-sm rounded-full focus:ring-4 bg-white w-fit h-fit" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
                             <img class="w-8 h-8 rounded-full" src="{{ asset('images/users/' ~ (app.user ? app.user.image : 'default-image.jpg')) }}" alt="user photo">
                         </button>
@@ -25,7 +25,7 @@
                         {% if app.user %}
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm" role="none">
-                                    @{{ app.user.username }}
+                                    {{ app.user.username }}
                                 </p>
                                 <p class="text-sm font-medium truncate" role="none">
                                     {{ app.user.email }}
@@ -41,7 +41,7 @@
                                     <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-theme-primary" role="menuitem">Leaderboard</a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-white hover:bg-theme-primary" role="menuitem">Sign Out</a>
+                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-white hover:bg-theme-primary" role="menuitem" data-turbo="false">Sign Out</a>
                                 </li>
                             {% else %}
                                 <li>

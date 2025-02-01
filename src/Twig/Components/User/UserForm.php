@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Twig\Components;
+namespace App\Twig\Components\User;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\User\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;

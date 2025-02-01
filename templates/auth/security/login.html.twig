@@ -11,51 +11,48 @@
 {% endblock %}
 
 {% block form %}
-    <div>
-        <twig:Turbo:Frame id="login-form">
-            <form action="{{ path('app_login') }}" method="post">
-                {% if error %}
-                    <twig:Utilities:Alert id="login-alert-error" type="error" message="{{ error.messageKey|trans(error.messageData, 'security') }}" />
-                {% endif %}
+    <twig:Turbo:Frame id="login-form">
+        <form action="{{ path('app_login') }}" method="post">
+            <input placeholder="Email Address" type="email" value="{{ last_username }}" name="_username" id="username" class="form-input" autocomplete="email" required autofocus>
 
-                {% if app.user %}
-                    <twig:Utilities:Alert id="login-alert-info" type="info" message="You are already logged in" />
-                {% endif %}
+            <div class="toggle-password-container mt-3">
+                <input placeholder="Password" type="password" name="_password" id="password" autocomplete="current-password" required
+                        {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
+                            visibleLabel: 'Show',
+                            hiddenLabel: 'Hide',
+                            buttonClasses: ['toggle-password-button'],
+                        }) }}
+                >
+                <a data-turbo="false" href="{{ path('app_forgot_password_request') }}" class="mt-5 text-sm inline-block hover:cursor-pointer hover:underline hover:underline-offset-4">Forgot Password?</a>
+            </div>
 
-                <input placeholder="Email Address" type="email" value="{{ last_username }}" name="_username" id="username" class="form-input" autocomplete="email" required autofocus>
+            <div>
+                <input type="checkbox" name="_remember_me" id="_remember_me">
+                <label for="_remember_me">Remember me</label>
+            </div>
 
-                <div class="toggle-password-container mt-3">
-                    <input placeholder="Password" type="password" name="_password" id="password" autocomplete="current-password" required
-                            {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
-                                visibleLabel: 'Show',
-                                hiddenLabel: 'Hide',
-                                buttonClasses: ['toggle-password-button'],
-                            }) }}
-                    >
-                    <a data-turbo="false" href="{{ path('app_forgot_password_request') }}" class="mt-5 text-sm inline-block hover:cursor-pointer hover:underline hover:underline-offset-4">Forgot Password?</a>
-                </div>
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-{#                <input type="hidden" name="_csrf_token"#}
-{#                       value="{{ csrf_token('authenticate') }}"#}
-{#                >#}
+            <button data-turbo="false" class="button-primary" type="submit">
+                Sign in
+            </button>
+        </form>
+    </twig:Turbo:Frame>
+{% endblock %}
 
-                <div>
-                    <input type="checkbox" name="_remember_me" id="_remember_me">
-                    <label for="_remember_me">Remember me</label>
-                </div>
+{% block secondary_link %}
+    <hr>
+    <a class="button-secondary mt-5" href="{{ path('app_register') }}">
+        Sign Up
+    </a>
+{% endblock %}
 
-{#                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">#}
+{% block alerts %}
+    {% if error %}
+        <twig:Utilities:Alert id="login-alert-error" type="error" message="{{ error.messageKey|trans(error.messageData, 'security') }}" />
+    {% endif %}
 
-                <button data-turbo="false" class="button-primary" type="submit">
-                    Sign in
-                </button>
-            </form>
-        </twig:Turbo:Frame>
-
-        <hr>
-
-        <a href="{{ path('app_register') }}" class="mt-6 button-secondary">
-            Sign Up
-        </a>
-    </div>
+    {% if app.user %}
+        <twig:Utilities:Alert id="login-alert-info" type="info" message="You are already logged in" />
+    {% endif %}
 {% endblock %}

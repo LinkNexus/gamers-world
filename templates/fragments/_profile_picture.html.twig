@@ -1,0 +1,10 @@
+<div class="flex justify-center items-center">
+    <div class="relative bg-white rounded-full w-fit h-fit cursor-pointer">
+        <img id="user-profile-image" class="w-96 aspect-square object-cover rounded-full" src="{{ asset('images/users/' ~ (user.image ?? "default-image.jpg")) }}" alt="profile image" />
+        {% if user.id == app.user.id %}
+            <div title="Change profile picture" class="flex justify-center items-center absolute right-0 bottom-6 bg-theme-secondary rounded-full cursor-pointer hover:bg-theme-primary" data-modal-target="profile-image-modal" data-modal-toggle="profile-image-modal">
+                <twig:ux:icon class="w-20" name="material-symbols:camera-rounded" />
+            </div>
+        {% endif %}
+    </div>
+</div>

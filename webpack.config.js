@@ -21,11 +21,11 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.ts)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('app', './assets/app.ts')
+    .addEntry('app', './assets/entrypoints/app.ts')
 
-    .addEntry('auth', './assets/auth.ts')
+    .addEntry('auth', './assets/entrypoints/auth.ts')
 
-    .addEntry('base', './assets/base.ts')
+    .addEntry('base', './assets/entrypoints/base.ts')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

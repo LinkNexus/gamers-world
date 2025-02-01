@@ -1,0 +1,13 @@
+<div{{ attributes }}>
+    <div>
+        {{ form_start(form) }}
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <button type="submit">Save</button>
+        {{ form_end(form) }}
+    </div>
+</div>
