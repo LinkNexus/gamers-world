@@ -20,18 +20,18 @@
     {
         'label': 'Games',
         'icon': 'emojione-v1:video-game',
-        'url': '#',
+        'url': path('app_games'),
         'authentication_required': null,
         'dropdown': [
             {
                 'label': 'Tic Tac Toe',
                 'icon': 'game-icons:tic-tac-toe',
-                'url': '#'
+                'url': path('app_games_game', {slug: 'tic-tac-toe'})
             },
             {
                 'label': 'Rock-Paper-Scissors',
                 'icon': 'fa:hand-scissors-o',
-                'url': '#'
+                'url': path('app_games_game', {slug: 'chifoumi'})
             }
         ]
     },
@@ -92,7 +92,7 @@
                                     class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
                                     aria-hidden="true"
                             />
-                            <a href="#" class="ms-3 hover:underline hover:underline-offset-4">{{ item.label }}</a>
+                            <a href="{{ item.url }}" class="ms-3 hover:underline hover:underline-offset-4">{{ item.label }}</a>
                             <twig:ux:icon
                                     name="codex:chevron-down"
                                     class="w-5 h-5 ml-auto"

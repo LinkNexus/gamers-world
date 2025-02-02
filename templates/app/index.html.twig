@@ -1,20 +1,5 @@
 {% extends 'app/base.html.twig' %}
 
-{% set games = [
-    {
-        name: 'Chifoumi',
-        image: 'chifoumi.webp',
-        description: 'Play Rock-Paper-Scissors against the computer or other players online',
-        url: '#'
-    },
-    {
-        name: 'Tic-Tac-Toe',
-        image: 'tictactoe.png',
-        description: 'Play Tic-Tac-Toe against the computer or other players online',
-        url: '#'
-    }
-] %}
-
 {% set top_scores = [
     {
         player: 'User 1',
@@ -53,25 +38,19 @@
     }
 ] %}
 
-{% block main_title %}
-    Welcome to The Gamers World!
-{% endblock %}
-
-{% block title_block %}
-    {{ parent() }}
-    <p class="w-full text-xl text-center mt-5">Play Free, Simple, and Fun Games online.</p>
-{% endblock %}
-
 {% block content %}
+    <div>
+        <h1 class="title">
+            <span>Welcome to the GamersWorld!</span>
+        </h1>
+        <p class="w-full text-xl text-center mt-5">Play Free, Simple, and Fun Games online.</p>
+    </div>
+
     <div class="mt-8 p-4">
         <h2 class="text-3xl w-full text-center font-bold md:text-4xl lg:text-5xl">Popular Games</h2>
         <div class="flex flex-wrap justify-center gap-5 mt-8">
             {% for game in games %}
-                <a href="{{ game.url }}" class="md:w-[400px] flex flex-col gap-y-3 border-2 border-dashed border-theme-primary rounded-md p-5 clickable hover:bg-theme-primary hover:border-theme-secondary transition">
-                    <img class="w-50 flex-shrink-0 flex-grow-0" src="{{ asset('images/' ~ game.image) }}" alt="{{ game.name ~ ' image' }}">
-                    <h3 class="text-center font-bold text-2xl">{{ game.name }}</h3>
-                    <span class="text-center">{{ game.description }}</span>
-                </a>
+                <twig:GameCard game="{{ game }}" />
             {% endfor %}
         </div>
     </div>

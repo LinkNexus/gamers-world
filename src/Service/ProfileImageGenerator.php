@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Config\FileType;
-use App\Config\Gender;
+use App\Enum\FileType;
+use App\Enum\Gender;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

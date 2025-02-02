@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Config\Gender;
 use App\DTO\TemplatedMailDTO;
 use App\Entity\User;
+use App\Enum\Gender;
 use App\Form\User\ChangeEmailType;
 use App\Form\User\UserType;
 use App\Security\Profile\EmailVerifier;

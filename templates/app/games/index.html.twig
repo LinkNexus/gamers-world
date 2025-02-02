@@ -1,10 +1,28 @@
 {% extends 'app/base.html.twig' %}
 
-{% block title %}Hello GamesController!{% endblock %}
+{#{% set games = [#}
+{#    {#}
+{#        name: 'Chifoumi',#}
+{#        image: 'chifoumi.webp',#}
+{#        description: 'Play Rock-Paper-Scissors against the computer or other players online',#}
+{#        url: '#'#}
+{#    },#}
+{#    {#}
+{#        name: 'Tic-Tac-Toe',#}
+{#        image: 'tictactoe.png',#}
+{#        description: 'Play Tic-Tac-Toe against the computer or other players online',#}
+{#        url: '#'#}
+{#    }#}
+{#] %}#}
 
 {% block main_title %}
     Games
 {% endblock %}
 
 {% block content %}
+    <div class="flex flex-wrap justify-center gap-5 mt-8">
+        {% for game in games %}
+            <twig:GameCard game="{{ game }}" />
+        {% endfor %}
+    </div>
 {% endblock %}
