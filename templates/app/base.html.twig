@@ -34,8 +34,15 @@
     {# Auth Modals #}
     {% if app.user is null %}
         <div>
-            <twig:Modals:Auth id="login-form" title="Sign in to our platform" />
-            <twig:Modals:Auth id="registration-form" title="Join our Community" />
+            <twig:Utilities:Modal id="login-form" title="Sign in to our platform" >
+                <twig:Turbo:Frame class="login-form" id="login-form">
+                </twig:Turbo:Frame>
+            </twig:Utilities:Modal>
+
+            <twig:Utilities:Modal id="registration-form" title="Join our Community">
+                <twig:Turbo:Frame class="registration-form" id="registration-form">
+                </twig:Turbo:Frame>
+            </twig:Utilities:Modal>
         </div>
     {% endif %}
 {% endblock %}

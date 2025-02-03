@@ -34,7 +34,7 @@
         <twig:User:ChangeEmailForm :form="changeEmailForm" />
     </div>
 
-    <twig:Modals:Form id="profile-image" title="Upload Profile Picture">
+    <twig:Utilities:Modal id="profile-image" title="Upload Profile Picture">
         <style>
             .dropzone-container {
                 height: 100%;
@@ -70,6 +70,6 @@
                 />
             </button>
         </form>
-    </twig:Modals:Form>
+    </twig:Utilities:Modal>
 {% endblock %}
 
