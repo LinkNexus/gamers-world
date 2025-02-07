@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Enum\GameType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/games', name: 'app_games')]
 final class GamesController extends AbstractController
@@ -33,6 +35,19 @@ final class GamesController extends AbstractController
     {
         return $this->render('app/games/game.html.twig', [
             'game' => $game,
+        ]);
+    }
+
+    #[Route('/{slug}/play/{type}', name: '_play', methods: ['GET'])]
+    public function play(
+        #[MapEntity(mapping: ['slug' => 'slug'])]
+        Game $game,
+        GameType $type = GameType::SOLO
+    ): Response
+    {
+        return $this->render('app/games/play.html.twig', [
+            'game' => $game->getName(),
+            'type' => $type
         ]);
     }
 }
