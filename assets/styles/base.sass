@@ -40,7 +40,7 @@ $body: #dddddd
       @apply bg-gradient-to-r from-theme-primary to-theme-secondary text-theme-white
 
   .color-gradient
-    @apply bg-gradient-to-r from-theme-primary to-theme-secondary to-theme-white bg-clip-text
+    @apply bg-gradient-to-r from-theme-primary to-theme-white bg-clip-text
     -webkit-text-fill-color: transparent
     -webkit-background-clip: text
 
@@ -66,58 +66,44 @@ body
   @apply text-body bg-theme-accent-1
   font-family: "Sora", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
 
-//.alert
-//  @apply flex flex-wrap p-5 rounded-lg flex flex-wrap items-center justify-center font-semibold
-//
-//.alert-danger
-//  @apply text-red-700
-//  background: rgba(254, 202, 202, .8)
-//
-//.alert-success
-//  @apply text-green-700
-//  background: rgba(209, 250, 229, .8)
-//
-//.alert-info
-//  @apply text-blue-700
-//  background: rgba(147, 197, 253, .8)
-
 form
   @apply w-full flex flex-col gap-y-5
 
-  & input:not([type="submit"], [type="checkbox"]), & textarea, & select
+input
+  &:not([type="submit"], [type="checkbox"]), & textarea, & select
     @apply bg-theme-accent-2 rounded-lg p-2 border border-theme-primary
 
     &:disabled
       @apply bg-theme-primary cursor-not-allowed
 
-    &:focus
-      @apply border-2 border-theme-primary
+  &:focus
+    @apply border-2 border-theme-primary
 
-  & input[type="checkbox"]
+  &[type="checkbox"]
     @apply rounded bg-transparent
 
     &:focus, &:checked
       @apply bg-theme-primary
 
-  & .toggle-password-container
-    @apply w-full mt-2
+.toggle-password-container
+  @apply w-full mt-2
 
-  & .input-with-icon
-    @apply flex gap-x-3 items-center
+.input-with-icon
+  @apply flex gap-x-3 items-center
 
-    & svg
-      @apply aspect-square h-full max-h-10 cursor-pointer
+  & svg
+    @apply aspect-square h-full max-h-10 cursor-pointer
 
-  & input + ul, & textarea + ul , & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul, & select + ul
-    @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2
+input + ul, textarea + ul , .toggle-password-container + ul, .input-with-icon + ul, input[type="checkbox"] + label + ul, select + ul
+  @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2
 
-  & select > option
-    &:hover
-        @apply bg-theme-primary text-theme-white
+select > option
+  &:hover
+    @apply bg-theme-primary text-theme-white
 
-  & button[type="submit"]
-    @apply button-primary w-full
-    transition: all 0.8s
+button[type="submit"]
+  @apply button-primary w-full
+  transition: all 0.8s
 
 .title-secondary
   @apply text-3xl w-full text-center font-bold

@@ -2,7 +2,7 @@ import {create} from "zustand/react";
 import {Player} from "@/react/types";
 import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
-import {PlayerStatus} from "@/react/enums";
+import {PlayerStatus} from "@/react/types/enums";
 
 const defaultUser: Player = {
     identifier: '',
@@ -33,7 +33,7 @@ const useGameStore = createSelectors(
                 },
                 changeUserStatus: function (status: PlayerStatus) {
                     set(function (state) {
-                        return { ...state, user: {...state.user, status } }
+                        return { ...state, user: { ...state.user, status: status } }
                     })
                 },
                 changeOpponentStatus: function (status: PlayerStatus) {

@@ -1,10 +1,20 @@
 {% extends 'app/base.html.twig' %}
 
-{% block content %}
-
-{% endblock %}
-
-{% block main_title %}
-
+{% block body %}
+    <div
+            {{ react_component('Game', {
+                userJson: app.user|serialize('json', { groups: 'play:read' }),
+                gameType: type,
+                gameName: game,
+                urls: {
+                    join: mercure('http://localhost:5001/join')|json_serialize,
+                    synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,
+                    isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
+                }
+            }) }}
+            class="w-full bg-gradient"
+    >
+        test
+    </div>
 {% endblock %}
 

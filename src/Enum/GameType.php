@@ -2,7 +2,10 @@
 
 namespace App\Enum;
 
-enum GameType
+enum GameType: string
 {
-
+    case SOLO = 'solo';
+    case COMPUTER = 'against-computer';
+    case FRIEND = 'against-friend';
+    case OPPONENT = 'against-opponent';
 }

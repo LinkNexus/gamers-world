@@ -1,21 +1,32 @@
 import React from "react";
-import WaitingQueue from "@/react/components/WaitingQueue";
-import useStore from "@/react/store";
-import {GameType} from "@/react/enums";
+import WaitingQueue from "@/react/components/games/common/WaitingQueue";
+import useGameStore from "@/react/stores/game-store";
+import {GameName, GameType, PlayerStatus} from "@/react/types/enums";
 import Spinner from "@/react/components/utilities/Spinner";
-import {User} from "@/react/types";
+import {Player} from "@/react/types";
+import TicTacToe from "../components/games/tic-tac-toe/TicTacToe";
+import Chifoumi from "../components/games/chifoumi/Chifoumi";
 
 interface Props {
     userJson: string;
     gameType: GameType;
-    gameName: string;
+    gameName: GameName;
+    urls: Record<string, string>,
 }
 
-export default function ({ userJson, gameName, gameType }: Props) {
-    useStore.getState().setUser(JSON.parse(userJson) as User);
+/**
+ * Main Game component that will render the game based on the game type and name
+ */
+export default function ({ userJson, gameName, gameType, urls }: Props) {
 
-    if (gameType === GameType.solo)
-        return <Spinner />
+    // Set the current connected user
+    useGameStore.getState().setUser({ ...JSON.parse(userJson), status: PlayerStatus.WAITING } as Player);
 
-    return <WaitingQueue />
+    // Render the game based on the game name
+    switch (gameName) {
+        case GameName.TIC_TAC_TOE:
+            return <TicTacToe gameType={gameType} urls={urls} />;
+        case GameName.CHIFOUMI:
+            return <Chifoumi />
+    }
 }

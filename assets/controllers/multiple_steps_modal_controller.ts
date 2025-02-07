@@ -18,7 +18,6 @@ export default class extends Controller {
     declare stepTargets: HTMLElement[];
     declare currentStepValue: number;
     declare previousButtonTarget: HTMLButtonElement;
-
     private stepTargetsOriginalStates: Record<string, string> = {};
 
     connect() {
@@ -38,7 +37,10 @@ export default class extends Controller {
             else if (dataController !== 'disable-button')
                 target.dataset.controller = `${dataController} disable-button`;
 
-            if (!target.querySelector('[data-disable-button-target = "button"]')) {
+            if (
+                !target.querySelector('[data-disable-button-target = "button"]') &&
+                targetStep !== this.stepTargets.length.toString()
+            ) {
                 this.appendButtonToElement(target);
             }
 

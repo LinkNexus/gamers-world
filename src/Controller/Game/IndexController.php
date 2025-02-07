@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Game;
 
 use App\Entity\Game;
 use App\Enum\GameType;
@@ -9,10 +9,9 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/games', name: 'app_games')]
-final class GamesController extends AbstractController
+final class IndexController extends AbstractController
 {
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
@@ -46,7 +45,7 @@ final class GamesController extends AbstractController
     ): Response
     {
         return $this->render('app/games/play.html.twig', [
-            'game' => $game->getName(),
+            'game' => $game->getSlug(),
             'type' => $type
         ]);
     }

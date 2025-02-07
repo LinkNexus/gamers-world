@@ -23,6 +23,9 @@ export default class extends Controller<HTMLDivElement> {
     }
 
     changeContent() {
+        if (this.linksContainerTarget.querySelector('a'))
+            return;
+
         const links = (new URL(document.location.href)).pathname.substring(1).split('/').filter(s => s !== '');
 
         const transformText = (val: string): string => {
