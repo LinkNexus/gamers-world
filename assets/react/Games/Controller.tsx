@@ -1,10 +1,10 @@
 import React from "react";
-import WaitingQueue from "@/react/games/components/common/WaitingQueue";
-import useGameStore from "@/react/games/store";
-import {GameName, GameType, PlayerStatus} from "@/react/games/types/enums";
-import {Player} from "assets/react/games/types";
-import TicTacToe from "@/react/games/components/tic-tac-toe/TicTacToe";
-import Chifoumi from "@/react/games/components/chifoumi/Chifoumi";
+import WaitingQueue from "@/react/Games/components/common/WaitingQueue";
+import useGameStore from "@/react/Games/store";
+import {GameName, GameType, PlayerStatus} from "@/react/Games/types/enums";
+import {Player} from "@/react/Games/types";
+import TicTacToe from "@/react/Games/components/tic-tac-toe/TicTacToe";
+import Chifoumi from "@/react/Games/components/chifoumi/Chifoumi";
 
 interface Props {
     userJson: string;
