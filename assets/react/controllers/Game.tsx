@@ -1,29 +1,32 @@
 import React from "react";
-import WaitingQueue from "@/react/components/games/common/WaitingQueue";
-import useGameStore from "@/react/stores/game-store";
-import {GameName, GameType, PlayerStatus} from "@/react/types/enums";
-import Spinner from "@/react/components/utilities/Spinner";
-import {Player} from "@/react/types";
-import TicTacToe from "../components/games/tic-tac-toe/TicTacToe";
-import Chifoumi from "../components/games/chifoumi/Chifoumi";
+import WaitingQueue from "@/react/games/components/common/WaitingQueue";
+import useGameStore from "@/react/games/store";
+import {GameName, GameType, PlayerStatus} from "@/react/games/types/enums";
+import {Player} from "assets/react/games/types";
+import TicTacToe from "@/react/games/components/tic-tac-toe/TicTacToe";
+import Chifoumi from "@/react/games/components/chifoumi/Chifoumi";
 
 interface Props {
     userJson: string;
     gameType: GameType;
     gameName: GameName;
     urls: Record<string, string>,
+    turnTime: number
 }
 
 /**
  * Main Game component that will render the game based on the game type and name
  */
-export default function ({ userJson, gameName, gameType, urls }: Props) {
+export default function ({ userJson, gameName, gameType, urls, turnTime = 180 }: Props) {
     const user = useGameStore.use.user();
     const opponent = useGameStore.use.opponent();
 
     // Set the current connected user
     useGameStore.getState().setUser({ ...JSON.parse(userJson), status: PlayerStatus.WAITING } as Player);
 
+    // Initialize the timer
+    useGameStore.getState().initializeTimer(turnTime);
+    
     // Render the game based on the game name
     if (user.status === PlayerStatus.READY && opponent?.status === PlayerStatus.READY) {
         switch (gameName) {

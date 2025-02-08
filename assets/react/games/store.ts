@@ -1,8 +1,8 @@
 import {create} from "zustand/react";
-import {Player} from "@/react/components/games/types";
+import {Player} from "@/react/games/types";
 import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
-import {PlayerStatus} from "@/react/components/games/types/enums";
+import {PlayerStatus} from "@/react/games/types/enums";
 
 const defaultUser: Player = {
     identifier: '',

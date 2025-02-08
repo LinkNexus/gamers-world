@@ -1,4 +1,4 @@
-import { GameProps } from "assets/react/components/games/types";
+import { GameProps } from "assets/react/games/types";
 
 export default function ({ urls, gameType }: GameProps) {
     return (
