@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from "react";
+import {memo, useEffect, useMemo} from "react";
 import SplitScreen from "@/react/components/games/common/SplitScreen";
 import type {Player} from "@/react/types";
 import Spinner from "@/react/components/utilities/Spinner";
@@ -12,42 +12,25 @@ interface Props {
     isReadyUrl: string;
 }
 
-enum OpponentState {
-    IN_SEARCH = 'Waiting for other players...',
-    FOUND = 'Opponent found!',
-    READY = 'Opponent is ready to play!',
-}
-
 /**
  * Waiting queue component where the opponent player will be set
  */
 export default function ({ joinUrl, synchronizationUrl, isReadyUrl }: Props) {
+    // States from the store
     const user = useGameStore.use.user();
     const opponent = useGameStore.use.opponent();
-    const {state: status, toggleState: toggleStatus} = useToggle(PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY);
-    const {state: test, toggleState: toggleTest} = useToggle(true, false);
-    const isReady = status === PlayerStatus.READY;
+    const setOpponent = useGameStore.getState().setOpponent;
+    const changeUserStatus = useGameStore.getState().changeUserStatus;
 
-    const opponentState = useMemo(function (){
-        return toggleOpponentState(opponent);
-    }, [opponent?.status]);
+    // For some reason, when toggleStatus is called
+    // the status is not updated the first time
+    const {state: status, toggleState: toggleStatus} = useToggle(PlayerStatus.READY, PlayerStatus.FOUND_OPPONENT);
+    const isReady = status !== PlayerStatus.READY;
 
-    const structure = useMemo(function () {
-            return Structure(user, opponent, isReady, toggleCheck, opponentState);
-        },
-        [user.status, opponent?.identifier, isReady, opponentState]
-    );
-
+    // Fetch functions
     const { load: joinGame } = useFetch('/games/server/events/join');
     const { load: synchronizePlayers } = useFetch('/games/server/events/players/synchronize');
-    const { load: notifyReady } = useFetch('/games/server/events/players/is-ready'); 
-
-    async function toggleCheck () {
-        toggleStatus();
-        toggleTest();
-        console.log(status, test);
-        await notifyReady({ playerId: user.identifier, status });
-    }
+    const { load: notifyReady } = useFetch('/games/server/events/players/is-ready');
 
     // When a player joins the game, send the request to join and listen the
     // event source to get the player that joined on the opponent side
@@ -57,7 +40,7 @@ export default function ({ joinUrl, synchronizationUrl, isReadyUrl }: Props) {
 
     useEventSource(joinUrl, (player: Player) => {
         if (player.identifier !== user.identifier) {
-            useGameStore.getState().setOpponent(player);
+            setOpponent(player);
         }
     })
 
@@ -71,84 +54,108 @@ export default function ({ joinUrl, synchronizationUrl, isReadyUrl }: Props) {
 
     useEventSource(synchronizationUrl, (player: Player) => {
         if (!opponent) {
-            useGameStore.getState().setOpponent(player);
+            setOpponent(player);
         }
 
-        useGameStore.getState().changeUserStatus(PlayerStatus.FOUND_OPPONENT);
+        changeUserStatus(PlayerStatus.FOUND_OPPONENT);
+        useGameStore.getState().changeOpponentStatus(PlayerStatus.FOUND_OPPONENT);
     }, [opponent?.identifier]);
 
     // When the player status (ready or not) changes, 
     // notify the other player(s)
+    async function toggleCheck () {
+        // This does not update the status during the first call
+        toggleStatus();
+        changeUserStatus(status);
+        await notifyReady({ playerId: user.identifier, status });
+    }
+
     useEventSource(isReadyUrl, ({ playerId, status }: { playerId: string, status: PlayerStatus }) => {
         if (playerId !== user.identifier) {
             useGameStore.getState().changeOpponentStatus(status);
         }
     });
 
-    return <SplitScreen { ...structure } />
+    return (
+        <Structure
+            user={user} 
+            opponent={opponent} 
+            isReady={isReady} 
+            toggleCheck={toggleCheck} 
+        />
+    );
 }
 
 /**
  * Represents the structure of the component to be exported
  */
 
-function Structure(
-    user: Player, 
-    opponent: Player|null, 
-    isReady: boolean, 
-    toggleCheck: () => void,
-    opponentState: OpponentState
-) {
-    return {
-        playerSide: (
-            <>
-                <div className='image'>
-                    <img src={`/images/users/${user.image}`} alt='profile-image'/>
-                </div>
-                <div className='header'>
-                    <h1>
-                        <span>Player:</span>
-                        <span>{user.username}</span>
-                    </h1>
-                    <span className='opponent-state'>{opponentState}</span>
-                </div>
+interface StructureProps {
+    user: Player;
+    opponent: Player | null;
+    isReady: boolean;
+    toggleCheck: () => void;
+}
 
-                {
-                    ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) && (
-                        <div className='mt-5 flex gap-x-2 items-center'>
-                            <input checked={isReady} onChange={toggleCheck} type='checkbox' id='is-player-ready' />
-                            <label className='font-semibold' htmlFor='is-player-ready'>Ready?</label>
-                        </div>
-                    )
-                }
-            </>
-        ),
+const Structure = memo(function ({ user, opponent, isReady, toggleCheck }: StructureProps) {
+    const playerSide = (
+        <>
+            <div className='image'>
+                <img src={`/images/users/${user.image}`} alt='profile-image' />
+            </div>
+            <div className='header'>
+                <h1>
+                    <span>Player:</span>
+                    <span>{user.username}</span>
+                </h1>
+                <OpponentState status={opponent?.status} />
+            </div>
 
-        opponentSide: !opponent ? <Spinner /> : (
-            <>
-                <div className='image'>
-                    <img src={`/images/users/${opponent.image}`} alt='profile-image'/>
-                </div>
-                <div className='header'>
-                    <h1>
-                        <span>Opponent:</span>
-                        <span>{opponent.username}</span>
-                    </h1>
-                </div>
-            </>
+            {
+                ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) && (
+                    <div className='mt-5 flex gap-x-2 items-center'>
+                        <input checked={isReady} onChange={toggleCheck} type='checkbox' id='is-player-ready' />
+                        <label className='font-semibold' htmlFor='is-player-ready'>Ready?</label>
+                    </div>
+                )
+            }
+        </>
+    );
+
+    const opponentSide = !opponent ? <Spinner /> : (
+        <>
+            <div className='image'>
+                <img src={`/images/users/${opponent.image}`} alt='profile-image' />
+            </div>
+            <div className='header'>
+                <h1>
+                    <span>Opponent:</span>
+                    <span>{opponent.username}</span>
+                </h1>
+            </div>
+        </>
+    );
+
+    return <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
+});
+
+const OpponentState = memo(
+    function ({ status }: { status: PlayerStatus | undefined }) {
+
+        let text: string;
+
+        if (!status || status === PlayerStatus.WAITING) {
+            text = 'Waiting for other players...';
+        } else if (status === PlayerStatus.READY) {
+            text = 'Opponent is ready to play!';
+        } else {
+            text = 'Opponent found!';
+        }
+
+        return (
+            <span className="opponent-state">
+                {text}
+            </span>
         )
     }
-}
-
-function toggleOpponentState (opponent: Player | null) {
-
-    if (!opponent) {
-        return OpponentState.IN_SEARCH;
-    }
-
-    if (opponent.status === PlayerStatus.READY) {
-        return OpponentState.READY;
-    }
-
-    return OpponentState.FOUND;
-}
+);

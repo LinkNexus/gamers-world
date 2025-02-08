@@ -18,15 +18,27 @@ interface Props {
  * Main Game component that will render the game based on the game type and name
  */
 export default function ({ userJson, gameName, gameType, urls }: Props) {
+    const user = useGameStore.use.user();
+    const opponent = useGameStore.use.opponent();
 
     // Set the current connected user
     useGameStore.getState().setUser({ ...JSON.parse(userJson), status: PlayerStatus.WAITING } as Player);
 
     // Render the game based on the game name
-    switch (gameName) {
-        case GameName.TIC_TAC_TOE:
-            return <TicTacToe gameType={gameType} urls={urls} />;
-        case GameName.CHIFOUMI:
-            return <Chifoumi />
+    if (user.status === PlayerStatus.READY && opponent?.status === PlayerStatus.READY) {
+        switch (gameName) {
+            case GameName.TIC_TAC_TOE:
+                return <TicTacToe gameType={gameType} urls={urls} />;
+            case GameName.CHIFOUMI:
+                return <Chifoumi gameType={gameType} urls={urls} />
+        }
     }
+
+    return (
+        <WaitingQueue
+            joinUrl={urls.join}
+            synchronizationUrl={urls.synchronization}
+            isReadyUrl={urls.isReady}
+        /> 
+    )
 }

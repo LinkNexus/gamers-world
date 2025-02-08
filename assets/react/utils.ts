@@ -22,7 +22,6 @@ export function useToggle<T>(initialState: T, finalState: T|null = null) {
     const [state, setState] = useState<T>(initialState);
     function toggleState() {
         setState(function (prevState) {
-            console.log(prevState === initialState ? (finalState ?? !initialState as T) : initialState);
             return prevState === initialState ? (finalState ?? !initialState as T) : initialState;
         });
     }
@@ -90,6 +89,8 @@ export function useEventSource<T>(
         eventSource.onerror = (event) => {
             console.error(event);
         }
-        return () => eventSource.close();
+        return function () {
+            return eventSource.close();
+        }
     }, [url, ...deps]);
 }
