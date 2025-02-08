@@ -1,8 +1,8 @@
 import {create} from "zustand/react";
-import {Player} from "@/react/types";
+import {Player} from "@/react/components/games/types";
 import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
-import {PlayerStatus} from "@/react/types/enums";
+import {PlayerStatus} from "@/react/components/games/types/enums";
 
 const defaultUser: Player = {
     identifier: '',
@@ -15,8 +15,8 @@ const useGameStore = createSelectors(
     create(
         combine(
             {
-                user: defaultUser,
-                opponent: null as Player|null
+                user: defaultUser as Player,
+                opponent: null as Player|null,
             },
             (set) => ({
                 setUser: function (user: Player) {
@@ -39,6 +39,15 @@ const useGameStore = createSelectors(
                 changeOpponentStatus: function (status: PlayerStatus) {
                     set(function (state) {
                         return { ...state, opponent: state.opponent ? { ...state.opponent, status } : null }
+                    })
+                },
+                kickOpponent: function () {
+                    set(function (state) {
+                        if ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(state.opponent?.status || PlayerStatus.WAITING)) {
+                            return { ...state, opponent: null }
+                        }
+
+                        return state;
                     })
                 }
             })

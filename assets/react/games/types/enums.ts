@@ -11,7 +11,8 @@ export enum PlayerStatus {
     READY = 'READY',
     HIS_TURN = 'PLAYING',
     OPPONENT_TURN = 'WAITING_FOR_OPPONENT',
-    FINISHED = 'FINISHED'
+    FINISHED = 'FINISHED',
+    DISCONNECTED = 'DISCONNECTED'
 }
 
 export enum GameOutcome {
@@ -23,4 +24,4 @@ export enum GameOutcome {
 export enum GameName {
     TIC_TAC_TOE = 'tic-tac-toe',
     CHIFOUMI = 'chifoumi'
-}
+} 

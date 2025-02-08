@@ -1,10 +1,11 @@
 import {memo, useEffect, useMemo} from "react";
-import SplitScreen from "@/react/components/games/common/SplitScreen";
-import type {Player} from "@/react/types";
+import SplitScreen from "@/react/games/components/common/SplitScreen";
+import type {Player} from "@/react/components/games/types";
 import Spinner from "@/react/components/utilities/Spinner";
-import useGameStore from "@/react/stores/game-store";
+import useGameStore from "@/react/components/games/store";
 import {useEventSource, useFetch, useToggle} from "@/react/utils";
-import {PlayerStatus} from "@/react/types/enums";
+import {PlayerStatus} from "@/react/components/games/types/enums";
+import Timer from "./Timer";
 
 interface Props {
     joinUrl: string;
@@ -113,10 +114,13 @@ const Structure = memo(function ({ user, opponent, isReady, toggleCheck }: Struc
 
             {
                 ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) && (
-                    <div className='mt-5 flex gap-x-2 items-center'>
-                        <input checked={isReady} onChange={toggleCheck} type='checkbox' id='is-player-ready' />
-                        <label className='font-semibold' htmlFor='is-player-ready'>Ready?</label>
-                    </div>
+                    <>
+                        <div className='mt-5 flex gap-x-2 items-center'>
+                            <input checked={isReady} onChange={toggleCheck} type='checkbox' id='is-player-ready' />
+                            <label className='font-semibold' htmlFor='is-player-ready'>Ready?</label>
+                        </div>
+                        <button type="button" className="min-h-20 bg-theme-primary">Kick</button>
+                    </>                
                 )
             }
         </>
