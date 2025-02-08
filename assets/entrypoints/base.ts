@@ -14,4 +14,4 @@ document.addEventListener('turbo:load', () => {
     initFlowbite();
 })
 
-registerReactControllerComponents(require.context('../react/controllers', true, /\.(j|t)sx?$/));
+registerReactControllerComponents(require.context('../react', true, /Controller\.(j|t)sx?$/));
