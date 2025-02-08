@@ -1,4 +1,4 @@
-import type {GameType, PlayerStatus} from "@/react/games/types/enums";
+import type {GameType, PlayerStatus} from "@/react/Games/types/enums";
 
 export interface Player {
     identifier: string;

@@ -1,10 +1,10 @@
 import {memo, useEffect, useMemo} from "react";
-import SplitScreen from "@/react/games/components/common/SplitScreen";
-import type {Player} from "assets/react/games/types";
-import Spinner from "@/react/utilities/Spinner";
-import useGameStore from "@/react/games/store";
+import SplitScreen from "@/react/Games/components/common/SplitScreen";
+import type {Player} from "@/react/Games/types";
+import Spinner from "@/react/Utilities/Spinner";
+import useGameStore from "@/react/Games/store";
 import {useEventSource, useFetch, useToggle} from "@/react/utils";
-import {PlayerStatus} from "@/react/games/types/enums";
+import {PlayerStatus} from "@/react/Games/types/enums";
 import Timer from "./Timer";
 
 interface Props {

@@ -1,8 +1,29 @@
 {% extends 'app/base.html.twig' %}
 
 {% block body %}
+{#    <div#}
+{#            {{ react_component('Games/Controller', {#}
+{#                userJson: app.user|serialize('json', { groups: 'play:read' }),#}
+{#                gameType: type,#}
+{#                gameName: game,#}
+{#                urls: {#}
+{#                    join: mercure('http://localhost:5001/join')|json_serialize,#}
+{#                    synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,#}
+{#                    isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,#}
+{#                }#}
+{#            }) }}#}
+{#            class="w-full bg-gradient"#}
+{#    >#}
+{#        test#}
+{#    </div>#}
+{#    {% set props = {#}
+{#        name: 'Jean'#}
+{#    } %}#}
+{#    <div data-controller="render-react" data-render-react-controller-value="Hello" data-render-react-props-value="{{ props|json_encode }}">#}
+{#    </div>#}
+
     <div
-            {{ react_component('Game', {
+            {{ react_component('Games', {
                 userJson: app.user|serialize('json', { groups: 'play:read' }),
                 gameType: type,
                 gameName: game,
@@ -12,9 +33,7 @@
                     isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
                 }
             }) }}
-            class="w-full bg-gradient"
     >
-        test
     </div>
 {% endblock %}
 

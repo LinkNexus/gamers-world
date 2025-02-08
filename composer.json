@@ -39,7 +39,6 @@
         "symfony/ux-dropzone": "^2.22",
         "symfony/ux-icons": "^2.22",
         "symfony/ux-live-component": "^2.22",
-        "symfony/ux-react": "^2.22",
         "symfony/ux-toggle-password": "^2.22",
         "symfony/ux-turbo": "^2.22",
         "symfony/ux-twig-component": "^2.22",
