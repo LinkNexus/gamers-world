@@ -23,9 +23,6 @@ export default function ({ userJson, gameName, gameType, urls, turnTime = 180 }:
 
     // Set the current connected user
     useGameStore.getState().setUser({ ...JSON.parse(userJson), status: PlayerStatus.WAITING } as Player);
-
-    // Initialize the timer
-    useGameStore.getState().initializeTimer(turnTime);
     
     // Render the game based on the game name
     if (user.status === PlayerStatus.READY && opponent?.status === PlayerStatus.READY) {
