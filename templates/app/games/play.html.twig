@@ -1,36 +1,21 @@
 {% extends 'app/base.html.twig' %}
 
 {% block body %}
-{#    <div#}
-{#            {{ react_component('Games/Controller', {#}
-{#                userJson: app.user|serialize('json', { groups: 'play:read' }),#}
-{#                gameType: type,#}
-{#                gameName: game,#}
-{#                urls: {#}
-{#                    join: mercure('http://localhost:5001/join')|json_serialize,#}
-{#                    synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,#}
-{#                    isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,#}
-{#                }#}
-{#            }) }}#}
-{#            class="w-full bg-gradient"#}
-{#    >#}
-{#        test#}
-{#    </div>#}
-{#    {% set props = {#}
-{#        name: 'Jean'#}
-{#    } %}#}
-{#    <div data-controller="render-react" data-render-react-controller-value="Hello" data-render-react-props-value="{{ props|json_encode }}">#}
-{#    </div>#}
+    <script>
+        // This is a hack to make the user available in the JS code
+        window.user = JSON.parse({{ app.user|serialize('json', { groups: 'play:read' })|json_serialize|raw }});
+        window.gameInitiator = '01JJW6PK92VW6JY8DJJBB85DT8';
+    </script>
 
     <div
             {{ react_component('Games', {
-                userJson: app.user|serialize('json', { groups: 'play:read' }),
                 gameType: type,
                 gameName: game,
                 urls: {
                     join: mercure('http://localhost:5001/join')|json_serialize,
                     synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,
                     isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
+                    disconnect: mercure('http://localhost:5001/players/disconnect')|json_serialize,
                 }
             }) }}
     >

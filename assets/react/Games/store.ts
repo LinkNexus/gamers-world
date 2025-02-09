@@ -4,28 +4,22 @@ import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
 import {PlayerStatus} from "@/react/Games/types/enums";
 
-const defaultUser: Player = {
-    identifier: '',
-    username: '',
-    image: '',
-    status: PlayerStatus.WAITING
-};
+declare global {
+    interface Window {
+        user: Player;
+        gameInitiator: string;
+    }
+}
 
 const useGameStore = createSelectors(
     create(
         combine(
             {
-                user: defaultUser as Player,
+                user: window.user,
                 opponent: null as Player|null,
+                initiator: window.gameInitiator,
             },
             (set) => ({
-                setUser: function (user: Player) {
-                    set(function (state) {
-                        if (state.user.identifier !== '')
-                            return state;
-                        return { ...state, user };
-                    })
-                },
                 setOpponent: function (opponent: Player|null) {
                     set(function (state) {
                         return { ...state, opponent };
@@ -43,11 +37,7 @@ const useGameStore = createSelectors(
                 },
                 kickOpponent: function () {
                     set(function (state) {
-                        if ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(state.opponent?.status || PlayerStatus.WAITING)) {
-                            return { ...state, opponent: null }
-                        }
-
-                        return state;
+                        return { ...state, opponent: null, user: { ...state.user, status: PlayerStatus.WAITING } }
                     })
                 }
             })

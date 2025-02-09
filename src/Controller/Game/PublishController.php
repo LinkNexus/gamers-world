@@ -41,4 +41,13 @@ final class PublishController extends AbstractController
             data: $request->getContent()
         );
     }
+
+    #[Route('/players/disconnect', name: 'disconnect')]
+    public function disconnectPlayer(Request $request): JsonResponse
+    {
+        return $this->broadcaster->broadcast(
+            'http://localhost:5001/players/disconnect',
+            data: $request->getContent()
+        );
+    }
 }

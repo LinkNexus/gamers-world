@@ -5,7 +5,7 @@ interface Props {
     opponentSide: ReactNode;
 }
 
-const SplitScreen = memo(
+export default memo(
     function ({playerSide, opponentSide}: Props) {
         return (
             <div className='flex flex-col min-h-screen h-screen w-full lg:flex-row'>
@@ -19,6 +19,4 @@ const SplitScreen = memo(
             </div>
         );
     }
-)
-
-export default SplitScreen;
+);

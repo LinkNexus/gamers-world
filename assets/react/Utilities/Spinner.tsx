@@ -1,6 +1,7 @@
-import {SVGProps} from "react";
+import { ComponentProps } from "react";
 
-export default function ({ ...props }: SVGProps<SVGSVGElement>) {
+
+export default function ({ ...props }: ComponentProps<'svg'>) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

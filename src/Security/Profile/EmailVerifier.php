@@ -8,17 +8,15 @@ use App\Events\TemplatedMailRequestEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\UrlHelper;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 readonly class EmailVerifier
 {
 
     public function __construct(
-        private readonly VerifyEmailHelperInterface $verifyEmailHelper,
-        private readonly EventDispatcherInterface $dispatcher,
-        private readonly EntityManagerInterface $entityManager
+        private VerifyEmailHelperInterface $verifyEmailHelper,
+        private EventDispatcherInterface $dispatcher,
+        private EntityManagerInterface $entityManager
     )
     {}
 
