@@ -18,15 +18,17 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
     return store
 }
 
-export function useToggle<T>(initialState: T, finalState: T|null = null) {
+// The toggle function here does not toggle the state at the first call!
+export function useToggle<T>(initialState: T, finalState: T|null = null): [T, () => void]
+{
     const [state, setState] = useState<T>(initialState);
     function toggleState() {
         setState(function (prevState) {
-            return prevState === initialState ? (finalState ?? !initialState as T) : initialState;
+            return (prevState === initialState) ? (finalState ?? !initialState as T) : initialState;
         });
     }
 
-    return {state, toggleState};
+    return [state, toggleState];
 }
 
 export function useDelay(time: number): Promise<void> {
@@ -35,13 +37,13 @@ export function useDelay(time: number): Promise<void> {
     });
 }
 
-export function useFetch<T> (
+export function useFetch<T, S>(
     url: string|URL,
     params: Omit<RequestInit, 'body'> = {},
-    callback?: (data: T) => void
+    callback: ((data: S) => void)|null = null
 ) {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<any>(null);
+    const [errors, setErrors] = useState<any[]>([]);
     const paramsRef: RefObject<Omit<RequestInit, 'body'>> = useRef({
         method: 'POST',
         ...params,
@@ -53,16 +55,24 @@ export function useFetch<T> (
     });
 
     const load = useCallback(
-        async function (data: any = null) {
+        async function (data: T|null = null) {
             try {
-                const response = await fetch(url, {...paramsRef.current, body: JSON.stringify(data) });
+                const response = await fetch(url, {
+                    ...paramsRef.current,
+                    body: JSON.stringify(data)
+                });
+
                 if (!response.ok) {
-                    setError(response.statusText);
+                    setErrors(function (prevErrors) {
+                        return [...prevErrors, response.statusText];
+                    });
                     return;
                 }
                 if (callback) callback(await response.json());
             } catch (e) {
-                setError(e);
+                setErrors(function (prevErrors) {
+                    return [...prevErrors, e];
+                });
             } finally {
                 setLoading(false);
             }
@@ -71,7 +81,7 @@ export function useFetch<T> (
 
     return {
         loading,
-        error,
+        errors,
         load,
     }
 }

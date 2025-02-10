@@ -3,22 +3,23 @@
 {% block body %}
     <script>
         // This is a hack to make the user available in the JS code
-        window.user = JSON.parse({{ app.user|serialize('json', { groups: 'play:read' })|json_serialize|raw }});
-        window.gameInitiator = '01JJW6PK92VW6JY8DJJBB85DT8';
+        window.game = {
+            user: JSON.parse({{ app.user|serialize('json', { groups: 'play:read' })|json_serialize|raw }}),
+            initiator: '01JJW6PK92VW6JY8DJJBB85DT8',
+            urls: {{ {
+                join: mercure('http://localhost:5001/join')|json_serialize,
+                synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,
+                isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
+                disconnect: mercure('http://localhost:5001/players/disconnect')|json_serialize,
+                play: mercure('http://localhost:5001/play')|json_serialize
+            }|json_encode|raw }},
+            type: {{ type|json_encode|raw }},
+            turnTime: 120,
+            name: "{{ game }}",
+        }
     </script>
 
-    <div
-            {{ react_component('Games', {
-                gameType: type,
-                gameName: game,
-                urls: {
-                    join: mercure('http://localhost:5001/join')|json_serialize,
-                    synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,
-                    isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
-                    disconnect: mercure('http://localhost:5001/players/disconnect')|json_serialize,
-                }
-            }) }}
-    >
+    <div {{ react_component('Games') }}>
     </div>
 {% endblock %}
 

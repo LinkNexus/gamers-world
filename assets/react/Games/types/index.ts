@@ -5,9 +5,5 @@ export interface Player {
     image: string;
     username: string;
     status: PlayerStatus;
-}
-
-export interface GameProps {
-    urls: Record<string, string>;
-    gameType: GameType;
+    previousStatus: PlayerStatus;
 }

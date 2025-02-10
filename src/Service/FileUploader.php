@@ -10,8 +10,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 readonly final class FileUploader
 {
     public function __construct(
-        private readonly SluggerInterface $slugger,
-        #[Autowire('%kernel.project_dir%/public')] private readonly string $baseDirectory
+        private SluggerInterface $slugger,
+        #[Autowire('%kernel.project_dir%/public')] private string $baseDirectory
     )
     {}
 

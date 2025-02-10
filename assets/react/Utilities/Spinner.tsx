@@ -1,6 +1,5 @@
 import { ComponentProps } from "react";
 
-
 export default function ({ ...props }: ComponentProps<'svg'>) {
     return (
         <svg

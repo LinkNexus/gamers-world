@@ -9,19 +9,30 @@ export enum PlayerStatus {
     WAITING = 'WAITING',
     FOUND_OPPONENT = 'FOUND_OPPONENT',
     READY = 'READY',
-    HIS_TURN = 'PLAYING',
-    OPPONENT_TURN = 'WAITING_FOR_OPPONENT',
-    FINISHED = 'FINISHED',
-    DISCONNECTED = 'DISCONNECTED'
-}
-
-export enum GameOutcome {
-    WIN = 'WIN',
-    LOSE = 'LOSE',
-    DRAW = 'DRAW'
+    PLAYING = 'PLAYING',
+    DISCONNECTED = 'DISCONNECTED',
+    WON = 'WON',
+    LOST = 'LOST',
+    DREW = 'DREW'
 }
 
 export enum GameName {
     TIC_TAC_TOE = 'tic-tac-toe',
     CHIFOUMI = 'chifoumi'
 } 
+
+export type TicTacToeSymbol = 'X' | 'O' | null;
+
+export enum GameEvent {
+    JOIN = 'JOIN',
+    SYNCHRONIZE = 'SYNCHRONIZE',
+    IS_READY = 'IS_READY',
+    DISCONNECT = 'DISCONNECT',
+    PLAY = 'PLAY',
+}
+
+export enum TimerStatus {
+    RUNNING = 'RUNNING',
+    STOPPED = 'STOPPED',
+    PAUSED = 'PAUSED'
+}

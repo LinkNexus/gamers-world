@@ -9,7 +9,7 @@ interface Props {
     opponent: Player | null;
     isReady: boolean;
     toggleCheck: () => void;
-    kickOpps: (playerId: string) => void;
+    kickOpponent: () => Promise<void>;
     initiator: string;
 }
 
@@ -17,7 +17,7 @@ interface Props {
  * Represents the structure of the component to be exported
  */
 
-export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpps, initiator }: Props) {
+export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator }: Props) {
     const playerSide = (
         <>
             <div className='image'>
@@ -61,9 +61,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpps, 
                 user.identifier === initiator &&
                 (
                     <button
-                        onClick={function () {
-                            kickOpps(opponent.identifier);
-                        }}
+                        onClick={kickOpponent}
                         type="button"
                         className="button-secondary mt-4"
                     >
