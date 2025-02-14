@@ -12,46 +12,5 @@
         </div>
     </div>
 
-    <twig:Utilities:Modal id="create-game" title="Create a new Game">
-        <div data-multiple-steps-modal-target="step" data-step="1">
-            <p class="mb-4">Choose your play mode:</p>
-
-            {% set play_modes = [
-                {
-                    name: 'Against the Computer',
-                    description: 'Play solo against the computer to test your skills',
-                    value: 'computer'
-                },
-                {
-                    name: 'Against a Friend',
-                    description: 'Have fun playing against a friend of yours',
-                    value: 'friend'
-                },
-                {
-                    name: 'Against a Random Player',
-                    description: 'Be competitive and play against a random player on the server',
-                    value: 'random'
-                }
-            ] %}
-
-            <ul class="space-y-4 mb-4">
-                {% for mode in play_modes %}
-                    <li>
-                        <input data-disable-button-target="toBeChecked" type="radio" id="against-{{ mode.value }}" name="opponent" value="{{ mode.value }}" class="hidden peer" />
-                        <label for="against-{{ mode.value }}" class="inline-flex items-center justify-between w-full p-5 border border-theme-primary rounded-lg cursor-pointer peer-checked:bg-theme-primary peer-checked:text-white hover:bg-theme-primary transition">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold text-white">{{ mode.name }}</div>
-                                <div class="w-full">{{ mode.description }}</div>
-                            </div>
-                            <twig:ux:icon class="w-4 h-4 ms-3 rtl:rotate-180" name="solar:arrow-right-linear" />
-                        </label>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-{#        <div data-multiple-steps-modal-target="step" data-step="2">#}
-
-{#        </div>#}
-    </twig:Utilities:Modal>
+    <twig:CreateGameForm :form="gameForm" />
 {% endblock %}

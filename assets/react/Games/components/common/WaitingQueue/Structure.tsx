@@ -1,5 +1,5 @@
 import type {Player} from "@/react/Games/types";
-import {memo} from "react";
+import {memo, PropsWithChildren} from "react";
 import {PlayerStatus} from "@/react/Games/types/enums";
 import Spinner from "@/react/Utilities/Spinner";
 import SplitScreen from "@/react/Games/components/common/SplitScreen";
@@ -20,16 +20,9 @@ interface Props {
 export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator }: Props) {
     const playerSide = (
         <>
-            <div className='image'>
-                <img src={`/images/users/${user.image}`} alt='profile-image' />
-            </div>
-            <div className='header'>
-                <h1>
-                    <span>Player:</span>
-                    <span>{user.username}</span>
-                </h1>
+            <Header player={user} label="Player">
                 <OpponentState status={opponent?.status} />
-            </div>
+            </Header>
 
             {
                 ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) && (
@@ -46,15 +39,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
 
     const opponentSide = !opponent ? <Spinner /> : (
         <>
-            <div className='image'>
-                <img src={`/images/users/${opponent.image}`} alt='profile-image' />
-            </div>
-            <div className='header'>
-                <h1>
-                    <span>Opponent:</span>
-                    <span>{opponent.username}</span>
-                </h1>
-            </div>
+            <Header player={opponent} label="Opponent" />
 
             {
                 ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) &&
@@ -75,6 +60,25 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
     return <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
 });
 
+function Header ({ player, label, children }: PropsWithChildren<{ player: Player, label: "Player"|"Opponent" }>) {
+    return (
+        <>
+            <div className='h-fit w-fit rounded-full border-2 border-slate-300'>
+                <img className='rounded-full bg-slate-500 w-32 h-32 object-cover md:w-48 md:h-48' src={`/images/users/${player.image}`} alt='profile-image' />
+            </div>
+            <div className='mt-3 w-full max-w-full flex flex-col gap-y-2'>
+                <h1 className='font-bold text-2xl flex flex-wrap flex-col items-center gap-y-2 text-ellipsis px-3 md:text-3xl'>
+                    <span className='max-w-full text-ellipsis overflow-hidden'>
+                        {label}:
+                    </span>
+                    <span className='max-w-full text-ellipsis overflow-hidden'>{player.username}</span>
+                </h1>
+                {children}
+            </div>
+        </>
+    );
+}
+
 const OpponentState = memo(
     function ({ status }: { status: PlayerStatus | undefined }) {
 
@@ -89,7 +93,7 @@ const OpponentState = memo(
         }
 
         return (
-            <span className="opponent-state">
+            <span className="w-fit self-center">
                 {text}
             </span>
         )

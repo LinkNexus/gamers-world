@@ -5,17 +5,19 @@
         // This is a hack to make the user available in the JS code
         window.game = {
             user: JSON.parse({{ app.user|serialize('json', { groups: 'play:read' })|json_serialize|raw }}),
-            initiator: '01JJW6PK92VW6JY8DJJBB85DT8',
+            initiator: {{ session.initiator.identifier|json_encode|raw }},
             urls: {{ {
-                join: mercure('http://localhost:5001/join')|json_serialize,
-                synchronization: mercure('http://localhost:5001/players/synchronize')|json_serialize,
-                isReady: mercure('http://localhost:5001/players/is-ready')|json_serialize,
-                disconnect: mercure('http://localhost:5001/players/disconnect')|json_serialize,
-                play: mercure('http://localhost:5001/play')|json_serialize
+                join: mercure('http://localhost:5001/join/' ~ identifier)|json_serialize,
+                synchronization: mercure('http://localhost:5001/players/synchronize/' ~ identifier)|json_serialize,
+                isReady: mercure('http://localhost:5001/players/is-ready/' ~ identifier)|json_serialize,
+                disconnect: mercure('http://localhost:5001/players/disconnect/' ~ identifier)|json_serialize,
+                play: mercure('http://localhost:5001/play/' ~ identifier)|json_serialize
             }|json_encode|raw }},
-            type: {{ type|json_encode|raw }},
-            turnTime: 120,
-            name: "{{ game }}",
+            type: "{{ session.type.value }}",
+            name: "{{ session.game.slug }}",
+            difficulty: "{{ session.difficulty is not null ? session.difficulty.value }}",
+            duration: "{{ session.duration }}",
+            identifier: '{{ session.identifier }}',
         }
     </script>
 

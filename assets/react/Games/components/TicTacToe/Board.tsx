@@ -23,6 +23,7 @@ export default function () {
     const declareWinner = useGameStore.getState().ticTacToeActions.declareWinner;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
     const changeOpponentStatus = useGameStore.getState().changeOpponentStatus;
+    const celebrate = useGameStore.getState().celebrate;
 
     // Local and derived states
     const [winningMoves, setWinningMoves] = useState<number[]>([]);
@@ -114,6 +115,11 @@ export default function () {
             }
         }
     })
+
+    useEffect(function () {
+        if (user.status === PlayerStatus.WON)
+            celebrate();
+    }, [user.status]);
 
     return (
         <div className='w-full flex flex-col items-center justify-center flex-wrap'>

@@ -14,7 +14,7 @@ export function useGameEventSource<T>(
 
 export function useGameFetch<S>()
 {
-    const { load, ...rest } = useFetch<{ event: GameEvent, payload: Record<string, any>}, S>('/games/server/events', {}, null);
+    const { load, ...rest } = useFetch<{ event: GameEvent, payload: Record<string, any>}, S>(`/games/session/events/${window.game.identifier}`, {}, null);
 
     return {
         ...rest,

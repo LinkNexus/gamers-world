@@ -69,8 +69,8 @@ body
 form
   @apply w-full flex flex-col gap-y-5
 
-input
-  &:not([type="submit"], [type="checkbox"]), & textarea, & select
+input, textarea, select
+  &:not([type="submit"], [type="checkbox"])
     @apply bg-theme-accent-2 rounded-lg p-2 border border-theme-primary
 
     &:disabled

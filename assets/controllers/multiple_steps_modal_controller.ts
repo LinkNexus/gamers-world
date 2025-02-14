@@ -30,18 +30,18 @@ export default class extends Controller {
     initializeSteps() {
         this.stepTargets.forEach(target => {
             const dataController = target.dataset.controller,
-                targetStep = target.dataset.step;
+                targetStep = target.dataset.step,
+                firstChild = target.firstElementChild as HTMLElement;
 
-            if (!dataController)
-                target.dataset.controller = 'disable-button';
-            else if (dataController !== 'disable-button')
-                target.dataset.controller = `${dataController} disable-button`;
+            if (targetStep !== this.stepTargets.length.toString()) {
+                if (!target.querySelector('[data-disable-button-target = "button"]')) {
+                    this.appendButtonToElement(firstChild);
+                }
 
-            if (
-                !target.querySelector('[data-disable-button-target = "button"]') &&
-                targetStep !== this.stepTargets.length.toString()
-            ) {
-                this.appendButtonToElement(target);
+                if (!dataController)
+                    firstChild.dataset.controller = 'disable-button';
+                else if (dataController !== 'disable-button')
+                    firstChild.dataset.controller = `${dataController} disable-button`;
             }
 
             if (targetStep)

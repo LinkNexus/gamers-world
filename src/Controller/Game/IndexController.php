@@ -3,10 +3,13 @@
 namespace App\Controller\Game;
 
 use App\Entity\Game;
-use App\Enum\GameType;
+use App\Entity\GameSession;
+use App\Enum\Game\Type;
+use App\Form\CreateGameSessionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -26,27 +29,50 @@ final class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: '_game', methods: ['GET'])]
+    #[Route('/{slug}', name: '_game', methods: ['GET', 'POST'])]
     public function game(
         #[MapEntity(mapping: ['slug' => 'slug'])]
-        Game $game
+        Game $game,
+        Request $request
     ): Response
     {
+        $session = (new GameSession())->setGame($game);
+        $createGameForm = $this->createForm(CreateGameSessionType::class, $session);
+
+        $createGameForm->handleRequest($request);
+
+        if ($createGameForm->isSubmitted() && $createGameForm->isValid()) {
+            $session->setInitiator($this->getUser());
+            $this->entityManager->persist($session);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('app_games_play', [
+                'identifier' => $session->getIdentifier()
+            ]);
+        }
+
         return $this->render('app/games/game.html.twig', [
             'game' => $game,
+            'gameForm' => $createGameForm,
         ]);
     }
 
-    #[Route('/{slug}/play/{type}', name: '_play', methods: ['GET'])]
+    #[Route('/play/{identifier}', name: '_play', methods: ['GET'])]
     public function play(
-        #[MapEntity(mapping: ['slug' => 'slug'])]
-        Game $game,
-        GameType $type = GameType::SOLO
+        #[MapEntity(mapping: ['identifier' => 'identifier'])]
+        GameSession $session
     ): Response
     {
+        if (
+            $session->getType() === Type::OPPONENT  &&
+            !$this->getUser()
+        ) {
+            $this->addFlash('error', 'You must be logged in to play a competitive game');
+            return $this->redirectToRoute('app_index');
+        }
+
         return $this->render('app/games/play.html.twig', [
-            'game' => $game->getSlug(),
-            'type' => $type
+            'session' => $session,
+            'identifier' => $session->getIdentifier(),
         ]);
     }
 }

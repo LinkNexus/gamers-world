@@ -2,22 +2,45 @@ import {create} from "zustand/react";
 import {Player} from "@/react/Games/types";
 import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
-import {GameName, GameType, PlayerStatus, TicTacToeSymbol, TimerStatus} from "@/react/Games/types/enums";
+import {ChifoumiChoice, PlayerStatus, TicTacToeSymbol, TimerStatus} from "@/react/Games/types/enums";
+import {confetti} from "@tsparticles/confetti";
 
-declare global {
-    interface Window {
-        game: {
-            user: Omit<Omit<Player, 'status'>, 'previousStatus'>,
-            initiator: string,
-            urls: Record<"join"|"synchronization"|"isReady"|"disconnect"|"play", 'string'>,
-            turnTime: number,
-            type: GameType,
-            name: GameName
-        }
-    }
-}
-
-const { user, initiator, urls, turnTime, type, name } = window.game;
+const difficultiesDurations = {
+    1: [
+        45,
+        55,
+        65
+    ],
+    2: [
+        30,
+        40,
+        50
+    ],
+    3: [
+        20,
+        30,
+        40
+    ]
+};
+const { user, initiator, urls, type, name, duration, difficulty } = window.game;
+const memoryGameCards = [
+    'bear',
+    'bear-cat',
+    'giraffe',
+    'gorilla',
+    'kangaroo',
+    'koala',
+    'leopard',
+    'lion',
+    'orca',
+    'panda',
+    'pangolin',
+    'penguin',
+    'rhino',
+    'toucan',
+    'warthog',
+    'wolf',
+]
 
 const useGameStore = createSelectors(
     create(
@@ -27,7 +50,6 @@ const useGameStore = createSelectors(
                 opponent: null as Player|null,
                 initiator: initiator,
                 urls: urls,
-                turnTime: turnTime,
                 type: type,
                 name: name,
                 ticTacToe: {
@@ -37,12 +59,23 @@ const useGameStore = createSelectors(
                     opponent: null as TicTacToeSymbol,
                 },
                 timer: {
-                    initialTime: turnTime,
-                    timeLeft: turnTime,
+                    initialTime: duration || difficultiesDurations[difficulty || 1][0],
+                    timeLeft: duration || difficultiesDurations[difficulty || 1][0],
                     status: TimerStatus.STOPPED
+                },
+                chifoumi: {
+                    opponent: null as ChifoumiChoice|null,
+                    user: null as ChifoumiChoice|null
+                },
+                memoryGame: {
+                    cards: [] as string[],
+                    currentLevel: 1,
+                    maxLevel: 3,
+                    flippedCards: [] as number[],
+                    history: [] as number[]
                 }
             },
-            (set) => ({
+            (set, get) => ({
                 setOpponent: function (opponent: Player|null) {
                     set(function (state) {
                         return { ...state, opponent };
@@ -181,7 +214,177 @@ const useGameStore = createSelectors(
                             }
                         })
                     }
-                }
+                },
+                chifoumiActions: {
+                    startGame: function () {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                user: {
+                                    ...state.user,
+                                    status: PlayerStatus.PLAYING
+                                },
+                                opponent: {
+                                    ...state.opponent!,
+                                    status: PlayerStatus.PLAYING
+                                }
+                            }
+                        })
+                    },
+                    setOpponentChoice: function (choice: ChifoumiChoice) {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                chifoumi: {
+                                    ...state.chifoumi,
+                                    opponent: choice
+                                }
+                            }
+                        })
+                    },
+                    setUserChoice: function (choice: ChifoumiChoice) {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                chifoumi: {
+                                    ...state.chifoumi,
+                                    user: choice
+                                }
+                            }
+                        })
+                    }
+                },
+                memoryGameActions: {
+                    startGame: function () {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                user: {
+                                    ...state.user,
+                                    status: PlayerStatus.PLAYING
+                                },
+                            }
+                        })
+                    },
+                    setCards: function () {
+                        set(function (state) {
+                            const currentLevel = state.memoryGame.currentLevel;
+                            const cards: string[] = Array((currentLevel + 1) * 4);
+
+                            function getRandomIndex () {
+                                const index = Math.floor(Math.random() * cards.length);
+                                if (cards[index]) return getRandomIndex();
+                                return index;
+                            }
+
+                            for (let i = 0; i < 2 * (currentLevel + 1); i++) {
+                                const randomCardIndex = Math.floor(Math.random() * memoryGameCards.length);
+                                if (cards.includes(memoryGameCards[randomCardIndex])) {
+                                    i--;
+                                    continue;
+                                }
+                                cards[getRandomIndex()] = memoryGameCards[randomCardIndex];
+                                cards[getRandomIndex()] = memoryGameCards[randomCardIndex];
+                            }
+
+                            return {
+                                ...state,
+                                memoryGame: {
+                                    ...state.memoryGame,
+                                    cards: cards
+                                }
+                            }
+                        })
+                    },
+                    flipCard: function (index: number) {
+                        set(function (state) {
+                            if (state.memoryGame.flippedCards.length === 2) {
+                                return state;
+                            }
+
+                            return {
+                                ...state,
+                                memoryGame: {
+                                    ...state.memoryGame,
+                                    flippedCards: [...state.memoryGame.flippedCards, index]
+                                }
+                            }
+                        })
+                    },
+                    checkMatch: function () {
+                        set(function (state) {
+                            const [firstCard, secondCard] = state.memoryGame.flippedCards;
+                            const [firstValue, secondValue] = [
+                                state.memoryGame.cards[firstCard],
+                                state.memoryGame.cards[secondCard]
+                            ];
+
+                            const newState = {
+                                ...state,
+                                memoryGame: {
+                                    ...state.memoryGame,
+                                    flippedCards: []
+                                }
+                            };
+
+                            if (firstValue === secondValue) {
+                                newState.memoryGame.history.push(firstCard, secondCard);
+                                return newState;
+                            }
+
+                            return newState;
+                        })
+                    },
+                    switchLevel: function () {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                memoryGame: {
+                                    ...state.memoryGame,
+                                    currentLevel: state.memoryGame.currentLevel + 1,
+                                    history: []
+                                },
+                                timer: {
+                                    ...state.timer,
+                                    timeLeft: difficultiesDurations[difficulty || 1][state.memoryGame.currentLevel]
+                                }
+                            }
+                        })
+                    }
+                },
+                celebrate: function () {
+                    const duration = 15 * 1000,
+                        animationEnd = Date.now() + duration,
+                        defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                    function randomInRange(min: number, max: number) {
+                        return Math.random() * (max - min) + min;
+                    }
+
+                    const interval = setInterval(function() {
+                        const timeLeft = animationEnd - Date.now();
+
+                        if (timeLeft <= 0) {
+                            return clearInterval(interval);
+                        }
+
+                        const particleCount = 50 * (timeLeft / duration);
+
+                        // since particles fall down, start a bit higher than random
+                        confetti(
+                            Object.assign({}, defaults, {
+                                particleCount,
+                                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                            })
+                        );
+                        confetti(
+                            Object.assign({}, defaults, {
+                                particleCount,
+                                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                            })
+                        );
+                    }, 250);
+                },
             })
         )
     )
