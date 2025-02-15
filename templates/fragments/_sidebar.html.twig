@@ -22,18 +22,11 @@
         'icon': 'emojione-v1:video-game',
         'url': path('app_games'),
         'authentication_required': null,
-        'dropdown': [
-            {
-                'label': 'Tic Tac Toe',
-                'icon': 'game-icons:tic-tac-toe',
-                'url': path('app_games_game', {slug: 'tic-tac-toe'})
-            },
-            {
-                'label': 'Rock-Paper-Scissors',
-                'icon': 'fa:hand-scissors-o',
-                'url': path('app_games_game', {slug: 'chifoumi'})
-            }
-        ]
+        'dropdown': [],
+        'dropdown_attributes': {
+            'data-controller': 'templated-fetch',
+            'data-templated-fetch-endpoint-value': path('app_games_render'),
+        }
     },
     {
         'label': 'Sign In',
@@ -99,7 +92,7 @@
                                     aria-hidden="true"
                             />
                         </button>
-                        <ul id="dropdown-{{ item.label }}">
+                        <ul id="dropdown-{{ item.label }}" {{ item.dropdown_attributes is defined ? render_attributes(item.dropdown_attributes) }}>
                             {% for dropdown_item in item.dropdown %}
                                 <li>
                                    <a href="{{ dropdown_item.url }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-theme-primary">
