@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/games', name: 'app_games')]
 final class IndexController extends AbstractController
@@ -29,7 +30,7 @@ final class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: '_game', methods: ['GET', 'POST'])]
+    #[Route('/{slug}', name: '_game', methods: ['GET', 'POST'], priority: -1)]
     public function game(
         #[MapEntity(mapping: ['slug' => 'slug'])]
         Game $game,
@@ -73,6 +74,14 @@ final class IndexController extends AbstractController
         return $this->render('app/games/play.html.twig', [
             'session' => $session,
             'identifier' => $session->getIdentifier(),
+        ]);
+    }
+
+    #[Route('/render', name: '_render', methods: ['GET'])]
+    public function renderGames(): Response
+    {
+        return $this->render('app/games/render.html.twig', [
+            'games' => $this->entityManager->getRepository(Game::class)->findAll(),
         ]);
     }
 }
