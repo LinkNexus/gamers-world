@@ -4,6 +4,8 @@ import {GameName, GameType, PlayerStatus} from "@/react/Games/types/enums";
 import TicTacToe from "@/react/Games/components/TicTacToe";
 import Chifoumi from "@/react/Games/components/Chifoumi";
 import MemoryGame from "@/react/Games/components/MemoryGame";
+import {useEffect} from "react";
+import {useFetch} from "@/react/utils";
 
 /**
  * Main Game component that will render the game based on the game type and name
@@ -13,6 +15,11 @@ export default function () {
     const opponent = useGameStore.use.opponent();
     const name = useGameStore.use.name();
     const gameType = useGameStore.use.type();
+    const gameId = useGameStore.use.identifier();
+    const initiator = useGameStore.use.initiator();
+
+    const celebrate = useGameStore.getState().celebrate;
+    const { load: setWinnerRequest } = useFetch(`/games/session/${gameId}/winner`);
 
     const playingStates = [
         PlayerStatus.READY,
@@ -22,11 +29,23 @@ export default function () {
         PlayerStatus.DREW
     ];
 
+    useEffect(function () {
+        if (user.status === PlayerStatus.WON) {
+            setWinnerRequest({
+                identifier: user.identifier,
+            })
+            celebrate();
+        }
+
+        if (user.status === PlayerStatus.DREW && user.identifier === initiator) {
+            setWinnerRequest();
+        }
+    }, [user.status]);
+
     if (gameType === GameType.SOLO) {
         return <MemoryGame />;
     }
 
-    // Render the game based on the game name
     if (
         (
             opponent &&

@@ -1,8 +1,9 @@
 import type {Player} from "@/react/Games/types";
 import {memo, PropsWithChildren} from "react";
-import {PlayerStatus} from "@/react/Games/types/enums";
+import {GameType, PlayerStatus} from "@/react/Games/types/enums";
 import Spinner from "@/react/Utilities/Spinner";
 import SplitScreen from "@/react/Games/components/common/SplitScreen";
+import Modal from "@/react/Games/components/common/WaitingQueue/Modal";
 
 interface Props {
     user: Player;
@@ -11,13 +12,14 @@ interface Props {
     toggleCheck: () => void;
     kickOpponent: () => Promise<void>;
     initiator: string;
+    gameType: GameType;
 }
 
 /**
  * Represents the structure of the component to be exported
  */
 
-export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator }: Props) {
+export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator, gameType }: Props) {
     const playerSide = (
         <>
             <Header player={user} label="Player">
@@ -57,7 +59,12 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         </>
     );
 
-    return <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
+    return (
+        <>
+            <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
+            { gameType === GameType.FRIEND && <Modal /> }
+        </>
+    );
 });
 
 function Header ({ player, label, children }: PropsWithChildren<{ player: Player, label: "Player"|"Opponent" }>) {

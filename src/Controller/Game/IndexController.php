@@ -4,6 +4,7 @@ namespace App\Controller\Game;
 
 use App\Entity\Game;
 use App\Entity\GameSession;
+use App\Entity\User;
 use App\Enum\Game\Type;
 use App\Form\CreateGameSessionType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,10 +64,9 @@ final class IndexController extends AbstractController
         GameSession $session
     ): Response
     {
-        if (
-            $session->getType() === Type::OPPONENT  &&
-            !$this->getUser()
-        ) {
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($session->getType() === Type::OPPONENT  && !$user) {
             $this->addFlash('error', 'You must be logged in to play a competitive game');
             return $this->redirectToRoute('app_index');
         }

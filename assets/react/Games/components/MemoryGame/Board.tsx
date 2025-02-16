@@ -16,7 +16,6 @@ export default function () {
     const flipCard = useGameStore.getState().memoryGameActions.flipCard;
     const checkMatch = useGameStore.getState().memoryGameActions.checkMatch;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
-    const celebrate = useGameStore.getState().celebrate;
     const stopTimer = useGameStore.getState().timerActions.stop;
     const switchLevel = useGameStore.getState().memoryGameActions.switchLevel;
     const setCards = useGameStore.getState().memoryGameActions.setCards;
@@ -50,15 +49,12 @@ export default function () {
             } else {
                 stopTimer();
                 changeUserStatus(PlayerStatus.WON);
-                celebrate();
             }
         }
     }, [history.length]);
 
     useGameEventSource(urls.disconnect, function ({ event }) {
-        console.log(1)
         if (event === GameEvent.DISCONNECT) {
-            console.log(2)
             changeUserStatus(PlayerStatus.LOST);
             stopTimer();
         }

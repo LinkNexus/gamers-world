@@ -22,7 +22,7 @@ const difficultiesDurations = {
         40
     ]
 };
-const { user, initiator, urls, type, name, duration, difficulty } = window.game;
+const { user, initiator, urls, type, name, duration, difficulty, identifier } = window.game;
 const memoryGameCards = [
     'bear',
     'bear-cat',
@@ -52,6 +52,7 @@ const useGameStore = createSelectors(
                 urls: urls,
                 type: type,
                 name: name,
+                identifier: identifier,
                 ticTacToe: {
                     squares: Array(9).fill(null) as TicTacToeSymbol[],
                     currentPlayer: 'X' as TicTacToeSymbol,

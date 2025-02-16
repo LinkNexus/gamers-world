@@ -19,7 +19,6 @@ export default function () {
     const startGame = useGameStore.getState().chifoumiActions.startGame;
     const startTimer = useGameStore.getState().timerActions.start;
     const stopTimer = useGameStore.getState().timerActions.stop;
-    const celebrate = useGameStore.getState().celebrate;
     const choiceRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
     const opponent = useGameStore.use.opponent();
@@ -100,12 +99,6 @@ export default function () {
             stopTimer();
         }
     });
-
-    useEffect(() => {
-        if (user.status === PlayerStatus.WON) {
-            celebrate();
-        }
-    }, [user.status]);
 
     return (
         <Structure

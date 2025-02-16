@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import type {Player} from "@/react/Games/types";
 import useGameStore from "@/react/Games/store";
-import {useToggle} from "@/react/utils";
+import {useFetch, useToggle} from "@/react/utils";
 import {GameEvent, PlayerStatus} from "@/react/Games/types/enums";
 import Structure from "@/react/Games/components/common/WaitingQueue/Structure";
 import {useGameEventSource, useGameFetch} from "@/react/Games/utils";
@@ -15,6 +15,7 @@ export default function () {
     const opponent = useGameStore.use.opponent();
     const initiator = useGameStore.use.initiator();
     const urls = useGameStore.use.urls();
+    const gameType = useGameStore.use.type();
     const setOpponent = useGameStore.getState().setOpponent;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
     const changeOpponentStatus = useGameStore.getState().changeOpponentStatus;
@@ -26,6 +27,7 @@ export default function () {
 
     // Fetch function to dispatch the game events
     const { dispatchGameEvent } = useGameFetch();
+    const { load: setOpponentRequest } = useFetch(`/games/session/${window.game.identifier}/add-opponent`);
 
     // When a player joins the game, send the request to join and listen the
     // event source to get the player that joined on the opponent side
@@ -88,8 +90,17 @@ export default function () {
         status: PlayerStatus
     }>(urls.isReady, function ({ event, payload }) {
         const { playerId, status } = payload;
-        if (event === GameEvent.IS_READY && playerId !== user.identifier) {
-            changeOpponentStatus(status);
+        if (event === GameEvent.IS_READY) {
+            if (playerId !== user.identifier) {
+                changeOpponentStatus(status);
+            }
+
+            if (playerId !== initiator) {
+                setOpponentRequest({
+                    identifier: playerId,
+                    isReady: status === PlayerStatus.READY
+                });
+            }
         }
     }, [user.identifier]);
 
@@ -107,6 +118,11 @@ export default function () {
     }, [opponent?.identifier]);
 
     async function kickOpponent () {
+        await setOpponentRequest({
+            identifier: opponent?.identifier,
+            isReady: false
+        });
+
         await dispatchGameEvent({
             event: GameEvent.DISCONNECT,
             payload: {
@@ -131,6 +147,7 @@ export default function () {
             toggleCheck={toggleCheck}
             kickOpponent={kickOpponent}
             initiator={initiator}
+            gameType={gameType}
         />
     );
 }
