@@ -55,7 +55,7 @@ export default class extends Controller {
         button.setAttribute('type', 'button');
         button.textContent = 'Next Step';
         button.classList.add("w-full", "button-primary")
-        button.setAttribute('data-action', 'multiple-steps-modal#nextStep');
+        button.setAttribute('data-action', 'modals--multiple-steps#nextStep');
         element.appendChild(button);
 
         return button;

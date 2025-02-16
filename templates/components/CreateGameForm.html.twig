@@ -1,39 +1,37 @@
 <div{{ attributes }}>
-    <twig:Utilities:Modal multiple_steps="{{ true }}" id="create-game" title="Create a new Game">
-        {{ form_start(form) }}
-        <div data-multiple-steps-modal-target="step" data-step="1">
-            <div>
-                {{ form_label(form.type) }}
-                {{ form_widget(form.type) }}
+    {{ form_start(form) }}
+    <div data-modals--multiple-steps-target="step" data-step="1">
+        <div>
+            {{ form_label(form.type) }}
+            {{ form_widget(form.type) }}
+        </div>
+    </div>
+
+    <div data-modals--multiple-steps-target="step" data-step="2">
+        {% if form.duration is defined %}
+            <div data-controller="disable-button">
+                {{ form_label(form.duration) }}
+                {{ form_widget(form.duration) }}
+                <button type="submit" data-disable-button-target="button">
+                    Create Game
+                </button>
             </div>
-        </div>
+        {% elseif form.difficulty is defined %}
+            <div data-controller="disable-button">
+                {{ form_label(form.difficulty) }}
+                {{ form_widget(form.difficulty) }}
+                <button type="submit" data-disable-button-target="button">
+                    Create Game
+                </button>
+            </div>
+        {% endif %}
+    </div>
 
-        <div data-multiple-steps-modal-target="step" data-step="2">
-            {% if form.duration is defined %}
-                <div data-controller="disable-button">
-                    {{ form_label(form.duration) }}
-                    {{ form_widget(form.duration) }}
-                    <button type="submit" data-disable-button-target="button">
-                        Create Game
-                    </button>
-                </div>
-            {% elseif form.difficulty is defined %}
-                <div data-controller="disable-button">
-                    {{ form_label(form.difficulty) }}
-                    {{ form_widget(form.difficulty) }}
-                    <button type="submit" data-disable-button-target="button">
-                        Create Game
-                    </button>
-                </div>
-            {% endif %}
-        </div>
+    {{ form_row(form.game, {
+        attr: {
+            class: 'hidden',
+        },
+    }) }}
 
-        {{ form_row(form.game, {
-            attr: {
-                class: 'hidden',
-            },
-        }) }}
-
-        {{ form_end(form) }}
-    </twig:Utilities:Modal>
+    {{ form_end(form) }}
 </div>
