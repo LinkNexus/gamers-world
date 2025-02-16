@@ -12,5 +12,7 @@
         </div>
     </div>
 
-    <twig:CreateGameForm :form="gameForm" />
+    <twig:Utilities:Modal :static="true" multiple_steps="{{ true }}" id="create-game" title="Create a new Game">
+        <twig:CreateGameForm :form="gameForm" />
+    </twig:Utilities:Modal>
 {% endblock %}
