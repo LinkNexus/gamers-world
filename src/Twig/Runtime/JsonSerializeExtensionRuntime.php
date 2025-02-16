@@ -11,7 +11,7 @@ class JsonSerializeExtensionRuntime implements RuntimeExtensionInterface
         // Inject dependencies if needed
     }
 
-    public function serialize(string $value): string
+    public function serialize(string|array $value): string
     {
         return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG);
     }
