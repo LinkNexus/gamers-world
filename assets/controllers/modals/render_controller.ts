@@ -21,6 +21,10 @@ export default class extends Controller<HTMLElement> {
         static: {
             type: Boolean,
             default: false
+        },
+        isRendered: {
+            type: Boolean,
+            default: false
         }
     }
 
@@ -29,6 +33,7 @@ export default class extends Controller<HTMLElement> {
     declare idValue: string;
     declare readonly initiallyVisibleValue: boolean;
     declare readonly staticValue: boolean;
+    declare isRenderedValue: boolean;
 
     connect() {
         if (this.element.dataset.rendered !== 'true') {
@@ -64,7 +69,7 @@ export default class extends Controller<HTMLElement> {
         </div>
     </div>`;
 
-        this.element.setAttribute('data-rendered', 'true');
+        this.isRenderedValue = true;
         this.addAttributes();
     }
 

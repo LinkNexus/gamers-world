@@ -20,6 +20,8 @@ interface Props {
  */
 
 export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator, gameType }: Props) {
+    const waitingForFriend = user.status === PlayerStatus.WAITING && gameType === GameType.FRIEND && !opponent && user.identifier === initiator;
+
     const playerSide = (
         <>
             <Header player={user} label="Player">
@@ -36,6 +38,12 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
                     </>
                 )
             }
+
+            {waitingForFriend && (
+                <button className='button-primary mt-5' data-modal-target="copy-link-modal" data-modal-toggle="copy-link-modal">
+                    Invite Friend
+                </button>
+            )}
         </>
     );
 
@@ -62,7 +70,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
     return (
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
-            { gameType === GameType.FRIEND && <Modal /> }
+            { waitingForFriend && <Modal /> }
         </>
     );
 });
