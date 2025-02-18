@@ -77,7 +77,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
             { waitingForFriend && <ShareModal /> }
-            { user.username == null && <NameModal /> }
+            <NameModal username={user.username} />
         </>
     );
 });

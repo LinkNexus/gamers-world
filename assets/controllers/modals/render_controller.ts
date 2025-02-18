@@ -26,6 +26,10 @@ export default class extends Controller<HTMLElement> {
         isRendered: {
             type: Boolean,
             default: false
+        },
+        isClosed: {
+            type: Boolean,
+            default: false
         }
     }
 
@@ -35,6 +39,13 @@ export default class extends Controller<HTMLElement> {
     declare readonly initiallyVisibleValue: boolean;
     declare readonly staticValue: boolean;
     declare isRenderedValue: boolean;
+    declare isClosedValue: boolean;
+    declare modal: Modal;
+
+    initialize(): void {
+        initFlowbite();
+        this.modal = new Modal(this.element);
+    }
 
     connect() {
         if (!this.isRenderedValue) {
@@ -102,10 +113,16 @@ export default class extends Controller<HTMLElement> {
     }
 
     initModal() {
-        const modal = new Modal(this.element);
-
         if (this.initiallyVisibleValue) {
-            modal.show();
+            this.modal.show();
+        }
+    }
+
+    isClosedValueChanged(currentValue: boolean) {
+        if (currentValue) {
+            this.modal.hide();
+        } else {
+            this.modal.show();
         }
     }
 }
