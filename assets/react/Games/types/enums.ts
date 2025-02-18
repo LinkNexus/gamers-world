@@ -24,7 +24,8 @@ export enum PlayerStatus {
 
 export enum GameName {
     TIC_TAC_TOE = 'tic-tac-toe',
-    CHIFOUMI = 'chifoumi'
+    CHIFOUMI = 'chifoumi',
+    MEMORY_GAME = 'memory-game'
 } 
 
 export type TicTacToeSymbol = 'X' | 'O' | null;
@@ -33,25 +34,6 @@ export enum ChifoumiChoice {
     ROCK = 'ROCK',
     PAPER = 'PAPER',
     SCISSORS = 'SCISSORS'
-}
-
-export enum MemoryCard {
-    BEAR = 'BEAR',
-    BEAR_CAT = 'BEAR_CAT',
-    GIRAFFE = 'GIRAFFE',
-    GORILLA = 'GORILLA',
-    KANGAROO = 'KANGAROO',
-    KOALA = 'KOALA',
-    LEOPARD = 'LEOPARD',
-    LION = 'LION',
-    ORCA = 'ORCA',
-    PANDA = 'PANDA',
-    PANGOLIN = 'PANGOLIN',
-    PENGUIN = 'PENGUIN',
-    RHINO = 'RHINO',
-    TOUCAN = 'TOUCAN',
-    WARTHOG = 'WARTHOG',
-    WOLF = 'WOLF',
 }
 
 export enum GameEvent {

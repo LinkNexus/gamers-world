@@ -71,7 +71,18 @@ final class IndexController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
+        if ($session->getType() === Type::COMPUTER && $session->getInitiator() !== $user) {
+            $this->addFlash('error', 'You are not allowed to play this game');
+            return $this->redirectToRoute('app_index');
+        }
+
+        if (!$user) {
+            $user = new User();
+            $session->setInitiator($user);
+        }
+
         return $this->render('app/games/play.html.twig', [
+            'user' => $user,
             'session' => $session,
             'identifier' => $session->getIdentifier(),
         ]);

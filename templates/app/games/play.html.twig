@@ -4,7 +4,7 @@
     <script>
         // This is a hack to make the user available in the JS code
         window.game = {
-            user: JSON.parse({{ app.user|serialize('json', { groups: 'play:read' })|json_serialize|raw }}),
+            user: JSON.parse({{ user|serialize('json', { groups: 'play:read' })|json_serialize|raw }}),
             initiator: {{ session.initiator.identifier|json_encode|raw }},
             urls: {{ {
                 join: mercure('http://localhost:5001/join/' ~ identifier)|json_serialize,

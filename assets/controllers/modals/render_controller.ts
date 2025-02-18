@@ -1,5 +1,5 @@
 import {Controller} from '@hotwired/stimulus';
-import {Modal} from "flowbite";
+import {initFlowbite, Modal} from "flowbite";
 
 /*
 * The following line makes this controller "lazy": it won't be downloaded until needed
@@ -36,10 +36,12 @@ export default class extends Controller<HTMLElement> {
     declare isRenderedValue: boolean;
 
     connect() {
-        if (this.element.dataset.rendered !== 'true') {
+        if (this.isRenderedValue !== true) {
             this.render();
             this.initModal();
         }
+
+        initFlowbite();
     }
 
     render() {

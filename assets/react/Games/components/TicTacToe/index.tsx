@@ -3,8 +3,9 @@ import {useEffect} from "react";
 import useGameStore from "@/react/Games/store";
 
 export default function () {
+    const startGame = useGameStore.getState().ticTacToeActions.startGame;
     useEffect(() => {
-        useGameStore.getState().ticTacToeActions.startGame();
+        startGame();
     }, []);
 
     return (

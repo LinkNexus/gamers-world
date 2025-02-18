@@ -1,19 +1,22 @@
 import useGameStore from "@/react/Games/store";
 import Square from "./Square"
-import {GameEvent, PlayerStatus, TicTacToeSymbol} from "@/react/Games/types/enums";
+import {GameEvent, GameType, PlayerStatus, TicTacToeSymbol} from "@/react/Games/types/enums";
 import {useGameEventSource, useGameFetch} from "@/react/Games/utils";
 import {Player} from "@/react/Games/types";
 import {useEffect, useState} from "react";
 import Timer from "@/react/Games/components/common/Timer";
+import {useDelay} from "@/react/utils";
 
 export default function () {
-    // Sates from the store
+    // States from the store
     const user = useGameStore.use.user();
     const opponent = useGameStore.use.opponent();
     const userSymbol = useGameStore.use.ticTacToe().user;
     const squares = useGameStore.use.ticTacToe().squares;
     const currentPlayer = useGameStore.use.ticTacToe().currentPlayer;
     const urls = useGameStore.use.urls();
+    const gameType = useGameStore.use.type();
+    const gameName = useGameStore.use.name();
 
     // Store actions
     const stopTimer = useGameStore.getState().timerActions.stop;
@@ -28,6 +31,7 @@ export default function () {
     const [winningMoves, setWinningMoves] = useState<number[]>([]);
     const canPlay = currentPlayer === userSymbol;
     const gameEnd = winningMoves.length !== 0 || user.status === PlayerStatus.DISCONNECTED || opponent!.status === PlayerStatus.DISCONNECTED || user.status === PlayerStatus.DREW;
+    const againstComputer = gameType === GameType.COMPUTER;
 
     const { dispatchGameEvent } = useGameFetch();
 
@@ -43,14 +47,14 @@ export default function () {
             [2, 4, 6]
         ];
 
-        if (squares.every((square) => square !== null)) return [];
-
         for (let i = 0; i < winningMoves.length; i++) {
             const [a, b, c] = winningMoves[i];
             if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
                 return [a, b, c];
             }
         }
+
+        if (squares.every((square) => square !== null)) return [];
 
         return null;
     }
@@ -68,13 +72,16 @@ export default function () {
             declareWinner(winningMoves, currentPlayer);
             setWinningMoves(winningMoves);
         }
+
         toggleCurrentPlayer();
 
         await dispatchGameEvent({
             event: GameEvent.PLAY,
             payload: {
                 justPlayed: userSymbol,
-                squares: nextSquares
+                squares: nextSquares,
+                againstComputer,
+                gameName
             }
         })
     }
@@ -82,20 +89,28 @@ export default function () {
     useGameEventSource<{
         justPlayed: TicTacToeSymbol,
         squares: TicTacToeSymbol[]
-    }>(urls.play, function ({ event, payload }) {
+    }>(urls.play, async function ({ event, payload }) {
         const { justPlayed, squares } = payload;
+
         if (event === GameEvent.PLAY && justPlayed !== userSymbol) {
-            const winningMoves = getWinningMoves(squares);
-            setSquares(squares);
-            if (winningMoves) {
-                setWinningMoves(winningMoves);
-                declareWinner(winningMoves, justPlayed);
+            if (againstComputer) {
+                if (gameEnd) return;
+                await useDelay(1000);
             }
+
+            setSquares(squares);
+            const winningMoves = getWinningMoves(squares);
+
+            if (winningMoves) {
+                declareWinner(winningMoves, justPlayed);
+                setWinningMoves(winningMoves);
+            }
+
             toggleCurrentPlayer();
         }
-    }, [userSymbol])
+    }, [userSymbol, user.status])
 
-    useEffect(() => {
+    useEffect(function () {
         if (canPlay && !gameEnd) {
             startTimer();
         } else {
@@ -104,8 +119,8 @@ export default function () {
     }, [canPlay, gameEnd]);
 
     useGameEventSource<{ playerId: Player['identifier'] }>(urls.disconnect, function ({ event, payload }) {
-        const { playerId } = payload;
         if (event === GameEvent.DISCONNECT) {
+            const { playerId } = payload;
             if (playerId === user.identifier) {
                 changeUserStatus(PlayerStatus.DISCONNECTED);
             } else {

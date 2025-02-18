@@ -3,7 +3,8 @@ import {memo, PropsWithChildren} from "react";
 import {GameType, PlayerStatus} from "@/react/Games/types/enums";
 import Spinner from "@/react/Utilities/Spinner";
 import SplitScreen from "@/react/Games/components/common/SplitScreen";
-import Modal from "@/react/Games/components/common/WaitingQueue/Modal";
+import ShareModal from "@/react/Games/components/common/WaitingQueue/Modals/ShareModal";
+import NameModal from "./Modals/NameModal";
 
 interface Props {
     user: Player;
@@ -21,6 +22,9 @@ interface Props {
 
 export default memo(function ({ user, opponent, isReady, toggleCheck, kickOpponent, initiator, gameType }: Props) {
     const waitingForFriend = user.status === PlayerStatus.WAITING && gameType === GameType.FRIEND && !opponent && user.identifier === initiator;
+    const againstComputer = gameType === GameType.COMPUTER;
+
+    console.log(opponent?.status)
 
     const playerSide = (
         <>
@@ -53,7 +57,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
 
             {
                 ([PlayerStatus.FOUND_OPPONENT, PlayerStatus.READY].includes(user.status)) &&
-                user.identifier === initiator &&
+                user.identifier === initiator && !againstComputer &&
                 (
                     <button
                         onClick={kickOpponent}
@@ -67,19 +71,24 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         </>
     );
 
+    console.log(user.username)
+
     return (
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
-            { waitingForFriend && <Modal /> }
+            { waitingForFriend && <ShareModal /> }
+            { user.username == null && <NameModal /> }
         </>
     );
 });
 
 function Header ({ player, label, children }: PropsWithChildren<{ player: Player, label: "Player"|"Opponent" }>) {
+    const image = player.image ? '/images/users/' + player.image : "https://avatar.iran.liara.run/public";
+
     return (
         <>
             <div className='h-fit w-fit rounded-full border-2 border-slate-300'>
-                <img className='rounded-full bg-slate-500 w-32 h-32 object-cover md:w-48 md:h-48' src={`/images/users/${player.image}`} alt='profile-image' />
+                <img className='rounded-full bg-slate-500 w-32 h-32 object-cover md:w-48 md:h-48' src={image} alt='profile-image' />
             </div>
             <div className='mt-3 w-full max-w-full flex flex-col gap-y-2'>
                 <h1 className='font-bold text-2xl flex flex-wrap flex-col items-center gap-y-2 text-ellipsis px-3 md:text-3xl'>

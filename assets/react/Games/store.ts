@@ -77,6 +77,11 @@ const useGameStore = createSelectors(
                 }
             },
             (set, get) => ({
+                setUsername: function (username: string) {
+                    set(function (state) {
+                        return { ...state, user: { ...state.user, username } }
+                    })
+                },
                 setOpponent: function (opponent: Player|null) {
                     set(function (state) {
                         return { ...state, opponent };

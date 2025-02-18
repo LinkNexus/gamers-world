@@ -4,6 +4,7 @@ namespace App\Controller\Game;
 
 use App\Entity\GameSession;
 use App\Entity\User;
+use App\Service\AutomatedOpponent;
 use App\Service\UpdatesBroadcaster;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -18,7 +19,8 @@ final class SessionController extends AbstractController
 
     public function __construct(
         private readonly UpdatesBroadcaster $broadcaster,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly AutomatedOpponent $automatedOpponent
     )
     {}
 
@@ -28,6 +30,7 @@ final class SessionController extends AbstractController
         string $identifier
     ): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
         return $this->broadcaster->broadcast(
             [
                 'http://localhost:5001/join/' . $identifier,
@@ -36,7 +39,16 @@ final class SessionController extends AbstractController
                 'http://localhost:5001/players/disconnect/' . $identifier,
                 'http://localhost:5001/play/' . $identifier,
             ],
-            data: $request->getContent()
+            callback: function () use ($data) {
+                if ($data['event'] === 'PLAY' && $data['payload']['againstComputer']) {
+                    return json_encode([
+                        'event' => 'PLAY',
+                        'payload' => $this->automatedOpponent->process($data['payload'])
+                    ]);
+                }
+
+                return json_encode($data);
+            }
         );
     }
 

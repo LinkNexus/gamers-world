@@ -1,8 +1,8 @@
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import type {Player} from "@/react/Games/types";
 import useGameStore from "@/react/Games/store";
 import {useFetch, useToggle} from "@/react/utils";
-import {GameEvent, PlayerStatus} from "@/react/Games/types/enums";
+import {GameEvent, GameType, PlayerStatus} from "@/react/Games/types/enums";
 import Structure from "@/react/Games/components/common/WaitingQueue/Structure";
 import {useGameEventSource, useGameFetch} from "@/react/Games/utils";
 
@@ -19,6 +19,10 @@ export default function () {
     const setOpponent = useGameStore.getState().setOpponent;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
     const changeOpponentStatus = useGameStore.getState().changeOpponentStatus;
+    const setUsername = useGameStore.getState().setUsername;
+
+    // Local and Derived states
+    const againstComputer = gameType === GameType.COMPUTER;
 
     // For some reason, when toggleStatus is called
     // the status is not updated the first time
@@ -28,6 +32,22 @@ export default function () {
     // Fetch function to dispatch the game events
     const { dispatchGameEvent } = useGameFetch();
     const { load: setOpponentRequest } = useFetch(`/games/session/${window.game.identifier}/add-opponent`);
+
+
+    // If the game is against the computer, set the opponent to the computer
+    useEffect(function () {
+        if (againstComputer) {
+            setOpponent({
+                identifier: 'computer',
+                username: 'AI',
+                status: PlayerStatus.READY,
+                image: 'computer.avif',
+                previousStatus: PlayerStatus.WAITING
+            } as Player);
+
+            changeUserStatus(PlayerStatus.FOUND_OPPONENT);
+        }
+    }, []);
 
     // When a player joins the game, send the request to join and listen the
     // event source to get the player that joined on the opponent side
@@ -67,7 +87,9 @@ export default function () {
             }
 
             changeUserStatus(PlayerStatus.FOUND_OPPONENT);
-            changeOpponentStatus(PlayerStatus.FOUND_OPPONENT);
+            if (gameType !== GameType.COMPUTER) {
+                changeOpponentStatus(PlayerStatus.FOUND_OPPONENT);
+            }
         }
     }, [opponent?.identifier]);
 

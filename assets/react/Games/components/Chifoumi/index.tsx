@@ -13,6 +13,7 @@ export default function () {
     const urls = useGameStore.use.urls();
     const opponentChoice = useGameStore.use.chifoumi().opponent;
     const userChoice = useGameStore.use.chifoumi().user;
+    const opponent = useGameStore.use.opponent();
     const setUserChoice = useGameStore.getState().chifoumiActions.setUserChoice;
     const setOpponentChoice = useGameStore.getState().chifoumiActions.setOpponentChoice;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
@@ -21,7 +22,6 @@ export default function () {
     const stopTimer = useGameStore.getState().timerActions.stop;
     const choiceRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
-    const opponent = useGameStore.use.opponent();
 
     const {dispatchGameEvent} = useGameFetch();
 
