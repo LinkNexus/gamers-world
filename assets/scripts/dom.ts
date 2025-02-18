@@ -1,10 +1,30 @@
 export function renderAttributes (
     element: Element,
-    attributes: Record<string, string>,
-    defaults: Record<string, string>
+    attributes: Record<string, any>,
+    defaults: Record<string, any> = {}
 ) {
     Object.entries(attributes).forEach(
         function ([key, value]) {
+
+            if (key === 'styles') {
+                let styles = value;
+                if (defaults.styles) {
+                    styles = {...defaults.styles, ...value};
+                }
+                renderStyles(element as HTMLElement, styles);
+                delete defaults.style;
+                return;
+            }
+
+            if (key === 'classes') {
+                let classes = value;
+                if (defaults.classes) {
+                    classes = [ ...defaults.classes, ...value ];
+                }
+                element.classList.add(...classes);
+                delete defaults[key];
+            }
+
             const cumulativeAttributes = [
                 'class',
                 'id',
