@@ -97,7 +97,7 @@ HTML;
                         "label_html" => true,
                         'choice_attr' => function () {
                             return [
-                                'data-disable-button-target' => 'toBeChecked',
+                                'data-targeted-as' => 'disable-button:to-be-checked',
                             ];
                         },
                         'attr' => [
@@ -145,7 +145,7 @@ HTML;
                         'error_bubbling' => true,
                         'choice_attr' => function () {
                             return [
-                                'data-disable-button-target' => 'toBeChecked',
+                                'data-targeted-as' => 'disable-button:to-be-checked',
                             ];
                         },
                     ]);
@@ -183,7 +183,7 @@ HTML;
                         'error_bubbling' => true,
                         'choice_attr' => function () {
                             return [
-                                'data-disable-button-target' => 'toBeChecked',
+                                'data-targeted-as' => 'disable-button:to-be-checked',
                             ];
                         },
                     ]);

@@ -1,5 +1,4 @@
 import {Controller} from '@hotwired/stimulus';
-import {initFlowbite, Modal} from "flowbite";
 import {renderAttributes} from "@/scripts/dom";
 
 /*
@@ -30,6 +29,10 @@ export default class extends Controller<HTMLElement> {
         isClosed: {
             type: Boolean,
             default: false
+        },
+        isCloseable: {
+            type: Boolean,
+            default: true
         }
     }
 
@@ -40,24 +43,30 @@ export default class extends Controller<HTMLElement> {
     declare readonly staticValue: boolean;
     declare isRenderedValue: boolean;
     declare isClosedValue: boolean;
-    declare modal: Modal;
+    declare readonly isCloseableValue: boolean;
+
+    declare $modal: HTMLDivElement;
 
     initialize(): void {
-        initFlowbite();
-        this.modal = new Modal(this.element);
     }
 
     connect() {
         if (!this.isRenderedValue) {
             this.render();
-            this.initModal();
         }
 
-        initFlowbite();
+        if (this.initiallyVisibleValue) {
+            this.show();
+        }
+
+        this.element.addEventListener('modal:close', this.hide.bind(this));
+        this.element.addEventListener('modal:open', this.show.bind(this));
+        this.element.addEventListener('modal:toggle', this.toggle.bind(this));
+        document.addEventListener('click', this.setStatic.bind(this));
     }
 
     render() {
-        const $modal = document.createElement('div');
+        this.$modal = document.createElement('div');
         const $modalContent = document.createElement('div');
         const $modalBody = document.createElement('div');
 
@@ -66,7 +75,14 @@ export default class extends Controller<HTMLElement> {
             '<span class="sr-only">Previous Step</span>\n' +
             '</button>' : '';
 
-        $modal.classList.add('relative', 'p-4', 'w-full', 'max-w-xl', 'max-h-full');
+        const exitButton = this.isCloseableValue ? `
+            <button data-action="modals--render#hide" type="button" class="end-2.5 text-theme-primary bg-transparent hover:bg-theme-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" aria-hidden="true" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"/><path d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"/></g></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+        `: '';
+
+        this.$modal.classList.add('relative', 'p-4', 'w-full', 'max-w-xl', 'max-h-full');
         $modalContent.classList.add('relative', 'bg-black', 'border', 'border-theme-primary', 'rounded-lg', 'shadow-lg');
         $modalBody.classList.add('p-4', 'md:p-5');
 
@@ -76,17 +92,14 @@ export default class extends Controller<HTMLElement> {
                 <h3 class="title text-4xl">
                     ${this.titleValue}
                 </h3>
-                <button type="button" class="end-2.5 text-theme-primary bg-transparent hover:bg-theme-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="${this.idValue}-modal">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" aria-hidden="true" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"/><path d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"/></g></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
+                ${exitButton}
             </div>
         `;
 
         $modalBody.append(...this.element.children)
         $modalContent.append($modalBody);
-        $modal.append($modalContent);
-        this.element.append($modal);
+        this.$modal.append($modalContent);
+        this.element.append(this.$modal);
         this.isRenderedValue = true;
         this.addAttributes();
     }
@@ -112,17 +125,43 @@ export default class extends Controller<HTMLElement> {
         }
     }
 
-    initModal() {
-        if (this.initiallyVisibleValue) {
-            this.modal.show();
-        }
+    show() {
+        this.element.classList.remove('hidden');
+        this.element.classList.add('flex', 'justify-center', 'items-center');
+    }
+
+    hide() {
+        this.element.classList.remove('flex', 'justify-center', 'items-center');
+        this.element.classList.add('hidden');
+    }
+
+    toggle() {
+        this.element.classList.toggle('flex');
+        this.element.classList.toggle('items-center');
+        this.element.classList.toggle('justify-center');
+        this.element.classList.toggle('hidden');
     }
 
     isClosedValueChanged(currentValue: boolean) {
         if (currentValue) {
-            this.modal.hide();
+            this.hide();
         } else {
-            this.modal.show();
+            this.show();
         }
+    } 
+
+    setStatic(event: Event) {
+        event.stopPropagation();
+
+        if (event.target === this.element) {
+            if (!this.staticValue) this.hide();
+        }
+    }
+
+    disconnect(): void {
+        this.element.removeEventListener('modal:close', this.hide.bind(this));
+        this.element.removeEventListener('modal:open', this.show.bind(this));
+        this.element.removeEventListener('modal:toggle', this.toggle.bind(this));
+        this.element.removeEventListener('click', this.setStatic.bind(this));
     }
 }

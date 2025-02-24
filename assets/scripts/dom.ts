@@ -23,6 +23,7 @@ export function renderAttributes (
                 }
                 element.classList.add(...classes);
                 delete defaults[key];
+                return;
             }
 
             const cumulativeAttributes = [
@@ -31,10 +32,15 @@ export function renderAttributes (
                 'data-controller'
             ];
 
-            if (cumulativeAttributes.includes(key) && defaults[key]) {
-                value = `${defaults[key]} ${value}`;
+            if (key in defaults) {
+                if (cumulativeAttributes.includes(key) && defaults[key] !== null) {
+                    console.log('here');
+                    value = `${defaults[key]} ${value}`;
+                }
+
                 delete defaults[key];
             }
+
             element.setAttribute(key, value);
         }
     )

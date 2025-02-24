@@ -8,11 +8,13 @@
                 <span>{{ game.name }}</span>
             </h1>
             <p class="text-normal text-center">{{ game.description }}</p>
-            <button data-modal-target="create-game-modal" data-modal-toggle="create-game-modal" class="button-primary mt-5">Play</button>
+            <custom-action id="test-1" actions="create-game-modal:show">
+                <button class="button-primary mt-5">Play</button>
+            </custom-action>
         </div>
     </div>
 
-    <twig:Utilities:Modal :static="true" multiple_steps="{{ true }}" id="create-game" title="Create a new Game">
-        <twig:CreateGameForm :form="gameForm" />
-    </twig:Utilities:Modal>
+    <multi-modal id="create-game-modal" title="Create a new Game Session" static>
+        <twig:CreateGameForm :form="gameForm" data-targeted-as="create-game-modal:form" />
+    </multi-modal>
 {% endblock %}

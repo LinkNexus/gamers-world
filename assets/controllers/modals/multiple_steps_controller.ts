@@ -6,6 +6,7 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
+    static componentName = 'modal-multiple-steps';
     static targets = ['step', 'previousButton'];
 
     static values = {

@@ -24,8 +24,6 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
     const waitingForFriend = user.status === PlayerStatus.WAITING && gameType === GameType.FRIEND && !opponent && user.identifier === initiator;
     const againstComputer = gameType === GameType.COMPUTER;
 
-    console.log(opponent?.status)
-
     const playerSide = (
         <>
             <Header player={user} label="Player">
@@ -71,13 +69,11 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         </>
     );
 
-    console.log(user.username)
-
     return (
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
             { waitingForFriend && <ShareModal /> }
-            <NameModal username={user.username} />
+            { user.username === null && <NameModal username={user.username} /> }
         </>
     );
 });

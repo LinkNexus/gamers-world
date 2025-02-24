@@ -6,6 +6,7 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
+    static componentName = 'disable-button';
     static targets = ['button', 'toBeChecked', 'notEmpty'];
 
     declare buttonTarget: HTMLButtonElement;
@@ -46,7 +47,7 @@ export default class extends Controller {
 
     triggerConditionEvent(element: HTMLElement, fulfilled: boolean) {
         element.dispatchEvent(new CustomEvent('button-condition-change', { bubbles: true, detail: { fulfilled } }));
-    }
+    }   
 
     listenConditionChange(event: Event) {
         const { fulfilled } = (event as CustomEvent).detail;

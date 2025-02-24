@@ -1,30 +1,40 @@
 <div{{ attributes }}>
     {{ form_start(form) }}
-    <div data-modals--multiple-steps-target="step" data-step="1">
-        <div>
-            {{ form_label(form.type) }}
-            {{ form_widget(form.type) }}
-        </div>
-    </div>
 
-    <div data-modals--multiple-steps-target="step" data-step="2">
-        {% if form.duration is defined %}
-            <div data-controller="disable-button">
-                {{ form_label(form.duration) }}
-                {{ form_widget(form.duration) }}
-                <button type="submit" data-disable-button-target="button">
-                    Create Game
-                </button>
+    <disable-button>
+        <div id="create-game-form-type" data-targeted-as="create-game-modal:step">
+            <div>
+                {{ form_label(form.type) }}
+                {{ form_widget(form.type) }}
             </div>
-        {% elseif form.difficulty is defined %}
-            <div data-controller="disable-button">
-                {{ form_label(form.difficulty) }}
-                {{ form_widget(form.difficulty) }}
-                <button type="submit" data-disable-button-target="button">
-                    Create Game
+            <custom-action actions="create-game-modal:nextStep">
+                <button class="w-full button-primary" data-targeted-as="disable-button:button" type="button">
+                    Next
                 </button>
-            </div>
-        {% endif %}
+            </custom-action>
+        </div>
+    </disable-button>
+
+    <div data-targeted-as="create-game-modal:step">
+        <disable-button>
+            {% if form.duration is defined %}
+                <div>
+                    {{ form_label(form.duration) }}
+                    {{ form_widget(form.duration) }}
+                    <button data-targeted-as="disable-button:button" type="submit">
+                        Create Game
+                    </button>
+                </div>
+            {% elseif form.difficulty is defined %}
+                <div>
+                    {{ form_label(form.difficulty) }}
+                    {{ form_widget(form.difficulty) }}
+                    <button data-targeted-as="disable-button:button" type="submit">
+                        Create Game
+                    </button>
+                </div>
+            {% endif %}
+        </disable-button>
     </div>
 
     {{ form_row(form.game, {

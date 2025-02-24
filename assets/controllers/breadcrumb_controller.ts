@@ -7,6 +7,8 @@ import { Controller } from '@hotwired/stimulus';
 /* stimulusFetch: 'lazy' */
 export default class extends Controller<HTMLDivElement> {
 
+    static componentName = 'breadcrumb-element';
+
     static values = {
         separator: {
             type: String,
