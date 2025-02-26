@@ -1,4 +1,3 @@
-import Modal from "@/react/Utilities/Modal";
 import useGameStore from "@/react/Games/store";
 import { SyntheticEvent } from "react";
 
@@ -17,18 +16,13 @@ export default function ({ username }: { username: string|null }) {
     }
 
     return (
-        /* <Modal id="enter-username" title="Enter Username" isStatic={true} initiallyVisible={true} isClosed={!!username}>
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-y-5 md:gap-x-3" data-controller="disable-button">
-                <input name="username" placeholder="Username" className="w-full" data-disable-button-target="notEmpty" type="text" />
-                <button type="submit" className="button-primary" data-disable-button-target="button">Save</button>
-            </form>
-        </Modal> */
-
-        <modal-element title="Enter Username" id="enter-username" static={true} initiallyVisible={true} isClosed={!!username}>
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-y-5 md:gap-x-3" data-controller="disable-button">
-                <input name="username" placeholder="Username" className="w-full" data-disable-button-target="notEmpty" type="text" />
-                <button className="button-primary" data-disable-button-target="button">Save</button>
-            </form>
+        <modal-element title="Enter Username" id="enter-username-modal" static={true} initially-visible={true} isClosed={!!username}>
+            <disable-button>
+                <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-y-5 md:gap-x-3">
+                    <input name="username" placeholder="Username" className="w-full" data-targeted-as="disable-button:not-empty" type="text" />
+                    <button className="button-primary" data-targeted-as="disable-button:button">Save</button>
+                </form>
+            </disable-button>
         </modal-element>
     );
 }

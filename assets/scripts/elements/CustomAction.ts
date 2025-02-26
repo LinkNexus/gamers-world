@@ -1,4 +1,5 @@
 import CustomElement from "@/scripts/elements/CustomElement";
+import {act} from "react";
 
 export default class CustomAction extends CustomElement {
     static observedAttributes = ['actions'];
@@ -56,18 +57,22 @@ export default class CustomAction extends CustomElement {
 
     attachListeners() {
         for (const actionsMap of this.actionsMaps) {
-            this.addEventListener(actionsMap.trigger, () => {
-                this.dispatchEvent(new CustomEvent(`${actionsMap.target}.${actionsMap.action}`, { bubbles: true }));
-            })
+            if (actionsMap.trigger === "load") {
+                this.dispatchEvent(new CustomEvent(`${actionsMap.target}.${actionsMap.action}`, {bubbles: true}));
+            } else {
+                this.addEventListener(actionsMap.trigger, () => {
+                    this.dispatchEvent(new CustomEvent(`${actionsMap.target}.${actionsMap.action}`, {bubbles: true}));
+                })
+            }
         }
     }
 
-    actionsValueChanged(newValue: string[], oldValue: string[]) {
-        this.actionsMaps = this.interpretActions();
-        if (!oldValue && newValue) {
-            this.attachListeners();
-        }
-    }
+    // actionsValueChanged(newValue: string[], oldValue: string[]) {
+    //     this.actionsMaps = this.interpretActions();
+    //     if (!oldValue && newValue) {
+    //         this.attachListeners();
+    //     }
+    // }
 
     protected getDefaultTrigger() {
         let trigger: keyof DocumentEventMap = 'click';

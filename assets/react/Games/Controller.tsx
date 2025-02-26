@@ -21,8 +21,6 @@ export default function () {
     const celebrate = useGameStore.getState().celebrate;
     const { load: setWinnerRequest } = useFetch(`/games/session/${gameId}/winner`);
 
-    console.log(user.status)
-
     const playingStates = [
         PlayerStatus.READY,
         PlayerStatus.PLAYING,

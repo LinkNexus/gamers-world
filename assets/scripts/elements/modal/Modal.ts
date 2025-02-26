@@ -9,10 +9,7 @@ export default class Modal extends CustomElement {
             static: Boolean,
             isRendered: Boolean,
             isClosed: Boolean,
-            isCloseable: {
-                type: Boolean,
-                default: true
-            }
+            isCloseable: Boolean
         }
     }
 
@@ -56,7 +53,7 @@ export default class Modal extends CustomElement {
         this.$modalHeader.classList.add('flex', 'items-center', 'justify-between', 'p-4', 'md:p-5', 'border-b', 'rounded-t', 'dark:border-gray-600');
 
         const exitButton = this.isCloseable ? `
-            <custom-action id="test-2" actions="${this.id}:hide">
+            <custom-action actions="click->${this.id}:hide">
                 <button type="button" class="end-2.5 text-theme-primary bg-transparent hover:bg-theme-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" aria-hidden="true" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"/><path d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"/></g></svg>
                     <span class="sr-only">Close modal</span>

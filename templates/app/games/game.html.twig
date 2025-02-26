@@ -14,7 +14,11 @@
         </div>
     </div>
 
-    <multi-modal id="create-game-modal" title="Create a new Game Session" static>
-        <twig:CreateGameForm :form="gameForm" data-targeted-as="create-game-modal:form" />
+    <multi-modal id="create-game-modal" title="Create a new Game Session" static is-closeable>
+        <twig:CreateGameForm :form="gameForm" data-targeted-as="create-game-modal:dynamic-form" />
     </multi-modal>
+
+    <random-input>
+        <input type="text" />
+    </random-input>
 {% endblock %}

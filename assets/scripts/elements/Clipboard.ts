@@ -1,5 +1,5 @@
 import { renderAttributes } from "@/scripts/dom";
-import CustomElement from "../CustomElement";
+import CustomElement from "./CustomElement";
 
 
 export default class Clipboard extends CustomElement {

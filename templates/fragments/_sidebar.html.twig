@@ -23,9 +23,8 @@
         'url': path('app_games'),
         'authentication_required': null,
         'dropdown': [],
-        'dropdown_attributes': {
-            'data-controller': 'templated-fetch',
-            'data-templated-fetch-endpoint-value': path('app_games_render'),
+        "dropdown_attributes": {
+            "data-targeted-as": "games-list-fetch:output"
         }
     },
     {
@@ -92,7 +91,7 @@
                                     aria-hidden="true"
                             />
                         </button>
-                        <ul id="dropdown-{{ item.label }}" {{ item.dropdown_attributes is defined ? render_attributes(item.dropdown_attributes) }}>
+                        <ul class="pl-8 flex align-center justify-center flex-col" id="dropdown-{{ item.label }}" {{ item.dropdown_attributes is defined ? render_attributes(item.dropdown_attributes) }}>
                             {% for dropdown_item in item.dropdown %}
                                 <li>
                                    <a href="{{ dropdown_item.url }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-theme-primary">
@@ -122,5 +121,7 @@
                 </li>
             {% endfor %}
         </ul>
+
+        <html-fetch id="games-list-fetch" endpoint="{{ path('app_games_render') }}" fetch-initially></html-fetch>
     </div>
 </aside>

@@ -1,5 +1,5 @@
 <div {{ attributes }}>
-    <div data-controller="forms--random-input" data-forms--random-input-initially-loaded-fields-value="[]">
+    <random-input initially-loaded-fields="username">
         {{ form_start(form, { attr: {
             'class': 'w-full flex flex-row lg:justify-between flex-wrap lg:gap-x-6',
             'novalidate': 'novalidate',
@@ -15,14 +15,22 @@
 
         <div>
             {{ form_label(form.username) }}
-            <twig:Forms:RandomInput type="username">
-                {{ form_widget(form.username, {
-                    attr: {
-                        'data-forms--random-input-target': 'username',
-                        'class': 'w-full',
-                    }
-                }) }}
-            </twig:Forms:RandomInput>
+
+
+            {{ form_widget(form.username, {
+                attr: {
+                    'class': 'w-full',
+                    'data-targeted-as': 'random-input:username'
+                }
+            }) }}
+            {#            <twig:Forms:RandomInput type="username">#}
+            {#                {{ form_widget(form.username, {#}
+            {#                    attr: {#}
+            {#                        'data-forms--random-input-target': 'username',#}
+            {#                        'class': 'w-full',#}
+            {#                    }#}
+            {#                }) }}#}
+            {#            </twig:Forms:RandomInput>#}
             {{ form_errors(form.username) }}
         </div>
 
@@ -31,7 +39,7 @@
             <twig:Forms:RandomInput type="password">
                 {{ form_widget(form.plainPassword.first, {
                     attr: {
-                        'data-forms--random-input-target': 'password',
+                        'data-targeted-as': 'random-input:password',
                         'class': 'w-full'
                     }
                 }) }}
@@ -43,7 +51,7 @@
             {{ form_label(form.plainPassword.second) }}
             {{ form_widget(form.plainPassword.second, {
                 attr: {
-                    'data-forms--random-input-target': 'password',
+                    'data-targeted-as': 'random-input:password',
                     'class': 'w-full'
                 }
             }) }}
@@ -61,5 +69,5 @@
         </button>
 
         {{ form_end(form) }}
-    </div>
+    </random-input>
 </div>

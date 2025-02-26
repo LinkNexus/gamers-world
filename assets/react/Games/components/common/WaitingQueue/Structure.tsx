@@ -1,7 +1,6 @@
 import type {Player} from "@/react/Games/types";
 import {memo, PropsWithChildren} from "react";
 import {GameType, PlayerStatus} from "@/react/Games/types/enums";
-import Spinner from "@/react/Utilities/Spinner";
 import SplitScreen from "@/react/Games/components/common/SplitScreen";
 import ShareModal from "@/react/Games/components/common/WaitingQueue/Modals/ShareModal";
 import NameModal from "./Modals/NameModal";
@@ -49,7 +48,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         </>
     );
 
-    const opponentSide = !opponent ? <Spinner /> : (
+    const opponentSide = !opponent ? <spinner-element /> : (
         <>
             <Header player={opponent} label="Opponent" />
 

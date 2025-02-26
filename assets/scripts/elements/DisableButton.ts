@@ -11,11 +11,6 @@ export default class DisableButton extends CustomElement {
     declare $toBeCheckedTargets: HTMLInputElement[];
     declare $notEmptyTargets: HTMLInputElement[];
 
-    constructor() {
-        super();
-        console.log('ffff')
-    }
-
     attachEventsToTargets() {
         // this.buttonTarget.addEventListener('click', this.checkCondition.bind(this));
         this.$buttonTarget.addEventListener('disabled-button-condition-change', this.listenConditionChange.bind(this));
@@ -27,11 +22,6 @@ export default class DisableButton extends CustomElement {
                     this.checkCondition.bind(this)
                 )
             );
-    }
-
-    childListChanged() {
-        this.attachEventsToTargets();
-        console.log(this.$toBeCheckedTargets);
     }
 
     checkCondition() {

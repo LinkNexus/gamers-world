@@ -8,7 +8,7 @@ export default class MultiModal extends Modal {
         return [
             ...super.customTargets(),
             'step',
-            'form',
+            'dynamicForm',
         ];
     }
 
@@ -27,7 +27,7 @@ export default class MultiModal extends Modal {
     private formComponent: Component|null = null;
 
     declare $stepTargets: HTMLElement[];
-    declare $formTarget: HTMLFormElement;
+    declare $dynamicFormTarget: HTMLFormElement;
 
     constructor() {
         super();
@@ -38,8 +38,8 @@ export default class MultiModal extends Modal {
         super.connectedCallback();
         this.initializeSteps();
         this.displayCurrentStep();
-        if (this.$formTarget) {
-            this.formComponent = await getComponent(this.$formTarget);
+        if (this.$dynamicFormTarget) {
+            this.formComponent = await getComponent(this.$dynamicFormTarget);
         }
         this.formComponent?.on('render:finished', () => {
             this.displayCurrentStep();

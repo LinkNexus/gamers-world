@@ -1,6 +1,7 @@
 import { toDashCase } from "../utils";
 
 export default abstract class CustomElement extends HTMLElement {
+    protected static observedAttributes: string[] = ["id"];
     protected customProperties(): Record<string, Function|Record<string, any>> {
         return {};
     }
@@ -24,7 +25,6 @@ export default abstract class CustomElement extends HTMLElement {
         this.mutationObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'childList') {
-                    console.log(this, (this as any)['childListChanged']);
                     if ((this as any)['childListChanged']) {
                         (this as any)['childListChanged']();
                     }
@@ -39,11 +39,11 @@ export default abstract class CustomElement extends HTMLElement {
             if (key in this) continue;
 
             if (typeof value === 'object') {
-                if (typeof value.type() === 'boolean') {
-                     this.toggleAttribute(toDashCase(key), value.default);
-                } else {
-                    this.setAttribute(toDashCase(key), JSON.stringify(value.default()));
-                }
+                // if (typeof value.type() === 'boolean') {
+                //      this.toggleAttribute(toDashCase(key), value.default);
+                // } else {
+                //     this.setAttribute(toDashCase(key), JSON.stringify(value.default()));
+                // }
                 this.addProp(key, value.type(), toDashCase(key));
             } else {
                 this.addProp(key, value(), toDashCase(key));
@@ -52,6 +52,10 @@ export default abstract class CustomElement extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+        if (name === "id") {
+            this.registerActions();
+        }
+
         for (const key of Object.keys(this.properties)) {
             const normalizedKey = toDashCase(key);
 
@@ -155,6 +159,7 @@ export default abstract class CustomElement extends HTMLElement {
     private registerActions() {
         const actions = this.customActions();
         actions.forEach(action => {
+            if (!this.id) return;
             document.addEventListener(`${this.id}.${action}`, (this as any)[action].bind(this));
         })
     }

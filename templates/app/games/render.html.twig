@@ -1,14 +1,12 @@
-<ul id="dropdown-Games">
-    {% for game in games %}
-        <li>
-            <a href="{{ path('app_games_game', { slug: game.slug }) }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-theme-primary">
-                <twig:ux:icon
-                        name="{{ game.icon }}"
-                        class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
-                        aria-hidden="true"
-                />
-                <span class="ms-3">{{ game.name }}</span>
-            </a>
-        </li>
-    {% endfor %}
-</ul>
+{% for game in games %}
+    <li>
+        <a href="{{ path('app_games_game', { slug: game.slug }) }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg group hover:bg-theme-primary">
+            <twig:ux:icon
+                    name="{{ game.icon }}"
+                    class="flex-shrink-0 w-5 h-5 text-body transition duration-75 group-hover:text-theme-secondary"
+                    aria-hidden="true"
+            />
+            <span class="ms-3">{{ game.name }}</span>
+        </a>
+    </li>
+{% endfor %}
