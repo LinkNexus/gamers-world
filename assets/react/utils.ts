@@ -1,6 +1,7 @@
 import {UseBoundStore} from "zustand/react";
 import {StoreApi} from "zustand/vanilla";
 import {RefObject, useCallback, useEffect, useRef, useState} from "react";
+import {toDashCase} from "@/scripts/utils";
 
 type WithSelectors<S> = S extends { getState: () => infer T }
     ? S & { use: { [K in keyof T]: () => T[K] } }
@@ -103,4 +104,30 @@ export function useEventSource<T>(
             return eventSource.close();
         }
     }, [url, ...deps]);
+}
+
+export function stimulusController(controller: string, values: Record<string, any> = {}) {
+   return stimulusControllers([controller], { [controller]: values });
+}
+
+export function stimulusControllers(controllers: string[], controllersValues: Record<string, Record<string, any>>) {
+    const attributes: Record<string, any> = {};
+    for (let controller of controllers) {
+        if (attributes["data-controller"]) {
+            attributes["data-controller"] += ` ${controller}`;
+        } else {
+            attributes["data-controller"] = controller;
+        }
+
+        for (let value in controllersValues[controller]) {
+            const valueType = typeof controllersValues[controller][value];
+            if (valueType === "string") {
+                attributes[`data-${controller}-${toDashCase(value)}-value`] = controllersValues[controller][value];
+                continue;
+            }
+            attributes[`data-${controller}-${toDashCase(value)}-value`] = JSON.stringify(controllersValues[controller][value]);
+        }
+    }
+
+    return attributes;
 }

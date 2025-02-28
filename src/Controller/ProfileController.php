@@ -34,6 +34,7 @@ final class ProfileController extends AbstractController
     {}
 
     #[Route('/', name: '')]
+    #[IsGranted("ROLE_USER", message: "You must be logged in to access this page")]
     public function index(
         Request $request,
         FileUploader $fileUploader,

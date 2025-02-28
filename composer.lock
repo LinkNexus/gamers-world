@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cf951547efeee9db772f246e381b3e8",
+    "content-hash": "29dc3b5c3459fd63d3a7c4dbf8de0e8d",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -6926,7 +6926,7 @@
         },
         {
             "name": "symfony/ux-cropperjs",
-            "version": "v2.22.1",
+            "version": "v2.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-cropperjs.git",
@@ -6991,7 +6991,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-cropperjs/tree/v2.22.1"
+                "source": "https://github.com/symfony/ux-cropperjs/tree/v2.23.0"
             },
             "funding": [
                 {

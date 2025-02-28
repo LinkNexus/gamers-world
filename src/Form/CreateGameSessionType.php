@@ -76,7 +76,11 @@ class CreateGameSessionType extends AbstractType
                         'expanded' => true,
                         'multiple' => false,
                         'choice_filter' => function (?Type $type) {
-                            if (!$this->security->isGranted('ROLE_USER') && $type && $type->value === Type::OPPONENT->value) {
+                            if (
+                                !$this->security->isGranted('ROLE_USER') &&
+                                $type &&
+                                ($type->value === Type::OPPONENT->value || $type->value === Type::FRIEND->value)
+                            ) {
                                 return false;
                             }
 

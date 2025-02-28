@@ -24,8 +24,6 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
     const waitingForFriend = user.status === PlayerStatus.WAITING && gameType === GameType.FRIEND && !opponent && user.identifier === initiator;
     const againstComputer = gameType === GameType.COMPUTER;
 
-    console.log(opponent?.status)
-
     const playerSide = (
         <>
             <Header player={user} label="Player">
@@ -44,7 +42,12 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
             }
 
             {waitingForFriend && (
-                <button className='button-primary mt-5' data-modal-target="copy-link-modal" data-modal-toggle="copy-link-modal">
+                <button
+                    data-controller="modal--trigger"
+                    data-modal--trigger-action-value="open"
+                    data-modal--trigger-target-value="invite-friend"
+                    className='button-primary mt-5'
+                >
                     Invite Friend
                 </button>
             )}
@@ -71,13 +74,11 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
         </>
     );
 
-    console.log(user.username)
-
     return (
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
             { waitingForFriend && <ShareModal /> }
-            <NameModal username={user.username} />
+            {!user.username && <NameModal />}
         </>
     );
 });

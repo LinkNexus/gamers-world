@@ -1,31 +1,22 @@
-import Modal from "@/react/Utilities/Modal";
+import {stimulusController} from "@/react/utils";
 
 export default function () {
     return (
-        /*
         <div
-            data-controller="modals--render"
-            data-modals--render-id-value="copy-link"
-            data-modals--render-initially-visible-value="true"
-            data-modals--render-title-value="Share Link"
+            {...stimulusController("modal--structure", {
+                id: "invite-friend",
+                initiallyVisible: true,
+                title: "Invite a friend",
+            })}
         >
             <div
-                data-controller="clipboard--render"
-                data-clipboard--render-id-value="copy-link"
-                data-clipboard--render-label-value="Share this link to your friend in order to invite them to the game"
-                data-clipboard--render-is-link-value="true"
+                {...stimulusController("clipboard", {
+                    id: "copy-link",
+                    label: "Share this link to your friend in order to invite them to the game",
+                    isLink: true,
+                })}
             >
             </div>
-        </div> */
-
-        <Modal id="copy-link" title="Share Link" initiallyVisible={true}>
-            <div
-                data-controller="clipboard--render"
-                data-clipboard--render-id-value="copy-link"
-                data-clipboard--render-label-value="Share this link to your friend in order to invite them to the game"
-                data-clipboard--render-is-link-value="true"
-            >
-            </div>
-        </Modal>
+        </div>
     );
 }

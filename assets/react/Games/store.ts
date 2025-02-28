@@ -123,6 +123,14 @@ const useGameStore = createSelectors(
                     },
                     startGame: function () {
                         set(function (state) {
+                            let initiator = state.initiator;
+                            if (!initiator) {
+                                console.log('initiator not found')
+                                initiator = Math.random() < 0.5 ? state.user.identifier : state.opponent!.identifier;
+                            }
+
+                            console.log(initiator, state.user.identifier, state.opponent!.identifier)
+
                             return {
                                 ...state,
                                 user: {
@@ -135,8 +143,8 @@ const useGameStore = createSelectors(
                                 },
                                 ticTacToe: {
                                     ...state.ticTacToe,
-                                    user: state.initiator === state.user.identifier ? 'X' : 'O',
-                                    opponent: state.initiator === state.user.identifier ? 'O' : 'X',
+                                    user: initiator === state.user.identifier ? 'X' : 'O',
+                                    opponent: initiator === state.user.identifier ? 'O' : 'X',
                                 }
                             }
                         })

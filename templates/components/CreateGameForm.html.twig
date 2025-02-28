@@ -1,13 +1,11 @@
 <div{{ attributes }}>
     {{ form_start(form) }}
-    <div data-modals--multiple-steps-target="step" data-step="1">
-        <div>
-            {{ form_label(form.type) }}
-            {{ form_widget(form.type) }}
-        </div>
+    <div data-modal--multiple-steps-target="step">
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
     </div>
 
-    <div data-modals--multiple-steps-target="step" data-step="2">
+    <div data-modal--multiple-steps-target="step">
         {% if form.duration is defined %}
             <div data-controller="disable-button">
                 {{ form_label(form.duration) }}

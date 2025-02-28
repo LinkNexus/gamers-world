@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import type {Player} from "@/react/Games/types";
 import useGameStore from "@/react/Games/store";
 import {useFetch, useToggle} from "@/react/utils";
@@ -51,14 +51,16 @@ export default function () {
 
     // When a player joins the game, send the request to join and listen the
     // event source to get the player that joined on the opponent side
-    useEffect(() => {
-        dispatchGameEvent({
-            event: GameEvent.JOIN,
-            payload: {
-                player: user
-            }
-        });
-    }, [dispatchGameEvent, user.identifier]);
+    useEffect(function () {
+        if (user.username) {
+            dispatchGameEvent({
+                event: GameEvent.JOIN,
+                payload: {
+                    player: user
+                }
+            });
+        }
+    }, [dispatchGameEvent, user.identifier, user.username])
 
     useGameEventSource<{ player: Player }>(urls.join, function ({ event, payload: { player } }){
         if (event === GameEvent.JOIN && player.identifier !== user.identifier) {
@@ -81,7 +83,6 @@ export default function () {
 
     useGameEventSource<{ player: Player }>(urls.synchronization, ({ event, payload: { player } }) => {
         if (event === GameEvent.SYNCHRONIZE) {
-            console.log(1)
             if (!opponent) {
                 setOpponent(player);
             }
