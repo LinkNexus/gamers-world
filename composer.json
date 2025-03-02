@@ -35,7 +35,7 @@
         "symfony/stimulus-bundle": "^2.22",
         "symfony/twig-bundle": "7.2.*",
         "symfony/uid": "7.2.*",
-        "symfony/ux-cropperjs": "^2.22",
+        "symfony/ux-cropperjs": "^2.23",
         "symfony/ux-dropzone": "^2.22",
         "symfony/ux-icons": "^2.22",
         "symfony/ux-live-component": "^2.22",

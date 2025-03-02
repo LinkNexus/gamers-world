@@ -4,7 +4,9 @@
     <div class="flex justify-center items-center">
         <div class="relative bg-white rounded-full w-fit h-fit cursor-pointer">
             <img id="user-profile-image" class="w-96 aspect-square object-cover rounded-full" src="{{ asset('images/users/' ~ (user.image ?? "default-image.jpg")) }}" alt="profile image" />
-            <div title="Change profile picture" class="flex justify-center items-center absolute right-0 bottom-6 bg-theme-secondary rounded-full cursor-pointer hover:bg-theme-primary" data-modal-target="profile-image-modal" data-modal-toggle="profile-image-modal">
+            <div title="Change profile picture" class="flex justify-center items-center absolute right-0 bottom-6 bg-theme-secondary rounded-full cursor-pointer hover:bg-theme-primary" {{ stimulus_controller('modal--trigger', {
+                target: "profile-image"
+            }) }}>
                 <twig:ux:icon class="w-20" name="material-symbols:camera-rounded" />
             </div>
         </div>
@@ -34,7 +36,11 @@
         <twig:User:ChangeEmailForm :form="changeEmailForm" />
     </div>
 
-    <twig:Utilities:Modal id="profile-image" title="Upload Profile Picture">
+    <div {{ stimulus_controller('modal--structure', {
+            id: "profile-image",
+            title: "Upload Profile Picture"
+        }) }}
+    >
         <style>
             .dropzone-container {
                 height: 100%;
@@ -61,15 +67,15 @@
         <hr>
 
         <form action="{{ path('app_profile_random_image') }}" method="POST">
-            <button type="submit" class="button-secondary flex items-center gap-x-3 mt-3 bg-none" title="Generate a random image" data-turbo="false">
+            <button class="button-secondary flex items-center gap-x-3 mt-3 bg-none" title="Generate a random image" data-turbo="false">
                 <span class="hidden md:block">Generate Random Image</span>
                 <twig:ux:icon
                         name="noto-v1:game-die"
                         title="Generate a random image"
-                        class="clickable w-10 aspect-square cursor-pointer"
+                        class="clickable w-8 aspect-square cursor-pointer"
                 />
             </button>
         </form>
-    </twig:Utilities:Modal>
+    </div>
 {% endblock %}
 

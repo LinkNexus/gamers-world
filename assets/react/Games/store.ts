@@ -2,7 +2,7 @@ import {create} from "zustand/react";
 import {Player} from "@/react/Games/types";
 import {createSelectors} from "@/react/utils";
 import {combine} from "zustand/middleware";
-import {ChifoumiChoice, PlayerStatus, TicTacToeSymbol, TimerStatus} from "@/react/Games/types/enums";
+import {ChifoumiChoice, GameType, PlayerStatus, TicTacToeSymbol, TimerStatus} from "@/react/Games/types/enums";
 import {confetti} from "@tsparticles/confetti";
 
 const difficultiesDurations = {
@@ -53,6 +53,7 @@ const useGameStore = createSelectors(
                 type: type,
                 name: name,
                 identifier: identifier,
+                difficulty: difficulty,
                 ticTacToe: {
                     squares: Array(9).fill(null) as TicTacToeSymbol[],
                     currentPlayer: 'X' as TicTacToeSymbol,
@@ -70,13 +71,21 @@ const useGameStore = createSelectors(
                 },
                 memoryGame: {
                     cards: [] as string[],
-                    currentLevel: 1,
+                    currentLevel: type === GameType.SOLO ? 1 : 3,
                     maxLevel: 3,
                     flippedCards: [] as number[],
-                    history: [] as number[]
+                    history: [] as number[],
+                    userPoints: 0,
+                    opponentPoints: 0,
+                    actualPlayer: initiator || user.identifier,
                 }
             },
             (set, get) => ({
+                setUsername: function (username: string) {
+                    set(function (state) {
+                        return { ...state, user: { ...state.user, username } }
+                    })
+                },
                 setOpponent: function (opponent: Player|null) {
                     set(function (state) {
                         return { ...state, opponent };
@@ -118,6 +127,14 @@ const useGameStore = createSelectors(
                     },
                     startGame: function () {
                         set(function (state) {
+                            let initiator = state.initiator;
+                            if (!initiator) {
+                                console.log('initiator not found')
+                                initiator = Math.random() < 0.5 ? state.user.identifier : state.opponent!.identifier;
+                            }
+
+                            console.log(initiator, state.user.identifier, state.opponent!.identifier)
+
                             return {
                                 ...state,
                                 user: {
@@ -130,8 +147,8 @@ const useGameStore = createSelectors(
                                 },
                                 ticTacToe: {
                                     ...state.ticTacToe,
-                                    user: state.initiator === state.user.identifier ? 'X' : 'O',
-                                    opponent: state.initiator === state.user.identifier ? 'O' : 'X',
+                                    user: initiator === state.user.identifier ? 'X' : 'O',
+                                    opponent: initiator === state.user.identifier ? 'O' : 'X',
                                 }
                             }
                         })
@@ -267,25 +284,28 @@ const useGameStore = createSelectors(
                             }
                         })
                     },
-                    setCards: function () {
+                    setCards: function (cards?: string[]) {
                         set(function (state) {
                             const currentLevel = state.memoryGame.currentLevel;
-                            const cards: string[] = Array((currentLevel + 1) * 4);
 
-                            function getRandomIndex () {
-                                const index = Math.floor(Math.random() * cards.length);
-                                if (cards[index]) return getRandomIndex();
-                                return index;
-                            }
+                            if (!cards) {
+                                cards= Array((currentLevel + 1) * 4);
 
-                            for (let i = 0; i < 2 * (currentLevel + 1); i++) {
-                                const randomCardIndex = Math.floor(Math.random() * memoryGameCards.length);
-                                if (cards.includes(memoryGameCards[randomCardIndex])) {
-                                    i--;
-                                    continue;
+                                function getRandomIndex (cards: string[]) {
+                                    const index = Math.floor(Math.random() * cards.length);
+                                    if (cards[index]) return getRandomIndex(cards);
+                                    return index;
                                 }
-                                cards[getRandomIndex()] = memoryGameCards[randomCardIndex];
-                                cards[getRandomIndex()] = memoryGameCards[randomCardIndex];
+
+                                for (let i = 0; i < 2 * (currentLevel + 1); i++) {
+                                    const randomCardIndex = Math.floor(Math.random() * memoryGameCards.length);
+                                    if (cards.includes(memoryGameCards[randomCardIndex])) {
+                                        i--;
+                                        continue;
+                                    }
+                                    cards[getRandomIndex(cards)] = memoryGameCards[randomCardIndex];
+                                    cards[getRandomIndex(cards)] = memoryGameCards[randomCardIndex];
+                                }
                             }
 
                             return {
@@ -330,6 +350,14 @@ const useGameStore = createSelectors(
 
                             if (firstValue === secondValue) {
                                 newState.memoryGame.history.push(firstCard, secondCard);
+
+                                if ([GameType.FRIEND, GameType.OPPONENT, GameType.COMPUTER].includes(type)) {
+                                    if (state.memoryGame.actualPlayer === state.user.identifier) {
+                                        newState.memoryGame.userPoints += 100;
+                                    } else {
+                                        newState.memoryGame.opponentPoints += 100;
+                                    }
+                                }
                                 return newState;
                             }
 
@@ -348,6 +376,17 @@ const useGameStore = createSelectors(
                                 timer: {
                                     ...state.timer,
                                     timeLeft: difficultiesDurations[difficulty || 1][state.memoryGame.currentLevel]
+                                }
+                            }
+                        })
+                    },
+                    switchPlayer: function () {
+                        set(function (state) {
+                            return {
+                                ...state,
+                                memoryGame: {
+                                    ...state.memoryGame,
+                                    actualPlayer: state.memoryGame.actualPlayer === state.user.identifier ? state.opponent!.identifier : state.user.identifier
                                 }
                             }
                         })

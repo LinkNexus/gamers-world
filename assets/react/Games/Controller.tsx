@@ -38,7 +38,7 @@ export default function () {
         }
 
         if (user.status === PlayerStatus.DREW && user.identifier === initiator) {
-            setWinnerRequest();
+            setWinnerRequest({});
         }
     }, [user.status]);
 
@@ -58,9 +58,10 @@ export default function () {
                 return <TicTacToe />;
             case GameName.CHIFOUMI:
                 return <Chifoumi />;
+            case GameName.MEMORY_GAME:
+                return <MemoryGame />;
         }
     }
-
 
     return (
         <WaitingQueue />

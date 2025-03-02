@@ -8,6 +8,7 @@ use App\Enum\Game\Difficulty;
 use App\Enum\Game\Type;
 use App\Enum\GameName;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -19,13 +20,17 @@ use Symfonycasts\DynamicForms\DynamicFormBuilder;
 class CreateGameSessionType extends AbstractType
 {
 
+    public function __construct(private readonly Security $security)
+    {}
+
     static array $gameTypes = [
         Type::SOLO->value => [
             'memory-game'
         ],
         Type::COMPUTER->value => [
             'tic-tac-toe',
-            'chifoumi'
+            'chifoumi',
+            'memory-game'
         ],
         Type::FRIEND->value => [
             'tic-tac-toe',
@@ -71,6 +76,17 @@ class CreateGameSessionType extends AbstractType
                         'choices' => $types,
                         'expanded' => true,
                         'multiple' => false,
+                        'choice_filter' => function (?Type $type) {
+                            if (
+                                !$this->security->isGranted('ROLE_USER') &&
+                                $type &&
+                                ($type->value === Type::OPPONENT->value || $type->value === Type::FRIEND->value)
+                            ) {
+                                return false;
+                            }
+
+                            return true;
+                        },
                         "choice_label" => function (Type $type) {
                         $description = $type->getDescription();
                         $name = ucfirst($type->value);
@@ -103,7 +119,11 @@ HTML;
                 'duration',
                 'type',
                 function (DependentField $field, ?Type $type) {
-                    if ($type === null || $type->value === Type::SOLO->value) {
+                    if ($type === null || (
+                        $type->value === Type::SOLO->value ||
+                        $type->value === Type::COMPUTER->value
+                        )
+                    ) {
                         return;
                     }
 
@@ -144,7 +164,11 @@ HTML;
                 'difficulty',
                 'type',
                 function (DependentField $field, ?Type $type) {
-                    if ($type === null || $type->value !== Type::SOLO->value) {
+                    if (
+                        $type === null ||
+                        $type->value !== Type::SOLO->value &&
+                        $type->value !== Type::COMPUTER->value
+                    ) {
                         return;
                     }
 
