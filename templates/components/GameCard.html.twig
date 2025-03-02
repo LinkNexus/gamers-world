@@ -1,0 +1,7 @@
+{% props game %}
+
+<a href="{{ path('app_games_game', { slug: game.slug }) }}" {{ attributes.defaults({ class: "md:w-[400px] flex flex-col gap-y-3 border-2 border-dashed border-theme-primary rounded-md p-5 clickable hover:bg-theme-primary hover:border-theme-secondary transition" }) }}>
+    <img class="w-50 flex-shrink-0 flex-grow-0" src="{{ asset('images/' ~ game.image) }}" alt="{{ game.name ~ ' image' }}">
+    <h3 class="text-center font-bold text-2xl">{{ game.name }}</h3>
+    <span class="text-center">{{ game.description }}</span>
+</a>

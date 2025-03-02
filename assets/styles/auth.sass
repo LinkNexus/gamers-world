@@ -1,7 +1,7 @@
 @use './base'
 
 form
-  @apply py-5 w-full flex flex-col gap-y-5 px-3
+  @apply py-5 px-3
 
   @media (min-width: 768px)
     @apply gap-y-8
@@ -9,30 +9,8 @@ form
   & input:not([type="submit"], [type="checkbox"]), & textarea
     @apply bg-theme-accent-2 rounded-lg p-2 w-full border border-theme-primary
 
-    &:focus
-      @apply border-2 border-theme-primary
-
-  & input[type="checkbox"]
-    @apply rounded bg-transparent
-
-    &:focus, &:checked
-      @apply bg-theme-primary
-
-  & .toggle-password-container
-    @apply w-full mt-2
-
-  & .input-with-icon
-    @apply flex gap-x-3
-
-    & svg
-      @apply aspect-square h-full max-h-10 cursor-pointer
-
   & input:has(+ul), & textarea:has(+ul), & .toggle-password-container:has(+ul) > input, & .input-with-icon:has(+ul) input
     @apply border border-red-500
 
-  & input + ul, & textarea + ul , & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul
-    @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2
-
   & button[type="submit"]
-    @apply button-primary w-full mt-3
-    transition: all 0.8s
+    @apply mt-3

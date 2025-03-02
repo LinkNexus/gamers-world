@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\TemplatedMailDTO;
 use App\Entity\User;
+use App\Enum\Gender;
 use App\Form\User\ChangeEmailType;
 use App\Form\User\UserType;
 use App\Security\Profile\EmailVerifier;
@@ -33,6 +34,7 @@ final class ProfileController extends AbstractController
     {}
 
     #[Route('/', name: '')]
+    #[IsGranted("ROLE_USER", message: "You must be logged in to access this page")]
     public function index(
         Request $request,
         FileUploader $fileUploader,
@@ -159,7 +161,7 @@ final class ProfileController extends AbstractController
         #[CurrentUser] ?User $user
     ): RedirectResponse
     {
-        $imageName = $imageGenerator->generateImageByGender($user->getGender(), $user->getUsername());
+        $imageName = $imageGenerator->generateImageByGender(($user->getGender() ?? Gender::Other), $user->getUsername());
 
         if ($imageName) {
             $user->deleteImage($this->getParameter('kernel.project_dir'));

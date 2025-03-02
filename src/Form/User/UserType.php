@@ -2,8 +2,8 @@
 
 namespace App\Form\User;
 
-use App\Config\Gender;
 use App\Entity\User;
+use App\Enum\Gender;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;

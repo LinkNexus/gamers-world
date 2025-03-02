@@ -200,7 +200,7 @@
         "files": [
             "assets/bootstrap.ts",
             "assets/controllers.json",
-            "assets/controllers/csrf_protection_controller.js",
+            "assets/controllers/csrf_protection_controller.ts",
             "assets/controllers/hello_controller.js"
         ]
     },
@@ -267,18 +267,6 @@
         },
         "files": [
             "config/routes/ux_live_component.yaml"
-        ]
-    },
-    "symfony/ux-react": {
-        "version": "2.22",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.9",
-            "ref": "e970076b31d602ae6e2106cf91a82c7e1f7ddff2"
-        },
-        "files": [
-            "assets/react/controllers/Hello.jsx"
         ]
     },
     "symfony/ux-toggle-password": {

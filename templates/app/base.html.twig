@@ -14,31 +14,43 @@
     {% include 'fragments/_header.html.twig' %}
     {% include 'fragments/_sidebar.html.twig' %}
 
-    <div class="p-4 sm:ml-64">
-        <div class="p-4 mt-14 rounded-lg bg-gradient">
+    <div class="py-4 sm:ml-64">
 
-            {% include 'fragments/_flash_messages.html.twig' %}
+        {% block breadcrumb %}
+            {% include 'fragments/_breadcrumb.html.twig' %}
+        {% endblock %}
 
-            {% block title_block %}
-                <div class="p-5">
-                    <h1 class="title">
-                    <span>
-                        {% block main_title %}{% endblock %}
-                    </span>
-                    </h1>
-                </div>
-            {% endblock %}
+        <div class="bg-gradient py-8">
+            <div class="p-4 rounded-lg">
+                {% include 'fragments/_flash_messages.html.twig' %}
 
-            {% block content %}
-            {% endblock %}
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
+
     </div>
 
     {# Auth Modals #}
     {% if app.user is null %}
         <div>
-            <twig:Modals:Auth id="login-form" title="Sign in to our platform" />
-            <twig:Modals:Auth id="registration-form" title="Join our Community" />
+            <div
+                    {{ stimulus_controller('modal--structure', {
+                        id: 'login-form',
+                        title: 'Sign in to our platform'
+                    }) }}
+            >
+                <twig:Turbo:Frame class="login-form" id="login-form" />
+            </div>
+
+            <div
+                    {{ stimulus_controller('modal--structure', {
+                        id: 'registration-form',
+                        title: 'Join our Community'
+                    }) }}
+            >
+                <twig:Turbo:Frame class="registration-form" id="registration-form" />
+            </div>
         </div>
     {% endif %}
 {% endblock %}

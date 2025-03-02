@@ -1,7 +1,9 @@
 {% set flash_index = 0 %}
 {% for type, messages in app.flashes %}
     {% for message in messages %}
-        <twig:Utilities:Alert id="alert-{{ type }}-{{ flash_index }}" type="{{ type }}" message="{{ message }}" />
+        <twig:Utilities:Alert id="alert-{{ type }}-{{ flash_index }}" type="{{ type }}" >
+            {{ message }}
+        </twig:Utilities:Alert>
         {% set flash_index = flash_index + 1 %}
     {% endfor %}
 {% endfor %}

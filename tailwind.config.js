@@ -4,7 +4,8 @@ module.exports = {
     "./assets/**/*.{js,jsx,ts,tsx}",
     "./templates/**/*.html.twig",
     './vendor/symfony/twig-bridge/Resources/views/Form/*.html.twig',
-    "./node_modules/flowbite/**/*.js"
+    "./node_modules/flowbite/**/*.js",
+      "./src/Form/**/*.php",
   ],
   theme: {
     extend: {

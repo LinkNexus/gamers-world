@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Config\Gender;
+use App\Enum\Gender;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Ignore]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -49,6 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             new Assert\Regex(pattern: '/^@/', message: 'The username must start with an @ symbol')
         ]
     )]
+    #[Groups(['play:read'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -63,9 +69,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $name = null;
 
     #[ORM\Column(type: 'ulid')]
+    #[Groups(['play:read'])]
     private ?Ulid $identifier = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['play:read'])]
     private ?string $image = null;
 
     #[ORM\Column]
