@@ -1,6 +1,7 @@
 {% extends 'app/base.html.twig' %}
 
 {% block body %}
+    {% dump(session) %}
     <script>
         // This is a hack to make the user available in the JS code
         window.game = {
@@ -11,7 +12,7 @@
                 synchronization: mercure('http://localhost:5001/players/synchronize/' ~ identifier)|json_serialize,
                 isReady: mercure('http://localhost:5001/players/is-ready/' ~ identifier)|json_serialize,
                 disconnect: mercure('http://localhost:5001/players/disconnect/' ~ identifier)|json_serialize,
-                play: mercure('http://localhost:5001/play/' ~ identifier)|json_serialize
+                play: mercure('http://localhost:5001/play/' ~ identifier)|json_serialize,
             }|json_encode|raw }},
             type: "{{ session.type.value }}",
             name: "{{ session.game.slug }}",
@@ -19,9 +20,10 @@
             duration: "{{ session.duration }}",
             identifier: '{{ session.identifier }}'
         }
+
+        console.log(window.game.initiator)
     </script>
 
-    <div {{ react_component('Games') }}>
-    </div>
+    <div {{ react_component('Games') }}></div>
 {% endblock %}
 

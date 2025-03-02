@@ -5,6 +5,7 @@ import Spinner from "@/react/Utilities/Spinner";
 import SplitScreen from "@/react/Games/components/common/SplitScreen";
 import ShareModal from "@/react/Games/components/common/WaitingQueue/Modals/ShareModal";
 import NameModal from "./Modals/NameModal";
+import {stimulusController} from "@/react/utils";
 
 interface Props {
     user: Player;
@@ -43,9 +44,9 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
 
             {waitingForFriend && (
                 <button
-                    data-controller="modal--trigger"
-                    data-modal--trigger-action-value="open"
-                    data-modal--trigger-target-value="invite-friend"
+                    {...stimulusController("modal--trigger", {
+                        target: "invite-friend",
+                    })}
                     className='button-primary mt-5'
                 >
                     Invite Friend
@@ -77,7 +78,7 @@ export default memo(function ({ user, opponent, isReady, toggleCheck, kickOppone
     return (
         <>
             <SplitScreen playerSide={playerSide} opponentSide={opponentSide} />
-            { waitingForFriend && <ShareModal /> }
+            { waitingForFriend && initiator === user.identifier && <ShareModal /> }
             {!user.username && <NameModal />}
         </>
     );

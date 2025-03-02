@@ -78,7 +78,6 @@ final class IndexController extends AbstractController
 
         if (!$user) {
             $user = new User();
-            $session->setInitiator($user);
         }
 
         return $this->render('app/games/play.html.twig', [

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/games/session', name: 'app_games_session')]
+#[Route('/games/session', name: 'app_games_session', methods: ['POST'])]
 final class SessionController extends AbstractController
 {
 
@@ -24,7 +24,7 @@ final class SessionController extends AbstractController
     )
     {}
 
-    #[Route('/{identifier}/events', name: '_events', methods: ['POST'])]
+    #[Route('/{identifier}/events', name: '_events')]
     public function publish(
         Request $request,
         string $identifier
@@ -52,7 +52,7 @@ final class SessionController extends AbstractController
         );
     }
 
-    #[Route('/{identifier}/add-opponent', name: '_add-opponent', methods: ['POST'])]
+    #[Route('/{identifier}/add-opponent', name: '_add-opponent')]
     public function setOpponent(
         #[MapEntity(mapping: ['identifier' => 'identifier'])]
         GameSession $session,
@@ -77,7 +77,7 @@ final class SessionController extends AbstractController
         return $this->json(['status' => 'ok']);
     }
 
-    #[Route('/{identifier}/winner', name: '_winner', methods: ['POST'])]
+    #[Route('/{identifier}/winner', name: '_winner')]
     public function setWinner(
         #[MapEntity(mapping: ['identifier' => 'identifier'])]
         GameSession $session,

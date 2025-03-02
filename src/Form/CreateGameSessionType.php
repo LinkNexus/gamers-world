@@ -29,7 +29,8 @@ class CreateGameSessionType extends AbstractType
         ],
         Type::COMPUTER->value => [
             'tic-tac-toe',
-            'chifoumi'
+            'chifoumi',
+            'memory-game'
         ],
         Type::FRIEND->value => [
             'tic-tac-toe',
@@ -118,7 +119,11 @@ HTML;
                 'duration',
                 'type',
                 function (DependentField $field, ?Type $type) {
-                    if ($type === null || $type->value === Type::SOLO->value) {
+                    if ($type === null || (
+                        $type->value === Type::SOLO->value ||
+                        $type->value === Type::COMPUTER->value
+                        )
+                    ) {
                         return;
                     }
 
@@ -159,7 +164,11 @@ HTML;
                 'difficulty',
                 'type',
                 function (DependentField $field, ?Type $type) {
-                    if ($type === null || $type->value !== Type::SOLO->value) {
+                    if (
+                        $type === null ||
+                        $type->value !== Type::SOLO->value &&
+                        $type->value !== Type::COMPUTER->value
+                    ) {
                         return;
                     }
 

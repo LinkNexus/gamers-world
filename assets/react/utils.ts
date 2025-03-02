@@ -19,6 +19,13 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
     return store
 }
 
+/**
+ * Custom hook to toggle between two states.
+ *
+ * @param {T} initialState - The initial state value.
+ * @param {T|null} [finalState=null] - The final state value. If null, the hook will toggle between the initial state and its negation (cast to type T).
+ * @return {[T, () => void]} - An array containing the current state and a function to toggle the state.
+ */
 // The toggle function here does not toggle the state at the first call!
 export function useToggle<T>(initialState: T, finalState: T|null = null): [T, () => void]
 {
@@ -32,11 +39,30 @@ export function useToggle<T>(initialState: T, finalState: T|null = null): [T, ()
     return [state, toggleState];
 }
 
+/**
+ * Creates a promise that resolves after a specified delay.
+ *
+ * @param {number} time - The time in milliseconds to wait before resolving the promise.
+ * @return {Promise<void>} A promise that resolves after the specified delay.
+ */
+
 export function useDelay(time: number): Promise<void> {
     return new Promise(function (resolve) {
         return setTimeout(resolve, time)
     });
 }
+
+/**
+ * A custom hook for handling HTTP requests, providing state management for loading, errors, and a method for triggering the fetch operation.
+ *
+ * @param {string|URL} url The URL to which the HTTP request will be sent.
+ * @param {Omit<RequestInit, 'body'>} [params={}] Optional configuration options for the HTTP request, excluding the body field.
+ * @param {((data) => void)|null} [callback=null] An optional callback function to process the response data.
+ * @return {{ loading: boolean, errors: any[], load: (data) => Promise<void> }} An object with the following properties:
+ * - loading: A boolean that indicates whether the request is in progress.
+ * - errors: An array containing any errors that occurred during the request.
+ * - load: A function to initiate the fetch request, taking optional request body data as an argument.
+ */
 
 export function useFetch<T, S>(
     url: string|URL,
@@ -87,6 +113,16 @@ export function useFetch<T, S>(
     }
 }
 
+/**
+ * A custom hook that subscribes to an EventSource for server-sent events.
+ * It listens to the messages from the provided URL and invokes the callback function
+ * whenever a new event message is received.
+ *
+ * @param {string} url The URL to open an EventSource connection to.
+ * @param {(data) => void} callback A function to be called with the parsed event data when a message is received.
+ * @param {any[]} [deps=[]] An optional array of dependency values that will trigger the effect to reinitialize the EventSource when changed.
+ * @return {void} Does not return any value.
+ */
 export function useEventSource<T>(
     url: string,
     callback: (data: T) => void,
@@ -106,9 +142,25 @@ export function useEventSource<T>(
     }, [url, ...deps]);
 }
 
+/**
+ * Initializes a Stimulus controller with the provided name and values.
+ *
+ * @param {string} controller - The name of the Stimulus controller to initialize.
+ * @param {Record<string, any>} [values={}] - A record of values to be passed to the controller.
+ * @return {any} The result of the Stimulus controller initialization.
+ */
 export function stimulusController(controller: string, values: Record<string, any> = {}) {
    return stimulusControllers([controller], { [controller]: values });
 }
+
+/**
+ * Generates data attributes for Stimulus controllers and their respective values.
+ *
+ * @param {string[]} controllers - An array of Stimulus controller names to include in the attributes.
+ * @param {Record<string, Record<string, any>>} controllersValues - An object containing values for each controller,
+ * where the keys are controller names and the values are objects defining key-value pairs for the controller's data attributes.
+ * @return {Record<string, any>} An object containing the computed data attributes for Stimulus controllers and their associated values.
+ */
 
 export function stimulusControllers(controllers: string[], controllersValues: Record<string, Record<string, any>>) {
     const attributes: Record<string, any> = {};

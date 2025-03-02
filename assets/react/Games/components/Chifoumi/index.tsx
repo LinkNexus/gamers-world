@@ -1,7 +1,7 @@
 import Structure from "@/react/Games/components/Chifoumi/Structure";
 import useGameStore from "@/react/Games/store";
 import {Player} from "@/react/Games/types";
-import {ChifoumiChoice, GameEvent, PlayerStatus} from "@/react/Games/types/enums";
+import {ChifoumiChoice, GameEvent, GameType, PlayerStatus} from "@/react/Games/types/enums";
 import {useEffect, useRef} from "react";
 import Card from "@/react/Games/components/Chifoumi/Card";
 import {createRoot} from "react-dom/client";
@@ -14,6 +14,9 @@ export default function () {
     const opponentChoice = useGameStore.use.chifoumi().opponent;
     const userChoice = useGameStore.use.chifoumi().user;
     const opponent = useGameStore.use.opponent();
+    const gameType = useGameStore.use.type();
+    const gameName = useGameStore.use.name();
+    const gameDifficulty = useGameStore.use.difficulty();
     const setUserChoice = useGameStore.getState().chifoumiActions.setUserChoice;
     const setOpponentChoice = useGameStore.getState().chifoumiActions.setOpponentChoice;
     const changeUserStatus = useGameStore.getState().changeUserStatus;
@@ -23,12 +26,16 @@ export default function () {
     const choiceRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
 
+    const againstComputer = gameType === GameType.COMPUTER;
+
     const {dispatchGameEvent} = useGameFetch();
 
     useEffect(function () {
         startGame();
         startTimer();
     }, []);
+
+    console.log(gameDifficulty)
 
     async function onCardClick (value: ChifoumiChoice) {
         if (user.status !== PlayerStatus.PLAYING) return;
@@ -42,7 +49,10 @@ export default function () {
             event: GameEvent.PLAY,
             payload: {
                 choice: value,
-                playerId: user.identifier
+                playerId: user.identifier,
+                againstComputer,
+                gameName,
+                gameDifficulty
             }
         });
     }
@@ -74,7 +84,13 @@ export default function () {
         if (event === GameEvent.PLAY) {
             const {choice, playerId} = payload;
             if (playerId !== user.identifier) {
-                setOpponentChoice(choice);
+                if (againstComputer) {
+                    setTimeout(function () {
+                        setOpponentChoice(choice);
+                    }, 1500)
+                } else {
+                    setOpponentChoice(choice);
+                }
             }
         }
     })
