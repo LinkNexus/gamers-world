@@ -20,9 +20,6 @@ use Symfonycasts\DynamicForms\DynamicFormBuilder;
 class CreateGameSessionType extends AbstractType
 {
 
-    public function __construct(private readonly Security $security)
-    {}
-
     static array $gameTypes = [
         Type::SOLO->value => [
             'memory-game'
@@ -43,6 +40,9 @@ class CreateGameSessionType extends AbstractType
             'memory-game'
         ]
     ];
+
+    public function __construct(private readonly Security $security)
+    {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

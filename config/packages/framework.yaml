@@ -13,6 +13,12 @@ framework:
             imageGenerator.client:
                 base_uri: "https://avatar.iran.liara.run/"
 
+    assets:
+        version_strategy: 'Pentatrion\ViteBundle\Asset\ViteAssetVersionStrategy'
+        packages:
+            vite:
+                version_strategy: 'Pentatrion\ViteBundle\Asset\ViteAssetVersionStrategy'
+
 when@test:
     framework:
         test: true

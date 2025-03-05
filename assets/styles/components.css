@@ -1,0 +1,33 @@
+.login-form, .registration-form {
+  & form {
+    @apply w-full px-3 py-3;
+
+    @media (min-width: 768px) {
+      @apply gap-y-6;
+    }
+
+    & input:not([type="submit"], [type="checkbox"]), & textarea {
+      @apply w-full;
+    }
+
+    & .toggle-password-container {
+      @apply w-full mt-3;
+    }
+
+    & button[type="submit"] {
+      @apply mb-3;
+    }
+
+    & input:has(+ul), & textarea:has(+ul), & .toggle-password-container:has(+ul) > input, & .input-with-icon:has(+ul) input {
+      @apply border border-red-500;
+    }
+
+    & input + ul, & textarea + ul, & .toggle-password-container + ul, & .input-with-icon + ul, & input[type="checkbox"] + label + ul {
+      @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2;
+    }
+  }
+
+  & a:not(form a, .auth-primary-button), & hr {
+    @apply hidden;
+  }
+}

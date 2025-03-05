@@ -1,0 +1,25 @@
+@import './base.css';
+@import './components.css';
+@import './games.css';
+
+.modal {
+  input[type="radio"] {
+    @apply hidden;
+
+    & + label {
+      @apply inline-flex items-center justify-between w-full p-5 border border-theme-primary rounded-lg cursor-pointer transition;
+
+      &:hover {
+        @apply bg-theme-primary text-white;
+      }
+    }
+
+    &:checked + label {
+      @apply bg-theme-primary text-white;
+    }
+  }
+}
+
+
+
+

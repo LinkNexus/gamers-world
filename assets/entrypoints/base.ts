@@ -1,5 +1,5 @@
 import '../bootstrap';
-import "../styles/base.sass";
+import "../styles/base.css";
 import {initFlowbite} from 'flowbite';
 
 document.addEventListener('turbo:render', () => {

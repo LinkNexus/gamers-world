@@ -1,5 +1,6 @@
 import {useEventSource, useFetch} from "@/react/utils";
 import {GameEvent} from "@/react/Games/types/enums";
+import {useState} from "react";
 
 /**
  * A custom hook that subscribes to a game event source, handling incoming events

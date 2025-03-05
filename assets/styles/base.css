@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@plugin "flowbite/plugin";
+
+@theme {
+  --color-theme-primary: #8750f7;
+  --color-theme-primary-1: #2400ff;
+  --color-theme-primary-2: #9b8dff;
+  --color-theme-theme-primary-3: #4654f9;
+  --color-theme-accent-1: #0f0715;
+  --color-theme-secondary: #2a1454;
+  --color-theme-black-2: #050709;
+  --color-theme-accent-2: #140c1c;
+  --color-body: #dddddd;
+}
+
+
+@utility clickable {
+  box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+  &:active {
+    @apply transform scale-95;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
+}
+
+@utility button {
+  @apply cursor-pointer outline-none transition-all flex content-center justify-center text-lg font-semibold rounded-full py-3 px-8 clickable;
+
+  &:disabled {
+    @apply cursor-not-allowed bg-none bg-gray-400;
+  }
+}
+
+@utility button-primary {
+  @apply button bg-gradient-to-r from-theme-primary to-theme-secondary text-white;
+
+  &:not(:disabled):hover {
+    @apply bg-gradient-to-r from-theme-secondary to-theme-primary;
+  }
+}
+
+@utility button-secondary {
+  @apply button text-theme-primary border-2 border-theme-secondary;
+
+  &:hover {
+    @apply bg-gradient-to-r from-theme-primary to-theme-secondary text-white;
+  }
+}
+
+@utility color-gradient {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  @apply bg-gradient-to-r from-theme-primary to-white bg-clip-text;
+}
+
+@utility bg-gradient {
+  @apply bg-gradient-to-r from-theme-accent-1 from-55% to-theme-secondary;
+}
+
+@utility title {
+  @apply w-full text-3xl font-bold text-center;
+
+  &>* {
+    @apply color-gradient;
+  }
+
+  @media (min-width: 768px) {
+    @apply text-5xl;
+  }
+
+  @media (min-width: 1024px) {
+    @apply text-6xl;
+  }
+}
+
+@utility dashed-borders {
+  @apply border-dashed border-theme-primary;
+}
+
+body {
+  @apply text-body bg-theme-accent-1;
+  font-family: "Sora", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+form {
+  @apply w-full flex flex-col gap-y-5;
+}
+
+input, textarea, select {
+  &:not([type="submit"], [type="checkbox"]) {
+    @apply bg-theme-accent-2 rounded-lg p-2 border border-theme-primary;
+
+    &:disabled {
+      @apply bg-theme-secondary cursor-not-allowed;
+    }
+  }
+
+  &:focus {
+    @apply border-2 border-theme-primary;
+  }
+
+  &[type="checkbox"] {
+    @apply rounded bg-transparent;
+
+    &:focus, &:checked {
+      @apply bg-theme-primary;
+    }
+  }
+}
+
+
+.toggle-password-container {
+  @apply w-full mt-2;
+}
+
+.input-with-icon {
+  @apply flex gap-x-3 items-center;
+
+  & svg {
+    @apply aspect-square h-full max-h-10 cursor-pointer;
+  }
+}
+
+input + ul, textarea + ul , .toggle-password-container + ul, .input-with-icon + ul, input[type="checkbox"] + label + ul, select + ul {
+  @apply text-red-500 mt-3 list-disc flex flex-col gap-y-2;
+}
+
+select > option {
+  &:hover {
+    @apply bg-theme-primary text-white;
+  }
+}
+
+button[type="submit"] {
+  @apply button-primary w-full;
+  transition: all 0.8s;
+}
+
+.title-secondary {
+  @apply text-3xl w-full text-center font-bold;
+  @media (min-width: 768px) {
+    @apply text-4xl;
+  }
+  @media (min-width: 1024px) {
+    @apply text-5xl;
+  }
+}
+
+
+.alert-success {
+  @apply text-green-800 bg-green-200;
+  & button svg {
+    @apply hover:bg-green-400 focus:ring-green-400;
+  }
+}
+
+.alert-error {
+  @apply text-red-800 bg-red-200;
+  & button svg {
+    @apply hover:bg-red-400 focus:ring-red-400;
+  }
+}
+
+.alert-info {
+  @apply text-blue-800 bg-blue-200;
+  & button svg {
+    @apply hover:bg-blue-400 focus:ring-blue-400;
+  }
+}
+
+.alert-warning {
+  @apply text-yellow-800 bg-yellow-200;
+  & button svg {
+    @apply hover:bg-yellow-400 focus:ring-yellow-400;
+  }
+}

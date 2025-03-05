@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.locale }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport"
@@ -17,11 +17,13 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
 
         {% block stylesheets %}
-            {{ encore_entry_link_tags('base') }}
+            {{ vite_entry_link_tags('base') }}
+{#            {{ encore_entry_link_tags('base') }}#}
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('base') }}
+            {{ vite_entry_script_tags('base') }}
+{#            {{ encore_entry_script_tags('base') }}#}
         {% endblock %}
     </head>
     <body>

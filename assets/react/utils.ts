@@ -183,3 +183,34 @@ export function stimulusControllers(controllers: string[], controllersValues: Re
 
     return attributes;
 }
+
+/**
+ * A custom hook for managing and manipulating array state providing functions to append, prepend, and remove items.
+ *
+ * @param {T[]} array - The initial array to be used as the state.
+ * @return {Object} An object containing the current array state, a function to update the state, and utility functions:
+ * - `state`: The current array state.
+ * - `setState`: A function to update the array state directly.
+ * - `append(item: T)`: A function to add an item to the end of the array.
+ * - `prepend(item: T)`: A function to add an item to the beginning of the array.
+ * - `remove(item: T)`: A function to remove the specified item from the array.
+ */
+export function useArrayState<T>(array: T[]) {
+    const [state, setState] = useState<T[]>(array);
+
+    return {
+        state,
+        setState,
+        append: function (item: T) {
+            setState([...state, item]);
+        },
+        prepend: function (item: T) {
+            setState([item, ...state]);
+        },
+        remove: function (item: T) {
+            setState(state.filter(function (value) {
+                return value !== item;
+            }));
+        }
+    }
+}
