@@ -99,9 +99,9 @@ RUN set -eux; \
     chmod +x bin/console; sync;
 
 ## Install NodeJs and NPM
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash \
-#    source ~/.bashrc \
-#    nvm install v23.9.0;
-#
-## Install the JS Dependencies
-#RUN npm install
+RUN apt-get update; \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash; \
+    source ~/.bashrc; \
+    nvm install v23.9.0; \
+    npm install; \
+    npm run build;
