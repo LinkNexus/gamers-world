@@ -101,6 +101,9 @@ RUN set -eux; \
 ## Install NodeJs and NPM
 RUN apt-get update; \
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash; \
+    export NVM_DIR="/config/nvm" \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"; \
     source ~/.bashrc; \
     nvm install v23.9.0; \
     npm install; \
