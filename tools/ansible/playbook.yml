@@ -21,8 +21,8 @@
         CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} \
         POSTGRES_PASSWORD={{ postgres_password }} \
         docker compose -f compose.yaml -f compose.prod.yaml build --no-cache
-
-      chdir: "{{ dest_dir }}"
+      args:
+        chdir: "{{ dest_dir }}"
 
     - name: Execute the container
       ansible.builtin.shell: |
@@ -31,5 +31,5 @@
         CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} \
         POSTGRES_PASSWORD={{ postgres_password }} \
         docker compose -f compose.yaml -f compose.prod.yaml up --wait
-
-      chdir: "{{ dest_dir }}"
+      args:
+        chdir: "{{ dest_dir }}"
