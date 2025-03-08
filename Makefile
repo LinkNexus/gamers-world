@@ -18,4 +18,4 @@ stimulus:
 	$(symfony) make:stimulus-controller
 
 deploy:
-	ansible-playbook -i tools/ansible/hosts.yml tools/ansible/playbook.yml
+	ansible-playbook -i tools/ansible/hosts.yml tools/ansible/playbook.yml -vvvv
