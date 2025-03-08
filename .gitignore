@@ -16,5 +16,5 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /public/images/users
-/hosts.yml
-/playbook.yml
+/tools/ansible/hosts.yml
+/tools/ansible/vars.yml

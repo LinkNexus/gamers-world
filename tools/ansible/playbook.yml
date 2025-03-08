@@ -1,0 +1,24 @@
+---
+- name: Deploy the project on the server
+  hosts: digitalocean
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get recent changes from the repo
+      ansible.builtin.command:
+        cmd: git fetch
+        chdir: "{{ dest_dir }}"
+
+    - name: Merge the changes
+      ansible.builtin.command:
+        cmd: git pull
+        chdir: "{{ dest_dir }}"
+
+    - name: Build the container
+      ansible.builtin.command:
+        cmd: SERVER_NAME={{ server_name }} APP_SECRET={{ app_secret }} CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} POSTGRES_PASSWORD={{ postgres_password }} docker compose -f compose.yaml -f compose.prod.yaml build --no-cache
+        chdir: "{{ dest_dir }}"
+
+    - name: Execute the container
+      ansible.builtin.command:
+        cmd: SERVER_NAME={{ server_name }} APP_SECRET={{ app_secret }} CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} POSTGRES_PASSWORD={{ postgres_password }} docker compose -f compose.yaml -f compose.prod.yaml up --wait
