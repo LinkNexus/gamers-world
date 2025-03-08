@@ -27,27 +27,39 @@ final readonly class AutomatedOpponent
     }
 
     /**
+     * @param array $arr
+     * @return int
+     * @throws RandomException
+     */
+    private function getRandomIndex(array $arr): int {
+        $index = random_int(0, count($arr) - 1);
+        return $arr[$index] ? $this->getRandomIndex($arr) : $index;
+    }
+
+    /**
      * @param array $payload
      * @return array
+     * @throws RandomException
      */
     private function playTicTacToe(array $payload): array
     {
         $symbol = 'O';
-        function randomIndex($payload): int
-        {
-            $index = random_int(0, 8);
-            if ($payload['squares'][$index]) {
-                return randomIndex($payload);
-            }
-
-            return $index;
-        }
-
         $squares = $payload['squares'];
-        $squares[randomIndex($payload)] = $symbol;
-        $justPlayed = $symbol;
+        $squares[$this->getRandomIndex($payload['squares'])] = $symbol;
+        return ['squares' => $squares, 'justPlayed' => $symbol];
+    }
 
-        return ['squares' => $squares, 'justPlayed' => $justPlayed];
+    /**
+     * @param array $arr
+     * @return int
+     * @throws RandomException
+     */
+    private function getRandomValue(array $arr, ...$occupiedIndexes): int {
+        $index = random_int(0, 15);
+        if (in_array($index, $arr) || in_array($index, $occupiedIndexes)) {
+            return $this->getRandomValue($arr, ...$occupiedIndexes);
+        }
+        return $index;
     }
 
     /**
@@ -66,15 +78,19 @@ final readonly class AutomatedOpponent
         }
 
         if ($payload["gameDifficulty"] == 1) {
-            $cards = [randomValue($payload), randomValue($payload)];
+            $cards = [
+                $this->getRandomValue($payload['history']),
+                $this->getRandomValue($payload['history']),
+            ];
+
             return [
                 'cards' => $cards,
                 'justPlayed' => 'computer'
             ];
         } else if ($payload["gameDifficulty"] == 2) {
             if (random_int(0, 10) < 5) {
-                $index = randomValue($payload);
-                $secondIndex = randomValue($payload, $index);
+                $index = $this->getRandomValue($payload['history']);
+                $secondIndex = $this->getRandomValue($payload['history'], $index);
 
                 if ($index == $secondIndex) {
                     dd('Not normal');
@@ -88,7 +104,7 @@ final readonly class AutomatedOpponent
                     'justPlayed' => 'computer'
                 ];
             } else {
-                $cardIndex = randomValue($payload);
+                $cardIndex = $this->getRandomValue($payload['history']);
                 $allCards = $payload['cards'];
                 $cards = [$cardIndex];
 
@@ -101,7 +117,7 @@ final readonly class AutomatedOpponent
                 return ['cards' => $cards, 'justPlayed' => 'computer'];
             }
         } else {
-            $cardIndex = randomValue($payload);
+            $cardIndex = $this->getRandomValue($payload['history']);
             $allCards = $payload['cards'];
             $cards = [$cardIndex];
 
