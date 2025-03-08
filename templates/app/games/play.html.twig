@@ -1,7 +1,6 @@
 {% extends 'app/base.html.twig' %}
 
 {% block body %}
-    {% dump(session) %}
     <script>
         // This is a hack to make the user available in the JS code
         window.game = {
@@ -20,8 +19,6 @@
             duration: "{{ session.duration }}",
             identifier: '{{ session.identifier }}'
         }
-
-        console.log(window.game.initiator)
     </script>
 
     <div {{ react_component('Games') }}></div>
