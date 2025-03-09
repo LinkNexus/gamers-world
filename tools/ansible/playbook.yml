@@ -30,7 +30,7 @@
         APP_SECRET={{ app_secret }} \
         CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} \
         POSTGRES_PASSWORD={{ postgres_password }} \
-        docker compose -f compose.yaml -f compose.prod.yaml up --wait
+        docker compose -f compose.yaml -f compose.prod.yaml up -d
       args:
         chdir: "{{ dest_dir }}"
       ignore_errors: yes
