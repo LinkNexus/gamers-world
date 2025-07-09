@@ -11,6 +11,15 @@ services:
     networks:
       - levynkeneng_apps
 
+  mercure:
+    networks:
+      - levynkeneng_apps
+
+  database:
+    networks:
+      - levynkeneng_apps
+
+
 networks:
   levynkeneng_apps:
     external: true
