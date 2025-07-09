@@ -69,14 +69,6 @@ final readonly class AutomatedOpponent
      */
     private function playMemoryGame(array $payload): array
     {
-        function randomValue($payload, ...$occupiedIndexes): int {
-            $index = random_int(0, 15);
-            if (in_array($index, $payload['history']) || in_array($index, $occupiedIndexes)) {
-                return randomValue($payload);
-            }
-            return $index;
-        }
-
         if ($payload["gameDifficulty"] == 1) {
             $cards = [
                 $this->getRandomValue($payload['history']),

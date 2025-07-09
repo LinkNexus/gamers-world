@@ -30,8 +30,8 @@ export default function () {
     const isReady = status !== PlayerStatus.READY;
 
     // Fetch function to dispatch the game events
-    const { dispatchGameEvent } = useGameFetch();
-    const { load: setOpponentRequest } = useFetch(`/games/session/${window.game.identifier}/add-opponent`);
+    const {dispatchGameEvent} = useGameFetch();
+    const {load: setOpponentRequest} = useFetch(`/games/session/${window.game.identifier}/add-opponent`);
 
 
     // If the game is against the computer, set the opponent to the computer
@@ -41,7 +41,7 @@ export default function () {
                 identifier: 'computer',
                 username: 'AI',
                 status: PlayerStatus.READY,
-                image: 'computer.avif',
+                image: 'computer.jpg',
                 previousStatus: PlayerStatus.WAITING
             } as Player);
 
@@ -62,7 +62,7 @@ export default function () {
         }
     }, [dispatchGameEvent, user.identifier, user.username])
 
-    useGameEventSource<{ player: Player }>(urls.join, function ({ event, payload: { player } }){
+    useGameEventSource<{ player: Player }>(urls.join, function ({event, payload: {player}}) {
         if (event === GameEvent.JOIN && player.identifier !== user.identifier) {
             setOpponent(player);
         }
@@ -81,7 +81,7 @@ export default function () {
         }
     }, [opponent?.identifier, user.identifier, dispatchGameEvent]);
 
-    useGameEventSource<{ player: Player }>(urls.synchronization, ({ event, payload: { player } }) => {
+    useGameEventSource<{ player: Player }>(urls.synchronization, ({event, payload: {player}}) => {
         if (event === GameEvent.SYNCHRONIZE) {
             if (!opponent) {
                 setOpponent(player);
@@ -96,7 +96,7 @@ export default function () {
 
     // When the player status (ready or not) changes, 
     // notify the other player(s)
-    async function toggleCheck () {
+    async function toggleCheck() {
         // This does not update the status during the first call!
         toggleStatus();
         changeUserStatus(status);
@@ -111,8 +111,8 @@ export default function () {
     useGameEventSource<{
         playerId: Player['identifier'],
         status: PlayerStatus
-    }>(urls.isReady, function ({ event, payload }) {
-        const { playerId, status } = payload;
+    }>(urls.isReady, function ({event, payload}) {
+        const {playerId, status} = payload;
         if (event === GameEvent.IS_READY) {
             if (playerId !== user.identifier) {
                 changeOpponentStatus(status);
@@ -130,7 +130,7 @@ export default function () {
     // Listen for the event to kick the opponent out of the game
     useGameEventSource<{
         playerId: Player['identifier']
-    }>(urls.disconnect, function ({ event, payload: { playerId } }){
+    }>(urls.disconnect, function ({event, payload: {playerId}}) {
         if (event === GameEvent.DISCONNECT) {
             if (playerId === opponent?.identifier) {
                 useGameStore.getState().kickOpponent();
@@ -140,7 +140,7 @@ export default function () {
         }
     }, [opponent?.identifier]);
 
-    async function kickOpponent () {
+    async function kickOpponent() {
         await setOpponentRequest({
             identifier: opponent?.identifier,
             isReady: false

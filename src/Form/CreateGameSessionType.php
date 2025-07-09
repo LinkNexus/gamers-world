@@ -6,7 +6,7 @@ use App\Entity\Game;
 use App\Entity\GameSession;
 use App\Enum\Game\Difficulty;
 use App\Enum\Game\Type;
-use App\Enum\GameName;
+//use App\Enum\GameName;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;

@@ -8,9 +8,8 @@ interface Props {
 export default function ({ type, onClick }: Props) {
     return (
         <div
-            onClick={ function (this: HTMLDivElement) {
-                if (onClick)
-                    onClick(type)
+            onClick={function () {
+                onClick?.(type);
             }}
             className='bg-theme-secondary w-fit border-2 border-theme-primary shadow-md cursor-pointer rounded-xl p-1 flex flex-col items-center justify-center shadow-lg hover:bg-theme-primary hover:transition-all'>
             <img className='w-40' src={`/images/chifoumi/${type.toLowerCase()}.png`} alt={type} />

@@ -35,8 +35,6 @@ export default function () {
         startTimer();
     }, []);
 
-    console.log(gameDifficulty)
-
     async function onCardClick (value: ChifoumiChoice) {
         if (user.status !== PlayerStatus.PLAYING) return;
 

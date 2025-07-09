@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SessionController extends AbstractController
 {
 
+    private string $updatesUri = "http://localhost:5001";
+
     public function __construct(
         private readonly UpdatesBroadcaster $broadcaster,
         private readonly EntityManagerInterface $entityManager,
@@ -33,11 +35,11 @@ final class SessionController extends AbstractController
         $data = json_decode($request->getContent(), true);
         return $this->broadcaster->broadcast(
             [
-                'http://localhost:5001/join/' . $identifier,
-                'http://localhost:5001/players/synchronize/' . $identifier,
-                'http://localhost:5001/players/is-ready/' . $identifier,
-                'http://localhost:5001/players/disconnect/' . $identifier,
-                'http://localhost:5001/play/' . $identifier,
+                "{$this->updatesUri}/join/" . $identifier,
+                "{$this->updatesUri}/players/synchronize/" . $identifier,
+                "{$this->updatesUri}/players/is-ready/" . $identifier,
+                "{$this->updatesUri}/players/disconnect/" . $identifier,
+                "{$this->updatesUri}/play/" . $identifier,
             ],
             callback: function () use ($data) {
                 if ($data['event'] === 'PLAY' && $data['payload']['againstComputer']) {

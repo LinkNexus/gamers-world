@@ -65,7 +65,9 @@ Encore
     .enableSassLoader()
 
     // uncomment if you use TypeScript
-    .enableTypeScriptLoader()
+    .enableTypeScriptLoader(tsLoaderOptions => {
+        tsLoaderOptions.transpileOnly = true;
+    })
 
     // uncomment if you use React
     .enableReactPreset()

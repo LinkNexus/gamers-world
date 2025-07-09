@@ -35,7 +35,7 @@ export default class extends Controller<HTMLElement> {
             await this.fetch();
             return;
         }
-        element.addEventListener(this.triggerValue.replace('on', ''), this.fetch);
+        element.addEventListener(this.triggerValue.replace('on', '') as keyof ElementEventMap, this.fetch);
     }
 
     async fetch() {
@@ -65,6 +65,6 @@ export default class extends Controller<HTMLElement> {
 
     disconnect() {
         let element = this.triggerTarget ?? this.element;
-        element.removeEventListener(this.triggerValue.replace('on', ''), this.fetch);
+        element.removeEventListener(this.triggerValue.replace('on', '') as keyof ElementEventMap, this.fetch);
     }
 }
