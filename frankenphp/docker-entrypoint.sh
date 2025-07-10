@@ -58,6 +58,17 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 
 	php bin/console app:add-games
+	
+	#Install nodejs
+   curl -fsSL https://deb.nodesource.com/setup_lts.x | bash
+   apt-get install -y nodejs
+   
+   # Build the assets
+    if [ -f package.json ]; then
+          echo 'Installing assets...'
+          npm install
+          npm run build
+    fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
