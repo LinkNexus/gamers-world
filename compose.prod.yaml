@@ -10,6 +10,12 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
     networks:
       - levynkeneng_apps
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gamers-world.entrypoints=web"
+      - "traefik.http.services.gamers-world.loadbalancer.server.port=80"
+      - "traefik.http.routers.gamers-world.rule=Host(`gamers-world.docker.localhost`)"
 
   mercure:
     networks:
@@ -23,3 +29,6 @@ services:
 networks:
   levynkeneng_apps:
     external: true
+  traefik:
+    external: true
+
