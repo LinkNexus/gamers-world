@@ -21,7 +21,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     networks:
-      - gamers_world
+      - default
 
   # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 
@@ -43,7 +43,7 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
     networks:
-      - gamers_world
+      - default
   ###< doctrine/doctrine-bundle ###
 
   ###> symfony/mercure-bundle ###
@@ -69,7 +69,7 @@ services:
       - mercure_data:/data
       - mercure_config:/config
     networks:
-      - gamers_world
+      - default
 ###< symfony/mercure-bundle ###
 
 volumes:
@@ -86,5 +86,5 @@ volumes:
 ###< symfony/mercure-bundle ###
 
 networks:
-  gamers_world:
+  default:
     driver: bridge

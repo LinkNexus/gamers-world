@@ -22,9 +22,12 @@ services:
     tty: true
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gamers-world.entrypoints=web"
       - "traefik.http.services.gamers-world.loadbalancer.server.port=80"
       - "traefik.http.routers.gamers-world.rule=Host(`gamers-world.docker.localhost`)"
+      - "traefik.http.routers.gamers-world.entrypoints=websecure"
+      - "traefik.http.routers.gamers-world-http.entrypoints=web"
+      - "traefik.http.routers.gamers-world-http.middlewares=gamers-world-https"
+      - "traefik.http.middlewares.gamers-world-https.redirectscheme.scheme=https"
     ports:
       - "8500:80"
     networks:

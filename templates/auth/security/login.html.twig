@@ -13,25 +13,27 @@
 {% block form %}
     <twig:Turbo:Frame id="login-form">
         <form action="{{ path('app_login') }}" method="post">
-            <input placeholder="Email Address" type="email" value="{{ last_username }}" name="_username" id="username" class="form-input" autocomplete="email" required autofocus>
+            <input placeholder="Email Address" type="email" value="{{ last_username }}" name="_username" id="username"
+                   class="form-input" autocomplete="email" required autofocus>
 
             <div class="toggle-password-container mt-3">
-                <input placeholder="Password" type="password" name="_password" id="password" autocomplete="current-password" required
+                <input placeholder="Password" type="password" name="_password" id="password"
+                       autocomplete="current-password" required
                         {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
                             visibleLabel: 'Show',
                             hiddenLabel: 'Hide',
                             buttonClasses: ['toggle-password-button'],
                         }) }}
                 >
-                <a data-turbo="false" href="{{ path('app_forgot_password_request') }}" class="mt-5 text-sm inline-block hover:cursor-pointer hover:underline hover:underline-offset-4">Forgot Password?</a>
+                <a data-turbo="false" href="{{ path('app_forgot_password_request') }}"
+                   class="mt-5 text-sm inline-block hover:cursor-pointer hover:underline hover:underline-offset-4">Forgot
+                    Password?</a>
             </div>
 
             <div>
                 <input type="checkbox" name="_remember_me" id="_remember_me">
                 <label for="_remember_me">Remember me</label>
             </div>
-
-            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
             <button data-turbo="false" class="button-primary" type="submit">
                 Sign in
@@ -49,10 +51,11 @@
 
 {% block alerts %}
     {% if error %}
-        <twig:Utilities:Alert id="login-alert-error" type="error" message="{{ error.messageKey|trans(error.messageData, 'security') }}" />
+        <twig:Utilities:Alert id="login-alert-error" type="error"
+                              message="{{ error.messageKey|trans(error.messageData, 'security') }}"/>
     {% endif %}
 
     {% if app.user %}
-        <twig:Utilities:Alert id="login-alert-info" type="info" message="You are already logged in" />
+        <twig:Utilities:Alert id="login-alert-info" type="info" message="You are already logged in"/>
     {% endif %}
 {% endblock %}

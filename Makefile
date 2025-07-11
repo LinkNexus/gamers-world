@@ -1,4 +1,4 @@
-base := docker exec -it gamersworld-php-1
+base := docker compose exec php
 symfony := docker compose exec php bin/console
 
 cache-clear:
