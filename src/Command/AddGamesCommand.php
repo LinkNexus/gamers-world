@@ -57,6 +57,11 @@ class AddGamesCommand extends Command
         ];
 
         foreach ($games as $gameData) {
+            if ($this->entityManager->getRepository(Game::class)->findOneBy(['slug' => $gameData['slug']])) {
+                $io->warning(sprintf('Game "%s" already exists in the database. Skipping...', $gameData['name']));
+                continue;
+            }
+            $io->note(sprintf('Adding game: %s', $gameData['name']));
             $game = new Game();
             $game->setName($gameData['name'])
                 ->setSlug($gameData['slug'])
