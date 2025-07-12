@@ -54,8 +54,4 @@
         <twig:Utilities:Alert id="login-alert-error" type="error"
                               message="{{ error.messageKey|trans(error.messageData, 'security') }}"/>
     {% endif %}
-
-    {% if app.user %}
-        <twig:Utilities:Alert id="login-alert-info" type="info" message="You are already logged in"/>
-    {% endif %}
 {% endblock %}

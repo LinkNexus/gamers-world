@@ -22,17 +22,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gettext \
     git \
     curl \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
     install-php-extensions \
-        @composer \
-        apcu \
-        intl \
-        opcache \
-        zip \
-        gd \
-        zlib \
+    @composer \
+    apcu \
+    intl \
+    opcache \
+    zip \
+    gd \
+    zlib \
     ;
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
@@ -50,10 +51,17 @@ COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
 COPY --link --chmod=755 frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --link frankenphp/Caddyfile /etc/caddy/Caddyfile
 
+COPY --link messenger-worker.conf /etc/supervisor/conf.d/messenger-worker.conf
+
+# Create and set permissions for var directory
+RUN mkdir -p /app/var/cache /app/var/log && \
+    chown -R www-data:www-data /app/var && \
+    chmod -R 755 /app/var
+
 ENTRYPOINT ["docker-entrypoint"]
 
 HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
-CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
+CMD /usr/bin/supervisord -n -c /etc/supervisor/conf.d/messenger-worker.conf & frankenphp run --config /etc/caddy/Caddyfile
 
 # Dev FrankenPHP image
 FROM frankenphp_base AS frankenphp_dev
@@ -64,12 +72,12 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN set -eux; \
     install-php-extensions \
-        xdebug \
+    xdebug \
     ;
 
 COPY --link frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
 
-CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
+CMD /usr/bin/supervisord -n -c /etc/supervisor/conf.d/messenger-worker.conf & frankenphp run --config /etc/caddy/Caddyfile --watch
 
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod

@@ -19,14 +19,19 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 final class RegistrationController extends AbstractController
 {
     public function __construct(
-        private readonly EmailVerifier $emailVerifier,
+        private readonly EmailVerifier         $emailVerifier,
         private readonly ProfileImageGenerator $imageGenerator
     )
-    {}
+    {
+    }
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_index');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -48,8 +53,8 @@ final class RegistrationController extends AbstractController
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('contact@gamersworld.com', 'Contact - GamersWorld'))
-                    ->to((string) $user->getEmail())
+                    ->from(new Address('contact@levynkeneng.dev', 'Contact - GamersWorld'))
+                    ->to((string)$user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('auth/registration/confirmation_email.html.twig')
             );

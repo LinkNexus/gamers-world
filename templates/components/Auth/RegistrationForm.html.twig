@@ -19,22 +19,18 @@
             </div>
 
             <div>
-                <twig:Forms:RandomInput type="username">
-                    {{ form_widget(form.username, { attr: {
-                        'data-forms--random-input-target': 'username'
-                    }}) }}
-                </twig:Forms:RandomInput>
+                {{ form_widget(form.username) }}
                 {{ form_errors(form.username) }}
             </div>
 
             <div>
-                <twig:Forms:RandomInput type="password">
+                <twig:Forms:RandomPasswordField>
                     {{ form_widget(form.plainPassword.first, {
                         attr: {
                             'data-forms--random-input-target': 'password'
                         }
                     }) }}
-                </twig:Forms:RandomInput>
+                </twig:Forms:RandomPasswordField>
                 {{ form_errors(form.plainPassword.first) }}
             </div>
 

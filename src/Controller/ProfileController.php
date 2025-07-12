@@ -29,15 +29,16 @@ final class ProfileController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly EmailVerifier $emailVerifier,
+        private readonly EmailVerifier          $emailVerifier,
     )
-    {}
+    {
+    }
 
     #[Route('/', name: '')]
     #[IsGranted("ROLE_USER", message: "You must be logged in to access this page")]
     public function index(
-        Request $request,
-        FileUploader $fileUploader,
+        Request              $request,
+        FileUploader         $fileUploader,
         FormFactoryInterface $formFactory,
     ): Response
     {
@@ -86,7 +87,7 @@ final class ProfileController extends AbstractController
                 try {
                     $fileName = $fileUploader->upload($file, '/images/users/');
                     $user->setImage($fileName);
-                    $user->setUsername("@". $user->getUsername());
+                    $user->setUsername("@" . $user->getUsername());
                     $this->addFlash('success', 'Image uploaded successfully');
                     $this->entityManager->flush();
 
@@ -101,12 +102,12 @@ final class ProfileController extends AbstractController
         }
 
         if ($changeEmailForm->isSubmitted() && $changeEmailForm->isValid()) {
-            $this->denyAccessUnlessGranted('IS_VERIFIED', $user, 'You must be verified to change your email');
+//            $this->denyAccessUnlessGranted('IS_VERIFIED', $user, 'You must be verified to change your email');
 
             $mailDetails = new TemplatedMailDTO(
                 subject: 'Please Confirm your Email',
                 template: 'app/profile/confirmation_email.html.twig',
-                fromAddresses: ['contact@gamersworld.com'],
+                fromAddresses: ['contact@levynkeneng.dev'],
                 toAddresses: [$changeEmailForm->get('email')->getData()],
             );
 
@@ -125,7 +126,7 @@ final class ProfileController extends AbstractController
     }
 
     #[Route('/change-email', name: '_change_email')]
-    #[IsGranted('IS_VERIFIED', message: 'You must be verified to change your email')]
+//    #[IsGranted('IS_VERIFIED', message: 'You must be verified to change your email')]
     public function changeEmail(
         Request $request,
     ): RedirectResponse
@@ -158,7 +159,7 @@ final class ProfileController extends AbstractController
     #[IsGranted('IS_VERIFIED', message: 'You must be verified to change your profile image')]
     public function generateRandomImage(
         ProfileImageGenerator $imageGenerator,
-        #[CurrentUser] ?User $user
+        #[CurrentUser] ?User  $user
     ): RedirectResponse
     {
         $imageName = $imageGenerator->generateImageByGender(($user->getGender() ?? Gender::Other), $user->getUsername());

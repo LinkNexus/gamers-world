@@ -20,6 +20,7 @@
         APP_SECRET={{ app_secret }} \
         CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} \
         POSTGRES_PASSWORD={{ postgres_password }} \
+        RESEND_KEY={{ resend_key }} \
         docker compose -f compose.yaml -f compose.prod.yaml build --no-cache
       args:
         chdir: "{{ dest_dir }}"
@@ -30,6 +31,7 @@
         APP_SECRET={{ app_secret }} \
         CADDY_MERCURE_JWT_SECRET={{ caddy_mercure_jwt_secret }} \
         POSTGRES_PASSWORD={{ postgres_password }} \
+        RESEND_KEY={{ resend_key }} \
         docker compose -f compose.yaml -f compose.prod.yaml up -d
       args:
         chdir: "{{ dest_dir }}"

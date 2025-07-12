@@ -24,6 +24,18 @@
             <div class="p-4 rounded-lg">
                 {% include 'fragments/_flash_messages.html.twig' %}
 
+                {% block is_verified_message %}
+                    {% if app.user and not app.user.isVerified() %}
+                        <twig:Utilities:Alert id="alert-not-verified" type="warning">
+                            Your account is not verified.
+                            <a data-turbo="false" class="hover:underline hover:underline-offset-4"
+                               href="/resend-verification-email">
+                                Click here to send back the mail for verification.
+                            </a>
+                        </twig:Utilities:Alert>
+                    {% endif %}
+                {% endblock %}
+
                 {% block content %}
                 {% endblock %}
             </div>
@@ -40,7 +52,7 @@
                         title: 'Sign in to our platform'
                     }) }}
             >
-                <twig:Turbo:Frame class="login-form" id="login-form" />
+                <twig:Turbo:Frame class="login-form" id="login-form"/>
             </div>
 
             <div
@@ -49,7 +61,7 @@
                         title: 'Join our Community'
                     }) }}
             >
-                <twig:Turbo:Frame class="registration-form" id="registration-form" />
+                <twig:Turbo:Frame class="registration-form" id="registration-form"/>
             </div>
         </div>
     {% endif %}
