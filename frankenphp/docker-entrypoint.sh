@@ -62,6 +62,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	#Install nodejs
    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash
    apt-get install -y nodejs
+   npm install -g npm@11.4.2
    
    # Build the assets
     if [ -f package.json ]; then
