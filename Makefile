@@ -18,4 +18,7 @@ stimulus:
 	$(symfony) make:stimulus-controller
 
 deploy:
-	ansible-playbook -i tools/ansible/hosts.yml tools/ansible/playbook.yml -vvvv
+	ansible-playbook -i ~/workspace/web-dev/hosts.yml tools/ansible/playbook.yml -vvvv
+
+fix-permissions:
+	docker compose run --rm php chown -R $(id -u):$(id -g) .

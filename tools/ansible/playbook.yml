@@ -1,6 +1,6 @@
 ---
 - name: Deploy the project on the server
-  hosts: server
+  hosts: j-server
   vars_files:
     - vars.yml
   tasks:
