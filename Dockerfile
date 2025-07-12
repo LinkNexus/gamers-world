@@ -61,7 +61,7 @@ RUN mkdir -p /app/var/cache /app/var/log && \
 ENTRYPOINT ["docker-entrypoint"]
 
 HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
-CMD /usr/bin/supervisord -n -c /etc/supervisor/conf.d/messenger-worker.conf & frankenphp run --config /etc/caddy/Caddyfile
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
 
 # Dev FrankenPHP image
 FROM frankenphp_base AS frankenphp_dev
@@ -77,7 +77,7 @@ RUN set -eux; \
 
 COPY --link frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
 
-CMD /usr/bin/supervisord -n -c /etc/supervisor/conf.d/messenger-worker.conf & frankenphp run --config /etc/caddy/Caddyfile --watch
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch"]
 
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
@@ -105,13 +105,3 @@ RUN set -eux; \
     composer dump-env prod; \
     composer run-script --no-dev post-install-cmd; \
     chmod +x bin/console; sync;
-
-### Install NodeJs and NPM
-#RUN apt-get update && \
-#    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
-#    export NVM_DIR="/config/nvm" && \
-#    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
-#    [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion" && \
-#    nvm install v23.9.0 && \
-#    npm install && \
-#    npm run build;
